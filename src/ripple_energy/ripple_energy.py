@@ -1,5 +1,6 @@
 """Python client for fetching data from Ripple Energy API."""
 from requests import get
+from models import EnergyGeneration
 
 
 def request(api_key: str = None, url_base: str = None, timeout: int = None):
@@ -15,6 +16,8 @@ def request(api_key: str = None, url_base: str = None, timeout: int = None):
 
     url: str = f"{url_base}/{api_key}"
 
-    response = get(url, timeout = timeout)
+    response = get(url, timeout = timeout).json()
 
-    return response.json()
+    data = EnergyGeneration.parse_obj(response)
+
+    return data
