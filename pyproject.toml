@@ -35,6 +35,9 @@ Documentation = "https://github.com/unknown/ripple-energy#readme"
 Issues = "https://github.com/unknown/ripple-energy/issues"
 Source = "https://github.com/unknown/ripple-energy"
 
+[template.plugins.default]
+src-layout = true
+
 [tool.hatch.version]
 path = "ripple_energy/__about__.py"
 
