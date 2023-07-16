@@ -35,11 +35,8 @@ Documentation = "https://github.com/unknown/ripple-energy#readme"
 Issues = "https://github.com/unknown/ripple-energy/issues"
 Source = "https://github.com/unknown/ripple-energy"
 
-[template.plugins.default]
-src-layout = true
-
 [tool.hatch.version]
-path = "ripple_energy/__about__.py"
+path = "src/ripple_energy/__about__.py"
 
 [tool.hatch.envs.default]
 dependencies = [
@@ -57,7 +54,7 @@ python = ["37", "38", "39", "310", "311"]
 branch = true
 parallel = true
 omit = [
-  "ripple_energy/__about__.py",
+  "src/ripple_energy/__about__.py",
 ]
 
 [tool.coverage.report]
