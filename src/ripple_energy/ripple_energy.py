@@ -3,8 +3,8 @@ from requests import get
 from models import EnergyGeneration
 
 
-def request(api_key: str = None, url_base: str = None, timeout: int = None):
-    """Create a request to the Ripple Energy API."""
+def request(api_key: str = None, url_base: str = None, timeout: int = None) -> EnergyGeneration:
+    """Create a request to the Ripple Energy API and validate response."""
     if api_key is None:
         return #Replace with exception
  
@@ -18,6 +18,6 @@ def request(api_key: str = None, url_base: str = None, timeout: int = None):
 
     response = get(url, timeout = timeout).json()
 
-    data = EnergyGeneration.parse_obj(response)
+    data = EnergyGeneration(**response)
 
     return data
