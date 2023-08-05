@@ -5,8 +5,8 @@ from typing import Dict, List, Optional
 class GenerationPeriod(BaseModel):
     model_config = ConfigDict(populate_by_name=True)
 
-    date_from: datetime = Field(alias="from")
-    date_to: datetime = Field(alias="to")
+    period_from: datetime = Field(alias="from")
+    period_to: datetime = Field(alias="to")
     contains_estimate: bool
     generated: float
     earned: float
