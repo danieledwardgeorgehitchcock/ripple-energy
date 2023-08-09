@@ -1,23 +1,41 @@
 """Python client for fetching data from Ripple Energy API."""
-from requests import get
-from models import EnergyGeneration
+import requests
+from pygqlmap.network import GQLResponse
+from graphql.mutations import authLoginSession
+from graphql.gql_types import AuthLoginSessionInputType
 
-
-def request(api_key: str = None, url_base: str = None, timeout: int = None) -> EnergyGeneration:
+def auth_login_session(email: str = None, password: str = None, url_base: str = None, timeout: int = None):
     """Create a request to the Ripple Energy API, parse and validate response."""
-    if api_key is None:
+    if email is None:
         return #Replace with exception
- 
+
+    if password is None:
+        return #Replace with exception
+
     if url_base is None:
-        url_base = "https://rippleenergy.com/rest/member_data"
+        url_base = "https://rippleenergy.com/graphql"
 
     if timeout is None:
         timeout = 10
 
-    url: str = f"{url_base}/{api_key}"
+    headers: dict[str, str] = {"Content-Type": "application/json"}
 
-    response = get(url, timeout = timeout).json()
+    mutation = authLoginSession()
+    mutation.name = "AuthLoginSession"
 
-    data = EnergyGeneration(**response)
+    mutation_input = AuthLoginSessionInputType()
 
-    return data
+    mutation_input.email = email
+    mutation_input.password = password
+
+    mutation._args.input = mutation_input
+
+    response = requests.post(url = url_base, timeout = timeout, headers = headers, json = { "query": mutation.export_gql_source })
+
+    gql_response = GQLResponse(response)
+
+    gql_response.print_msg_out()
+
+    gql_response.map_gqldata_to_obj(mutation.type)
+
+    return gql_response.result_obj
