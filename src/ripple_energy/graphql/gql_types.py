@@ -441,7 +441,7 @@ class list_GenerationData(list, GenerationData): pass
 
 class NonNull_InsightsChartDataInput(InsightsChartDataInput): pass
 
-class CSCJS_InsightsChartDataOutput_Field(InsightsChartDataOutput):
+class DEFTF_InsightsChartDataOutput_Field(InsightsChartDataOutput):
    class InsightsChartDataOutputArgs(GQLArgsSet, GQLObject):
       input: NonNull_InsightsChartDataInput
 
@@ -465,7 +465,7 @@ class GenerationFarm(GQLObject):
    generationData: list_GenerationData[GenerationData]
    lightShowImage: str
    capacityToGenerationFactor: float
-   insightsChartData: CSCJS_InsightsChartDataOutput_Field
+   insightsChartData: DEFTF_InsightsChartDataOutput_Field
    latestGenerationDataPoint: GenerationDataPoint
 
 class list_DocumentTag(list, DocumentTag): pass
@@ -1079,7 +1079,7 @@ class PaymentInput(GQLObject):
    email: str
    voucherCodes: list[str]
 
-class list_Date(list, Date): pass
+#class list_Date(list, Date): pass #To-Do: Clashes
 
 class list_PaymentLineInput(list, PaymentLineInput): pass
 
@@ -1087,7 +1087,7 @@ class InstalmentInput(GQLObject):
    description: str
    amount: int
    taxAmount: int
-   instalmentDates: list_Date[Date]
+#   instalmentDates: list_Date[Date] #To-Do: Clashes
    instalments: int
    lines: list_PaymentLineInput[PaymentLineInput]
 
@@ -1190,7 +1190,7 @@ class InstalmentPaymentPlan(GQLObject):
    totalNetAmount: int
    totalTaxAmount: int
    instalments: int
-   instalmentDates: list_Date[Date]
+#   instalmentDates: list_Date[Date] #To-Do: Clashes
    initialPayment: PaymentPlan
    instalmentPayment: PaymentPlan
 

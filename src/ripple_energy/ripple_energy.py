@@ -4,11 +4,14 @@ from pygqlmap.network import GQLResponse
 from graphql.mutations import authLoginSession
 from graphql.gql_types import AuthLoginSessionInputType
 
-def request(api_key: str = None, url_base: str = None, timeout: int = None):
+def auth_login_session(email: str = None, password: str = None, url_base: str = None, timeout: int = None):
     """Create a request to the Ripple Energy API, parse and validate response."""
-#    if api_key is None:
-#        return #Replace with exception
- 
+    if email is None:
+        return #Replace with exception
+
+    if password is None:
+        return #Replace with exception
+
     if url_base is None:
         url_base = "https://rippleenergy.com/graphql"
 
@@ -22,8 +25,8 @@ def request(api_key: str = None, url_base: str = None, timeout: int = None):
 
     mutation_input = AuthLoginSessionInputType()
 
-    mutation_input.email = "daniel.edward.george.hitchcock@gmail.com"
-    mutation_input.password = "H1tchc0ck"
+    mutation_input.email = email
+    mutation_input.password = password
 
     mutation._args.input = mutation_input
 
