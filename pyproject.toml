@@ -10,7 +10,7 @@ requires-python = ">=3.7"
 license = "MIT"
 keywords = []
 authors = [
-  { name = "daniel", email = "daniel.edward.george.hitchcock@gmail.com" },
+  { name = "Daniel Hitchcock", email = "daniel.edward.george.hitchcock@gmail.com" },
 ]
 classifiers = [
   "Development Status :: 4 - Beta",
@@ -31,9 +31,9 @@ dependencies = [
 dynamic = ["version"]
 
 [project.urls]
-Documentation = "https://github.com/unknown/ripple-energy#readme"
-Issues = "https://github.com/unknown/ripple-energy/issues"
-Source = "https://github.com/unknown/ripple-energy"
+Documentation = "https://github.com/danieledwardgeorgehitchcock/ripple-energy#readme"
+Issues = "https://github.com/danieledwardgeorgehitchcock/ripple-energy/issues"
+Source = "https://github.com/danieledwardgeorgehitchcock/ripple-energy"
 
 [tool.hatch.version]
 path = "src/ripple_energy/__about__.py"
