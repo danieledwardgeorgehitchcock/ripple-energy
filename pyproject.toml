@@ -25,7 +25,7 @@ classifiers = [
 ]
 dependencies = [
   "requests~=2.31.0",
-  "pydantic~=2.0.3",
+  "py-graphql-mapper~=1.1.1",
   "typing"
 ]
 dynamic = ["version"]
