@@ -25,7 +25,9 @@ def request(query = None, url: str = None, headers: dict[str, str] = None, timeo
 
     gql_response.map_gqldata_to_obj(query.type)
 
-    return gql_response.result_obj    
+    data = gql_response.result_obj
+
+    return data
 
 def auth_login_session(email: str = None, password: str = None):
     """Authenticate with Ripple Energy API"""
