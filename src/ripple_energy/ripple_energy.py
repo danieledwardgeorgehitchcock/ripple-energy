@@ -29,8 +29,28 @@ def request(query = None, url: str = None, headers: dict[str, str] = None, timeo
 
     return data
 
+def token_auth(email: str = None, password: str = None):
+    """Generate authentication token with Ripple Energy API"""
+    if email is None:
+        return #Replace with exception
+    if password is None:
+        return #Replace with exception
+
+    mutation = tokenAuth()
+    mutation.name = "TokenAuth"
+
+    mutation_input = TokenAuthenticationInput()
+    mutation_input.email = email
+    mutation_input.password = password
+
+    mutation._args.input = mutation_input
+
+    data = request(query = mutation)
+
+    return data
+
 def auth_login_session(email: str = None, password: str = None):
-    """Authenticate with Ripple Energy API"""
+    """Create login session with Ripple Energy API"""
     if email is None:
         return #Replace with exception
     if password is None:
@@ -48,3 +68,13 @@ def auth_login_session(email: str = None, password: str = None):
     data = request(query = mutation)
 
     return data
+
+def auth_logout_session():
+    """Destroy login session with Ripple Energy API"""
+    mutation = authLogoutSession()
+    mutation.name = "AuthLogoutSession"
+
+    data = request(query = mutation)
+
+    return data
+
