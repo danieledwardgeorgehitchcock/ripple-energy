@@ -12,6 +12,8 @@ def request(query = None, url: str = None, headers: dict[str, str] = None, timeo
         url = "https://rippleenergy.com/graphql"
     if headers is None:
         headers = {"Content-Type": "application/json"}
+    if "Content-Type" not in headers:
+        headers.update({"Content-Type": "application/json"})
     if timeout is None:
         timeout = 10
 
