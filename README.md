@@ -64,7 +64,7 @@ ripple  = RippleEnergy(email  =  "YOUR_RIPPLE_EMAIL", password  =  "YOUR_RIPPLE_
 
 data = ripple.me()
 
-print(ripple)
+print(data)
 ```
 
 ## License
