@@ -18,7 +18,7 @@ def request(query = None, url: str = None, headers: dict[str, str] = None, timeo
     if timeout is None:
         timeout = 10
 
-    response = post(url = url, timeout = timeout, headers = headers, json = { "query": query.export_gql_source })
+    response = post(url = url, timeout = timeout, headers = headers, json = {"query": query.export_gql_source})
 
     gql_response = GQLResponse(response)
 
@@ -98,6 +98,8 @@ def version():
     query = gql_query.version()
     query.name = "Version"
 
+    print(query.export_gql_source)
+
     data = request(query = query)
 
     return data
@@ -106,6 +108,17 @@ def branding():
     """Branding information from Ripple Energy API""" 
     query = gql_query.branding()
     query.name = "Branding"
+
+    data = request(query = query)
+
+    return data
+
+def products():
+    """Products information from Ripple Energy API""" 
+    query = gql_query.products()
+    query.name = "Products"
+
+    print(query)
 
     data = request(query = query)
 
