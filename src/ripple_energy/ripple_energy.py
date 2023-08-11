@@ -123,8 +123,6 @@ class RippleEnergy():
         query = gql_query.products()
         query.name = "Products"
 
-        print(query)
-
         data = self.request(query = query)
 
         return data

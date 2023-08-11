@@ -26,7 +26,7 @@
  - Complete function wrappers for all GraphQL queries
  - Complete function wrappers for all GraphQL mutations
  - Create function exceptions
- - Put functions into classes
+ - ~~Put functions into classes~~
  - Add linting
  - Create tests
  - Create build pipeline 
