@@ -16,16 +16,17 @@
 
 ## Known Bugs And Issues
 
- - Any (all?) GraphQL query functions fail
- - list_Date type clash warning
- - Unsure of header format for token auth
+ - ~~Any (all?) GraphQL query functions fail~~ solved by dapalex/py-graphql-mapper#25
+ - ~~list_Date type clash warning~~ solved by dapalex/py-graphql-mapper#25
+ - ~~Unsure of header format for token auth~~ now confirmed working
+ - insightsChartData optional in response but mandatory in framework
 
 ## To-Do
 
  - Complete function wrappers for all GraphQL queries
  - Complete function wrappers for all GraphQL mutations
  - Create function exceptions
- - Put functions into classes
+ - ~~Put functions into classes~~
  - Add linting
  - Create tests
  - Create build pipeline 
@@ -55,13 +56,15 @@ hatch shell start
 You should then be able to use the package from within this environment.
 
 ## Example
-Token Auth:
+Me:
   ```python
-from  ripple_energy  import token_auth
+from  ripple_energy  import RippleEnergy
 
-data  = token_auth(email  =  "YOUR_RIPPLE_EMAIL", password  =  "YOUR_RIPPLE_PASSWORD")
+ripple  = RippleEnergy(email  =  "YOUR_RIPPLE_EMAIL", password  =  "YOUR_RIPPLE_PASSWORD")
 
-print(data.token)
+data = ripple.me()
+
+print(data)
 ```
 
 ## License

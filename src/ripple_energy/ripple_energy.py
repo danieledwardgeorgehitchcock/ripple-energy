@@ -5,121 +5,124 @@ import graphql.queries as gql_query
 import graphql.mutations as gql_mutation
 import graphql.gql_types as gql_type
 
-def request(query = None, url: str = None, headers: dict[str, str] = None, timeout: int = None):
-    """Create a request to the Ripple Energy API, parse and validate response."""
-    if query is None:
-        return #Replace with exception
-    if url is None:
-        url = "https://rippleenergy.com/graphql"
-    if headers is None:
-        headers = {"Content-Type": "application/json"}
-    if "Content-Type" not in headers:
-        headers.update({"Content-Type": "application/json"})
-    if timeout is None:
-        timeout = 10
+class RippleEnergy():
+    # init method or constructor
+    def __init__(self, email: str = None, password: str = None):
+        if email is None:
+            return #Replace with exception
+        if password is None:
+            return #Replace with exception
+        if not hasattr(self, "token"):
+            self.token = self.token_auth(email = email, password = password)
 
-    response = post(url = url, timeout = timeout, headers = headers, json = {"query": query.export_gql_source})
+    def request(self, query = None, url: str = None, headers: dict[str, str] = {}, timeout: int = None):
+        """Create a request to the Ripple Energy API, parse and validate response."""
+        if query is None:
+            return #Replace with exception
+        if url is None:
+            url = "https://rippleenergy.com/graphql"
+        if not hasattr(headers, "Content-Type"):
+            headers.update({"Content-Type": "application/json"})
+        if hasattr(self, "token") and not hasattr(headers, "Authorization"):
+            headers.update({"Authorization": self.token})
+        if timeout is None:
+            timeout = 10
 
-    gql_response = GQLResponse(response)
+        response = post(url = url, timeout = timeout, headers = headers, json = {"query": query.export_gql_source})
 
-    gql_response.print_msg_out()
+        gql_response = GQLResponse(response)
 
-    gql_response.map_gqldata_to_obj(query.type)
+        gql_response.print_msg_out()
 
-    data = gql_response.result_obj
+        gql_response.map_gqldata_to_obj(query.type)
 
-    return data
+        data = gql_response.result_obj
 
-def token_auth(email: str = None, password: str = None):
-    """Generate authentication token with Ripple Energy API"""
-    if email is None:
-        return #Replace with exception
-    if password is None:
-        return #Replace with exception
+        return data
 
-    mutation = gql_mutation.tokenAuth()
-    mutation.name = "TokenAuth"
+    def token_auth(self, email: str = None, password: str = None):
+        """Generate authentication token with Ripple Energy API"""
+        if email is None:
+            return #Replace with exception
+        if password is None:
+            return #Replace with exception
 
-    mutation_input = gql_type.TokenAuthenticationInput()
-    mutation_input.email = email
-    mutation_input.password = password
+        mutation = gql_mutation.tokenAuth()
+        mutation.name = "TokenAuth"
 
-    mutation._args.input = mutation_input
+        mutation_input = gql_type.TokenAuthenticationInput()
+        mutation_input.email = email
+        mutation_input.password = password
 
-    data = request(query = mutation)
+        mutation._args.input = mutation_input
 
-    return data
+        data = self.request(query = mutation)
 
-def auth_login_session(email: str = None, password: str = None):
-    """Create login session with Ripple Energy API"""
-    if email is None:
-        return #Replace with exception
-    if password is None:
-        return #Replace with exception
+        token = f"JWT {data.token}"
 
-    mutation = gql_mutation.authLoginSession()
-    mutation.name = "AuthLoginSession"
+        return token
 
-    mutation_input = gql_type.AuthLoginSessionInputType()
-    mutation_input.email = email
-    mutation_input.password = password
+    def auth_login_session(self, email: str = None, password: str = None):
+        """Create login session with Ripple Energy API"""
+        if email is None:
+            return #Replace with exception
+        if password is None:
+            return #Replace with exception
 
-    mutation._args.input = mutation_input
+        mutation = gql_mutation.authLoginSession()
+        mutation.name = "AuthLoginSession"
 
-    data = request(query = mutation)
+        mutation_input = gql_type.AuthLoginSessionInputType()
+        mutation_input.email = email
+        mutation_input.password = password
 
-    return data
+        mutation._args.input = mutation_input
 
-def auth_logout_session():
-    """Destroy login session with Ripple Energy API"""
-    mutation = gql_mutation.authLogoutSession()
-    mutation.name = "AuthLogoutSession"
+        data = self.request(query = mutation)
 
-    data = request(query = mutation)
+        return data
 
-    return data
+    def auth_logout_session(self):
+        """Destroy login session with Ripple Energy API"""
+        mutation = gql_mutation.authLogoutSession()
+        mutation.name = "AuthLogoutSession"
 
-def me(token: str = None):
-    """User information from Ripple Energy API"""
-    if token is None:
-        return #Replace with exception
-    
-    query = gql_query.me()
-    query.name = "Me"
+        data = self.request(query = mutation)
 
-    token = f"JWT {token}" #Not sure if this is correct but, mimmicking website
+        return data
 
-    data = request(query = query, headers = {"Authorization": token})
+    def me(self):
+        """User information from Ripple Energy API"""
+        query = gql_query.me()
+        query.name = "Me"
 
-    return data
+        data = self.request(query = query)
 
-def version():
-    """Version information from Ripple Energy API""" 
-    query = gql_query.version()
-    query.name = "Version"
+        return data
 
-    print(query.export_gql_source)
+    def version(self):
+        """Version information from Ripple Energy API""" 
+        query = gql_query.version()
+        query.name = "Version"
 
-    data = request(query = query)
+        data = self.request(query = query)
 
-    return data
+        return data
 
-def branding():
-    """Branding information from Ripple Energy API""" 
-    query = gql_query.branding()
-    query.name = "Branding"
+    def branding(self):
+        """Branding information from Ripple Energy API""" 
+        query = gql_query.branding()
+        query.name = "Branding"
 
-    data = request(query = query)
+        data = self.request(query = query)
 
-    return data
+        return data
 
-def products():
-    """Products information from Ripple Energy API""" 
-    query = gql_query.products()
-    query.name = "Products"
+    def products(self):
+        """Products information from Ripple Energy API""" 
+        query = gql_query.products()
+        query.name = "Products"
 
-    print(query)
+        data = self.request(query = query)
 
-    data = request(query = query)
-
-    return data
+        return data
