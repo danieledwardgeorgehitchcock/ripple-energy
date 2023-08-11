@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "ripple-energy"
-description = ''
+description = 'Python Module For Ripple Energy'
 readme = "README.md"
 requires-python = ">=3.7"
 license = "MIT"
@@ -25,7 +25,7 @@ classifiers = [
 ]
 dependencies = [
   "requests~=2.31.0",
-  "py-graphql-mapper~=1.1.1",
+  "py-graphql-mapper~=1.1.2",
   "typing"
 ]
 dynamic = ["version"]
