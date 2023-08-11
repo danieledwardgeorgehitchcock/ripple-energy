@@ -56,13 +56,15 @@ hatch shell start
 You should then be able to use the package from within this environment.
 
 ## Example
-Token Auth:
+Me:
   ```python
-from  ripple_energy  import token_auth
+from  ripple_energy  import RippleEnergy
 
-data  = token_auth(email  =  "YOUR_RIPPLE_EMAIL", password  =  "YOUR_RIPPLE_PASSWORD")
+ripple  = RippleEnergy(email  =  "YOUR_RIPPLE_EMAIL", password  =  "YOUR_RIPPLE_PASSWORD")
 
-print(data.token)
+data = ripple.me()
+
+print(ripple)
 ```
 
 ## License
