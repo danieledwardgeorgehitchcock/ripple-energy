@@ -2,7 +2,13 @@ from graphql_client.client import Client
 
 class RippleEnergy():
     # init method or constructor
-    def __init__(self, email: str = None, password: str = None):
+    def __init__(self, token: str = None):
+        headers: dict[str, str] = {}
+        if token is not None:
+            headers.update({"Authorization": f"JWT {token}"})
+        self.client = Client(url = "https://rippleenergy.com/graphql", headers = headers)
+
+    async def token_auth(self, email: str = None, password: str = None):
         if email is None:
             return #Replace with exception
         else:
@@ -11,20 +17,17 @@ class RippleEnergy():
             return #Replace with exception
         else:
             self.password = password
-        if not hasattr(self, "client"):
-            self.client = Client(url = "https://rippleenergy.com/graphql")
-#        if not hasattr(self, "token"):
-#            self.token = self.token_auth()
-    
-    async def token_auth(self):
-        data = await self.client.token_auth(input = {"email": self.email, "password": self.password})
 
+        data = await self.client.token_auth(input = {"email": self.email, "password": self.password})
         return data
     
     async def version(self):
         data = await self.client.version()
         return data
-
+    
+    async def get_member(self):
+        data = await self.client.get_member()
+        return data
 
 #    def request(self, query = None, url: str = None, headers: dict[str, str] = {}, timeout: int = None):
 #        """Create a request to the Ripple Energy API, parse and validate response."""

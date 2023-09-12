@@ -1,3 +1,187 @@
 query Version {
     version
 }
+
+query GetMember {
+  member {
+    ...MemberFragment
+  }
+}
+
+fragment MemberFragment on Member {
+  id
+  isBusiness
+  accountType
+  businessName
+  businessRegistrationNumber
+  registrationCompleted
+  fullyChargedPreregistered
+  investmentTotal
+  billSavingsAcrossAllProjects
+  expectedGenerationAnnualTotal
+  ownershipPercentageTotal
+  capacityOwnedTotal
+  hasReservedInActiveCoop
+  dateOfReservationInActiveCoop
+  dateOfLastSharePurchase
+  hasBoughtSharesInActiveCoop
+  hasBoughtSharesInGraigFatha
+  hasBoughtSharesInKirkHill
+  hasBoughtSharesInMultipleCoops
+  isSuppliedByOctopusEnergy
+  memberDocument {
+    id
+    file
+    documentUrl
+  }
+  address {
+    id
+    line1
+    line2
+    town
+    postcode
+    manuallyEntered
+  }
+  badges {
+    id
+    name
+    code
+    description
+    imageUrl
+  }
+  beneficiaries {
+    id
+    nominatedPerson
+    email
+    phone
+    line1
+    line2
+    town
+    postcode
+  }
+  invoices {
+    id
+    category
+    quote {
+      id
+      arrangementFee
+      billSavingsAnnualEstimate
+      capacity
+      costTotal
+      costTotalLocale
+      currency {
+        code
+        precision
+        symbol
+      }
+      ownershipMultiplier
+      paymentTotal
+      paymentTotalLocale
+      electricityConsumptionAnnual
+    }
+  }
+  memberships {
+    id
+    capacity
+    reservedCapacity
+    createdAt
+    expectedGenerationAnnualTotal
+    ownershipPercentage
+    investmentTotal
+    billSavingsForProjectLifespan
+    billSavingsFirstYearEstimateTotal
+    firstOwnershipPurchaseDate
+    coop {
+      ...CoopFragment
+    }
+    lightShowImage
+  }
+  currentMemberSupplier {
+    id
+    accountIdentifier
+    supplier {
+      id
+      name
+      logoUrl
+    }
+  }
+  waitingListPlaces {
+    ...WaitingListPlaceFragment
+  }
+}
+
+fragment CoopFragment on Coop {
+  id
+  name
+  code
+  wattageSku
+  status
+  active
+  description
+  maxGenerationPerMember
+  minGenerationPerMember
+  percentageFunded
+  publicCloseDate
+  estimatedBillSavingsPerWattHour
+  firstYearEstimatedBillSavingsPerWattHour
+  costTotalPerWattHour
+  isAvailableForLocalPurchase
+  localPurchasePostcodes
+  currency {
+    id
+    code
+    precision
+    symbol
+  }
+  generationfarm {
+    id
+    name
+    latitude
+    longitude
+    isLocationConfirmed
+    startDate
+    operationalStatus
+    generationType
+    capacity
+    capacityToGenerationFactor
+    lightShowImage
+    currency {
+      id
+      code
+      precision
+      symbol
+    }
+  }
+  documents {
+    documentUrl
+    version
+    document {
+      id
+      name
+      category
+      subcategory
+      description
+      updatedAt
+      documentTags {
+        id
+        name
+      }
+    }
+  }
+}
+
+fragment WaitingListPlaceFragment on MemberCoopWaitingListPlace {
+  id
+  generationRequestedKwh
+  waitingList {
+    ...WaitingListFragment
+  }
+}
+
+fragment WaitingListFragment on CoopWaitingList {
+  id
+  coop {
+    id
+    name
+  }
+}

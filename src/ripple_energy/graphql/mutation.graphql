@@ -1,3 +1,5 @@
 mutation TokenAuth($input: TokenAuthenticationInput!) {
-  tokenAuth(input: $input)
+  tokenAuth(input: $input) {
+    token
+  }
 }
