@@ -25,10 +25,20 @@ class RippleEnergy:
         return data
     
     async def get_member(self):
-        """Get member data"""
+        """Ripple member data"""
         data = await self.client.get_member()
         return data
-    
+
+    async def me(self):
+        """Ripple user data"""
+        data = await self.client.me()
+        return data
+
+    async def get_active_coop_status(self):
+        """Ripple active co-op status"""
+        data = await self.client.get_active_coop_status()
+        return data
+
     async def __aenter__(self, client: Client | None = None, headers: dict[str, str] = None) -> RippleEnergy:
         """Async enter"""
         if headers is None:
@@ -37,9 +47,7 @@ class RippleEnergy:
             self.headers = headers        
         if client is None:
             self.client = Client(url = "https://rippleenergy.com/graphql", headers = self.headers)
-
-        await self.token_auth()
-        
+        await self.token_auth()   
         return self
 
     async def __aexit__(self, *args) -> None:
