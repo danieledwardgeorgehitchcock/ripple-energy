@@ -83,7 +83,7 @@ asyncio.run(main())
 
 ## Contributing
 
-To add a new query to this module, add the GraphQL query into the `src/ripple_energy/graphql_queries` folder as a file with the extension `.graphql` such as: ```my_example_query.graphql``` - please see the existing queries as an example of how to write them.
+To add a new query to this module, add the GraphQL query into the `src/ripple_energy/graphql_queries` folder as a file with the extension `.graphql` such as: `my_example_query.graphql` - please see the existing queries as an example of how to write them.
 
 In a terminal, make sure you are in the Hatch shell environment:
 
@@ -97,11 +97,11 @@ Run the Ariadne code generator:
 ariadne-codegen
 ```
 
-If there no errors, a new client should be generated in the `src/ripple_energy/graphql_client`
+If there no errors, a new client should be generated in the `src/ripple_energy/graphql_client` folder.
 
 Add the new function to `src/ripple_energy/ripple_energy.py` - please see the existing functions as an example of how to write them.
 
-Commit the changes and create a Pull Request in this repo
+Commit the changes and create a Pull Request in this repo.
 
 ## License
 
