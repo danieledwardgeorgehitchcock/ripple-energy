@@ -1,4 +1,4 @@
-query GetMember {
+query Member {
   member {
     ...MemberFragment
   }

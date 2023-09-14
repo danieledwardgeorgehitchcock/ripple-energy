@@ -1,6 +1,8 @@
+from .active_coop_status import ActiveCoopStatus, ActiveCoopStatusCoop
 from .async_base_client import AsyncBaseClient
 from .base_model import BaseModel
 from .client import Client
+from .coop import Coop, CoopCoop
 from .enums import (
     AccountType,
     ApprovalStatus,
@@ -55,9 +57,6 @@ from .fragments import (
     WaitingListPlaceFragment,
     WaitingListPlaceFragmentWaitingList,
 )
-from .get_active_coop_status import GetActiveCoopStatus, GetActiveCoopStatusCoop
-from .get_coop import GetCoop, GetCoopCoop
-from .get_member import GetMember, GetMemberMember
 from .input_types import (
     AddAdditionalWattsInputs,
     AddMemberToCoopWaitingListInput,
@@ -136,11 +135,14 @@ from .me import (
     MeMeReferredUser,
     MeMeReferredUserMember,
 )
+from .member import Member, MemberMember
 from .token_auth import TokenAuth, TokenAuthTokenAuth
 from .version import Version
 
 __all__ = [
     "AccountType",
+    "ActiveCoopStatus",
+    "ActiveCoopStatusCoop",
     "AddAdditionalWattsInputs",
     "AddMemberToCoopWaitingListInput",
     "AddressInput",
@@ -162,6 +164,8 @@ __all__ = [
     "ClientEnvInput",
     "ConsumptionEvidenceInput",
     "ConsumptionInput",
+    "Coop",
+    "CoopCoop",
     "CoopCoopStatusChoices",
     "CoopFragment",
     "CoopFragmentCurrency",
@@ -185,13 +189,7 @@ __all__ = [
     "GenerationDataTitle",
     "GenerationGenerationFarmGenerationTypeChoices",
     "GenerationGenerationFarmOperationalStatusChoices",
-    "GetActiveCoopStatus",
-    "GetActiveCoopStatusCoop",
-    "GetCoop",
-    "GetCoopCoop",
     "GetKeyValuePair",
-    "GetMember",
-    "GetMemberMember",
     "GetMemberMissingInvoiceDataInputs",
     "GetMemberOctopusConsumptionDataTitle",
     "GiftCardInput",
@@ -214,6 +212,7 @@ __all__ = [
     "MeMeReferredRecommendedBy",
     "MeMeReferredUser",
     "MeMeReferredUserMember",
+    "Member",
     "MemberFragment",
     "MemberFragmentAddress",
     "MemberFragmentBadges",
@@ -227,6 +226,7 @@ __all__ = [
     "MemberFragmentMemberships",
     "MemberFragmentMembershipsCoop",
     "MemberFragmentWaitingListPlaces",
+    "MemberMember",
     "MembersMemberConsumptionEvidenceSubmissionStatusChoices",
     "OctopusApiAddressInput",
     "OrderInput",
