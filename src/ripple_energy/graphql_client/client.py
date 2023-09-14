@@ -2,6 +2,7 @@ from typing import Optional
 
 from .async_base_client import AsyncBaseClient
 from .get_active_coop_status import GetActiveCoopStatus, GetActiveCoopStatusCoop
+from .get_coop import GetCoop, GetCoopCoop
 from .get_member import GetMember, GetMemberMember
 from .input_types import TokenAuthenticationInput
 from .me import Me, MeMe
@@ -29,6 +30,81 @@ class Client(AsyncBaseClient):
         response = await self.execute(query=query, variables=variables)
         data = self.get_data(response)
         return GetActiveCoopStatus.parse_obj(data).coop
+
+    async def get_coop(self) -> Optional[GetCoopCoop]:
+        query = gql(
+            """
+            query GetCoop {
+              coop {
+                ...CoopFragment
+              }
+            }
+
+            fragment CoopFragment on Coop {
+              id
+              name
+              code
+              wattageSku
+              status
+              active
+              description
+              maxGenerationPerMember
+              minGenerationPerMember
+              percentageFunded
+              publicCloseDate
+              estimatedBillSavingsPerWattHour
+              firstYearEstimatedBillSavingsPerWattHour
+              costTotalPerWattHour
+              isAvailableForLocalPurchase
+              localPurchasePostcodes
+              currency {
+                id
+                code
+                precision
+                symbol
+              }
+              generationfarm {
+                id
+                name
+                latitude
+                longitude
+                isLocationConfirmed
+                startDate
+                operationalStatus
+                generationType
+                capacity
+                capacityToGenerationFactor
+                lightShowImage
+                currency {
+                  id
+                  code
+                  precision
+                  symbol
+                }
+              }
+              documents {
+                documentUrl
+                version
+                document {
+                  id
+                  name
+                  category
+                  subcategory
+                  description
+                  updatedAt
+                  documentTags {
+                    id
+                    name
+                  }
+                }
+              }
+            }
+            """
+        )
+        variables: dict[str, object] = {}
+        response = await self.execute(query=query, variables=variables)
+        data = self.get_data(response)
+        return GetCoop.parse_obj(data).coop
 
     async def get_member(self) -> Optional[GetMemberMember]:
         query = gql(
