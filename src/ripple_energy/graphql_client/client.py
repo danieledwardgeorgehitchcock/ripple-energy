@@ -1,11 +1,11 @@
 from typing import Optional
 
+from .active_coop_status import ActiveCoopStatus, ActiveCoopStatusCoop
 from .async_base_client import AsyncBaseClient
-from .get_active_coop_status import GetActiveCoopStatus, GetActiveCoopStatusCoop
-from .get_coop import GetCoop, GetCoopCoop
-from .get_member import GetMember, GetMemberMember
+from .coop import Coop, CoopCoop
 from .input_types import TokenAuthenticationInput
 from .me import Me, MeMe
+from .member import Member, MemberMember
 from .token_auth import TokenAuth, TokenAuthTokenAuth
 from .version import Version
 
@@ -15,10 +15,10 @@ def gql(q: str) -> str:
 
 
 class Client(AsyncBaseClient):
-    async def get_active_coop_status(self) -> Optional[GetActiveCoopStatusCoop]:
+    async def active_coop_status(self) -> Optional[ActiveCoopStatusCoop]:
         query = gql(
             """
-            query GetActiveCoopStatus {
+            query ActiveCoopStatus {
               coop {
                 id
                 status
@@ -29,12 +29,12 @@ class Client(AsyncBaseClient):
         variables: dict[str, object] = {}
         response = await self.execute(query=query, variables=variables)
         data = self.get_data(response)
-        return GetActiveCoopStatus.parse_obj(data).coop
+        return ActiveCoopStatus.parse_obj(data).coop
 
-    async def get_coop(self) -> Optional[GetCoopCoop]:
+    async def coop(self) -> Optional[CoopCoop]:
         query = gql(
             """
-            query GetCoop {
+            query Coop {
               coop {
                 ...CoopFragment
               }
@@ -104,12 +104,77 @@ class Client(AsyncBaseClient):
         variables: dict[str, object] = {}
         response = await self.execute(query=query, variables=variables)
         data = self.get_data(response)
-        return GetCoop.parse_obj(data).coop
+        return Coop.parse_obj(data).coop
 
-    async def get_member(self) -> Optional[GetMemberMember]:
+    async def me(self) -> Optional[MeMe]:
         query = gql(
             """
-            query GetMember {
+            query Me {
+              me {
+                id
+                firstName
+                lastName
+                email
+                phoneNumber
+                isSuperuser
+                isStaff
+                isGuest
+                isActive
+                isEmailVerified
+                dateJoined
+                groups {
+                  id
+                  name
+                  permissions {
+                    id
+                    codename
+                    name
+                  }
+                }
+                referred {
+                  id
+                  user {
+                    id
+                    firstName
+                    lastName
+                    dateJoined
+                    member {
+                      id
+                    }
+                  }
+                  recommendedBy {
+                    id
+                  }
+                }
+                payments {
+                  id
+                  paid
+                  amount
+                }
+                directDebit {
+                  id
+                  accountName
+                  accountSortCode
+                  accountNumber
+                  paymentDay
+                }
+                member {
+                  id
+                  registrationCompleted
+                }
+              }
+            }
+            """
+        )
+        variables: dict[str, object] = {}
+        response = await self.execute(query=query, variables=variables)
+        data = self.get_data(response)
+        return Me.parse_obj(data).me
+
+    async def member(self) -> Optional[MemberMember]:
+        query = gql(
+            """
+            query Member {
               member {
                 ...MemberFragment
               }
@@ -297,72 +362,7 @@ class Client(AsyncBaseClient):
         variables: dict[str, object] = {}
         response = await self.execute(query=query, variables=variables)
         data = self.get_data(response)
-        return GetMember.parse_obj(data).member
-
-    async def me(self) -> Optional[MeMe]:
-        query = gql(
-            """
-            query Me {
-              me {
-                id
-                firstName
-                lastName
-                email
-                phoneNumber
-                isSuperuser
-                isStaff
-                isGuest
-                isActive
-                isEmailVerified
-                dateJoined
-                groups {
-                  id
-                  name
-                  permissions {
-                    id
-                    codename
-                    name
-                  }
-                }
-                referred {
-                  id
-                  user {
-                    id
-                    firstName
-                    lastName
-                    dateJoined
-                    member {
-                      id
-                    }
-                  }
-                  recommendedBy {
-                    id
-                  }
-                }
-                payments {
-                  id
-                  paid
-                  amount
-                }
-                directDebit {
-                  id
-                  accountName
-                  accountSortCode
-                  accountNumber
-                  paymentDay
-                }
-                member {
-                  id
-                  registrationCompleted
-                }
-              }
-            }
-            """
-        )
-        variables: dict[str, object] = {}
-        response = await self.execute(query=query, variables=variables)
-        data = self.get_data(response)
-        return Me.parse_obj(data).me
+        return Member.parse_obj(data).member
 
     async def token_auth(self, input: TokenAuthenticationInput) -> TokenAuthTokenAuth:
         query = gql(

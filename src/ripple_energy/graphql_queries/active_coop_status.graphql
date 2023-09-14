@@ -1,4 +1,4 @@
-query GetActiveCoopStatus {
+query ActiveCoopStatus {
   coop {
     id
     status
