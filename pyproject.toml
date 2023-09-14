@@ -65,5 +65,5 @@ exclude_lines = [
 [tool.ariadne-codegen]
 plugins = ["ariadne_codegen.contrib.shorter_results.ShorterResultsPlugin"]
 remote_schema_url = "https://rippleenergy.com/graphql"
-queries_path = "src/ripple_energy/graphql"
+queries_path = "src/ripple_energy/graphql_queries"
 target_package_path = "src/ripple_energy"
