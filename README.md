@@ -8,19 +8,11 @@
 
 **Table of Contents**
 
- - [Known Bugs And Issues](#known-bugs-and-issues)
  - [To-Do](#to-do)  
  - [Installation](#installation)
  - [Example](#example)
  - [Contributing](#contributing)
  - [License](#license)
-
-## Known Bugs And Issues
-
- - ~~Any (all?) GraphQL query functions fail~~ solved by dapalex/py-graphql-mapper#25
- - ~~list_Date type clash warning~~ solved by dapalex/py-graphql-mapper#25
- - ~~Unsure of header format for token auth~~ now confirmed working
- - ~~insightsChartData optional in response but mandatory in framework~~
 
 ## To-Do
 
