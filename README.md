@@ -66,11 +66,15 @@ if(platform == "win32"):
     asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy()) #Avoid event loop selector policy error in Windows 
 
 async def main():
-    token = await RippleEnergy().token_auth(email = "YOUR_RIPPLE_EMAIL", password = "YOUR_RIPPLE_PASSWORD")
+    async with RippleEnergy(email = "YOUR_RIPPLE_EMAIL", password = "YOUR_RIPPLE_PASSWORD") as ripple:
+        
+        member = await ripple.get_member()
+        
+        print(member)
 
-    member = await RippleEnergy(token = token.token).get_member()
+        version = await ripple.version()
 
-    print(member)
+        print(version)
 
 asyncio.run(main())
 ```

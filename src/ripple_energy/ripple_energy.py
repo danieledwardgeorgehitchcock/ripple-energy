@@ -1,14 +1,9 @@
+from __future__ import annotations
 from graphql_client.client import Client
 
-class RippleEnergy():
-    # init method or constructor
-    def __init__(self, token: str = None):
-        headers: dict[str, str] = {}
-        if token is not None:
-            headers.update({"Authorization": f"JWT {token}"})
-        self.client = Client(url = "https://rippleenergy.com/graphql", headers = headers)
-
-    async def token_auth(self, email: str = None, password: str = None):
+class RippleEnergy:
+    def __init__(self, email: str = None, password: str = None):
+        """Initialise Ripple object"""
         if email is None:
             return #Replace with exception
         else:
@@ -18,60 +13,36 @@ class RippleEnergy():
         else:
             self.password = password
 
+    async def token_auth(self):
+        """Authenticate with Ripple and generate JWT token"""
         data = await self.client.token_auth(input = {"email": self.email, "password": self.password})
+        self.headers.update({"Authorization": f"JWT {data.token}"})
         return data
     
     async def version(self):
+        """Ripple GraphQL API version"""
         data = await self.client.version()
         return data
     
     async def get_member(self):
+        """Get member data"""
         data = await self.client.get_member()
         return data
+    
+    async def __aenter__(self, client: Client | None = None, headers: dict[str, str] = None) -> RippleEnergy:
+        """Async enter"""
+        if headers is None:
+            self.headers = {}
+        else:
+            self.headers = headers        
+        if client is None:
+            self.client = Client(url = "https://rippleenergy.com/graphql", headers = self.headers)
 
-#    def request(self, query = None, url: str = None, headers: dict[str, str] = {}, timeout: int = None):
-#        """Create a request to the Ripple Energy API, parse and validate response."""
-#        if query is None:
-#            return #Replace with exception
-#        if url is None:
-#            url = "https://rippleenergy.com/graphql"
-#        if not hasattr(headers, "Content-Type"):
-#            headers.update({"Content-Type": "application/json"})
-#        if hasattr(self, "token") and not hasattr(headers, "Authorization"):
-#            headers.update({"Authorization": self.token})
-#        if timeout is None:
-#            timeout = 10
+        await self.token_auth()
+        
+        return self
 
-#        response = post(url = url, timeout = timeout, headers = headers, json = {"query": query.export_gql_source})
-
-#        gql_response = GQLResponse(response)
-
-#        gql_response.print_msg_out()
-
-#        gql_response.map_gqldata_to_obj(query.type)
-
-#        data = gql_response.result_obj
-
-#        return data
-
-#    def token_auth(self, email: str = None, password: str = None):
-#        """Generate authentication token with Ripple Energy API"""
-#        if email is None:
-#            return #Replace with exception
-#        if password is None:
-#            return #Replace with exception
-
-#        mutation = gql_mutation.tokenAuth()
-#        mutation.name = "TokenAuth"
-
-#        mutation_input = gql_type.TokenAuthenticationInput()
-#        mutation_input.email = email
-#        mutation_input.password = password
-
-#        mutation._args.input = mutation_input
-
-#        data = self.request(query = mutation)
-
-#        token = f"JWT {data.token}"
-
-#        return token
+    async def __aexit__(self, *args) -> None:
+        """Async exit"""
+        self.client = None
+        self.headers = None
