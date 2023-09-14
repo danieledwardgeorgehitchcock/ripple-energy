@@ -19,7 +19,7 @@
  - ~~Any (all?) GraphQL query functions fail~~ solved by dapalex/py-graphql-mapper#25
  - ~~list_Date type clash warning~~ solved by dapalex/py-graphql-mapper#25
  - ~~Unsure of header format for token auth~~ now confirmed working
- - insightsChartData optional in response but mandatory in framework
+ - ~~insightsChartData optional in response but mandatory in framework~~
 
 ## To-Do
 
@@ -31,7 +31,7 @@
  - Create tests
  - Create build pipeline 
  - Publish to PyPi 
- - Make Async?
+ - ~~Make Async?~~
 
 ## Installation
 
@@ -56,15 +56,27 @@ hatch shell start
 You should then be able to use the package from within this environment.
 
 ## Example
-Me:
+Get Member:
   ```python
-from  ripple_energy  import RippleEnergy
+from ripple_energy import RippleEnergy
+import asyncio
+from sys import platform
 
-ripple  = RippleEnergy(email  =  "YOUR_RIPPLE_EMAIL", password  =  "YOUR_RIPPLE_PASSWORD")
+if(platform == "win32"):
+    asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy()) #Avoid event loop selector policy error in Windows 
 
-data = ripple.me()
+async def main():
+    async with RippleEnergy(email = "YOUR_RIPPLE_EMAIL", password = "YOUR_RIPPLE_PASSWORD") as ripple:
+        
+        member = await ripple.get_member()
+        
+        print(member)
 
-print(data)
+        version = await ripple.version()
+
+        print(version)
+
+asyncio.run(main())
 ```
 
 ## License
