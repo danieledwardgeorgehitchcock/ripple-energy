@@ -1,0 +1,1 @@
+RIPPLE_GRAPH_URL = "https://rippleenergy.com/graphql"

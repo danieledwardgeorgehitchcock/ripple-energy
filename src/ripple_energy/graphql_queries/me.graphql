@@ -1,0 +1,55 @@
+query Me {
+  me {
+    id
+    firstName
+    lastName
+    email
+    phoneNumber
+    isSuperuser
+    isStaff
+    isGuest
+    isActive
+    isEmailVerified
+    dateJoined
+    groups {
+      id
+      name
+      permissions {
+        id
+        codename
+        name
+      }
+    }
+    referred {
+      id
+      user {
+        id
+        firstName
+        lastName
+        dateJoined
+        member {
+          id
+        }
+      }
+      recommendedBy {
+        id
+      }
+    }
+    payments {
+      id
+      paid
+      amount
+    }
+    directDebit {
+      id
+      accountName
+      accountSortCode
+      accountNumber
+      paymentDay
+    }
+    member {
+      id
+      registrationCompleted
+    }
+  }
+}
