@@ -1,0 +1,65 @@
+query GetCoop {
+  coop {
+    ...CoopFragment
+  }
+}
+
+fragment CoopFragment on Coop {
+  id
+  name
+  code
+  wattageSku
+  status
+  active
+  description
+  maxGenerationPerMember
+  minGenerationPerMember
+  percentageFunded
+  publicCloseDate
+  estimatedBillSavingsPerWattHour
+  firstYearEstimatedBillSavingsPerWattHour
+  costTotalPerWattHour
+  isAvailableForLocalPurchase
+  localPurchasePostcodes
+  currency {
+    id
+    code
+    precision
+    symbol
+  }
+  generationfarm {
+    id
+    name
+    latitude
+    longitude
+    isLocationConfirmed
+    startDate
+    operationalStatus
+    generationType
+    capacity
+    capacityToGenerationFactor
+    lightShowImage
+    currency {
+      id
+      code
+      precision
+      symbol
+    }
+  }
+  documents {
+    documentUrl
+    version
+    document {
+      id
+      name
+      category
+      subcategory
+      description
+      updatedAt
+      documentTags {
+        id
+        name
+      }
+    }
+  }
+}

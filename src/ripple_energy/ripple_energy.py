@@ -25,7 +25,7 @@ class RippleEnergy:
         data = await self.client.version()
         return data
     
-    async def get_member(self):
+    async def member(self):
         """Ripple member data"""
         data = await self.client.get_member()
         return data
@@ -35,9 +35,14 @@ class RippleEnergy:
         data = await self.client.me()
         return data
 
-    async def get_active_coop_status(self):
+    async def active_coop_status(self):
         """Ripple active co-op status"""
         data = await self.client.get_active_coop_status()
+        return data
+
+    async def coop(self):
+        """Ripple co-op data"""
+        data = await self.client.get_coop()
         return data
 
     async def __aenter__(self, client: Client | None = None, headers: dict[str, str] = None) -> RippleEnergy:

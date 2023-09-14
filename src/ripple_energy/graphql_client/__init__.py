@@ -56,6 +56,7 @@ from .fragments import (
     WaitingListPlaceFragmentWaitingList,
 )
 from .get_active_coop_status import GetActiveCoopStatus, GetActiveCoopStatusCoop
+from .get_coop import GetCoop, GetCoopCoop
 from .get_member import GetMember, GetMemberMember
 from .input_types import (
     AddAdditionalWattsInputs,
@@ -186,6 +187,8 @@ __all__ = [
     "GenerationGenerationFarmOperationalStatusChoices",
     "GetActiveCoopStatus",
     "GetActiveCoopStatusCoop",
+    "GetCoop",
+    "GetCoopCoop",
     "GetKeyValuePair",
     "GetMember",
     "GetMemberMember",

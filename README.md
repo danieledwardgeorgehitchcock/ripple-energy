@@ -70,7 +70,7 @@ if(platform == "win32"):
 async def main():
     async with RippleEnergy(email = "YOUR_RIPPLE_EMAIL", password = "YOUR_RIPPLE_PASSWORD") as ripple:
         
-        member = await ripple.get_member()
+        member = await ripple.member()
         
         print(member)
 
