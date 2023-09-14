@@ -1,5 +1,6 @@
 from __future__ import annotations
 from graphql_client.client import Client
+from constants import RIPPLE_GRAPH_URL
 
 class RippleEnergy:
     def __init__(self, email: str = None, password: str = None):
@@ -46,7 +47,7 @@ class RippleEnergy:
         else:
             self.headers = headers        
         if client is None:
-            self.client = Client(url = "https://rippleenergy.com/graphql", headers = self.headers)
+            self.client = Client(url = RIPPLE_GRAPH_URL, headers = self.headers)
         await self.token_auth()   
         return self
 
