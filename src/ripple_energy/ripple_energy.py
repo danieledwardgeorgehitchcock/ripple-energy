@@ -64,4 +64,11 @@ class RippleEnergy:
     async def tribe_url(self):
         """Ripple Tribe URL"""
         data = await self.client.tribe_url()
-        return data    
+        return data
+    
+    async def faqs(self, tag: str = None):
+        """Ripple Frequently Asked Questions"""
+        if tag is None:
+            tag = ""
+        data = await self.client.faqs(tag)
+        return data

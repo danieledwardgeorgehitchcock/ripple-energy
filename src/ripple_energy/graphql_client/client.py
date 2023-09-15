@@ -1,8 +1,9 @@
-from typing import Dict, Optional
+from typing import Dict, List, Optional
 
 from .active_coop_status import ActiveCoopStatus, ActiveCoopStatusCoop
 from .async_base_client import AsyncBaseClient
 from .coop import Coop, CoopCoop
+from .faqs import Faqs, FaqsFaqs
 from .input_types import TokenAuthenticationInput
 from .me import Me, MeMe
 from .member import Member, MemberMember
@@ -16,37 +17,6 @@ def gql(q: str) -> str:
 
 
 class Client(AsyncBaseClient):
-    async def token_auth(self, input: TokenAuthenticationInput) -> TokenAuthTokenAuth:
-        query = gql(
-            """
-            mutation TokenAuth($input: TokenAuthenticationInput!) {
-              tokenAuth(input: $input) {
-                token
-              }
-            }
-            """
-        )
-        variables: Dict[str, object] = {"input": input}
-        response = await self.execute(query=query, variables=variables)
-        data = self.get_data(response)
-        return TokenAuth.model_validate(data).token_auth
-
-    async def active_coop_status(self) -> Optional[ActiveCoopStatusCoop]:
-        query = gql(
-            """
-            query ActiveCoopStatus {
-              coop {
-                id
-                status
-              }
-            }
-            """
-        )
-        variables: Dict[str, object] = {}
-        response = await self.execute(query=query, variables=variables)
-        data = self.get_data(response)
-        return ActiveCoopStatus.model_validate(data).coop
-
     async def coop(self) -> Optional[CoopCoop]:
         query = gql(
             """
@@ -121,71 +91,6 @@ class Client(AsyncBaseClient):
         response = await self.execute(query=query, variables=variables)
         data = self.get_data(response)
         return Coop.model_validate(data).coop
-
-    async def me(self) -> Optional[MeMe]:
-        query = gql(
-            """
-            query Me {
-              me {
-                id
-                firstName
-                lastName
-                email
-                phoneNumber
-                isSuperuser
-                isStaff
-                isGuest
-                isActive
-                isEmailVerified
-                dateJoined
-                groups {
-                  id
-                  name
-                  permissions {
-                    id
-                    codename
-                    name
-                  }
-                }
-                referred {
-                  id
-                  user {
-                    id
-                    firstName
-                    lastName
-                    dateJoined
-                    member {
-                      id
-                    }
-                  }
-                  recommendedBy {
-                    id
-                  }
-                }
-                payments {
-                  id
-                  paid
-                  amount
-                }
-                directDebit {
-                  id
-                  accountName
-                  accountSortCode
-                  accountNumber
-                  paymentDay
-                }
-                member {
-                  id
-                  registrationCompleted
-                }
-              }
-            }
-            """
-        )
-        variables: Dict[str, object] = {}
-        response = await self.execute(query=query, variables=variables)
-        data = self.get_data(response)
-        return Me.model_validate(data).me
 
     async def member(self) -> Optional[MemberMember]:
         query = gql(
@@ -379,6 +284,123 @@ class Client(AsyncBaseClient):
         response = await self.execute(query=query, variables=variables)
         data = self.get_data(response)
         return Member.model_validate(data).member
+
+    async def token_auth(self, input: TokenAuthenticationInput) -> TokenAuthTokenAuth:
+        query = gql(
+            """
+            mutation TokenAuth($input: TokenAuthenticationInput!) {
+              tokenAuth(input: $input) {
+                token
+              }
+            }
+            """
+        )
+        variables: Dict[str, object] = {"input": input}
+        response = await self.execute(query=query, variables=variables)
+        data = self.get_data(response)
+        return TokenAuth.model_validate(data).token_auth
+
+    async def active_coop_status(self) -> Optional[ActiveCoopStatusCoop]:
+        query = gql(
+            """
+            query ActiveCoopStatus {
+              coop {
+                id
+                status
+              }
+            }
+            """
+        )
+        variables: Dict[str, object] = {}
+        response = await self.execute(query=query, variables=variables)
+        data = self.get_data(response)
+        return ActiveCoopStatus.model_validate(data).coop
+
+    async def faqs(self, tag: str) -> List[FaqsFaqs]:
+        query = gql(
+            """
+            query Faqs($tag: String!) {
+              faqs(tag: $tag) {
+                id
+                question
+                answer
+                tags {
+                  id
+                  name
+                }
+              }
+            }
+            """
+        )
+        variables: Dict[str, object] = {"tag": tag}
+        response = await self.execute(query=query, variables=variables)
+        data = self.get_data(response)
+        return Faqs.model_validate(data).faqs
+
+    async def me(self) -> Optional[MeMe]:
+        query = gql(
+            """
+            query Me {
+              me {
+                id
+                firstName
+                lastName
+                email
+                phoneNumber
+                isSuperuser
+                isStaff
+                isGuest
+                isActive
+                isEmailVerified
+                dateJoined
+                groups {
+                  id
+                  name
+                  permissions {
+                    id
+                    codename
+                    name
+                  }
+                }
+                referred {
+                  id
+                  user {
+                    id
+                    firstName
+                    lastName
+                    dateJoined
+                    member {
+                      id
+                    }
+                  }
+                  recommendedBy {
+                    id
+                  }
+                }
+                payments {
+                  id
+                  paid
+                  amount
+                }
+                directDebit {
+                  id
+                  accountName
+                  accountSortCode
+                  accountNumber
+                  paymentDay
+                }
+                member {
+                  id
+                  registrationCompleted
+                }
+              }
+            }
+            """
+        )
+        variables: Dict[str, object] = {}
+        response = await self.execute(query=query, variables=variables)
+        data = self.get_data(response)
+        return Me.model_validate(data).me
 
     async def tribe_url(self) -> str:
         query = gql(
