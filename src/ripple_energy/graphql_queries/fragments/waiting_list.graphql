@@ -1,0 +1,7 @@
+fragment WaitingListFragment on CoopWaitingList {
+  id
+  coop {
+    id
+    name
+  }
+}

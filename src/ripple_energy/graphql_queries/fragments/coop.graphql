@@ -1,9 +1,3 @@
-query Coop {
-  coop {
-    ...CoopFragment
-  }
-}
-
 fragment CoopFragment on Coop {
   id
   name

@@ -7,4 +7,4 @@ class Version(BaseModel):
     version: Optional[str]
 
 
-Version.update_forward_refs()
+Version.model_rebuild()

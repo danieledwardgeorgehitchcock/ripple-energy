@@ -24,7 +24,7 @@ classifiers = [
   "Programming Language :: Python :: Implementation :: PyPy",
 ]
 dependencies = [
-  "ariadne-codegen~=0.7.1"
+  "ariadne-codegen~=0.9.0"
 ]
 dynamic = ["version"]
 

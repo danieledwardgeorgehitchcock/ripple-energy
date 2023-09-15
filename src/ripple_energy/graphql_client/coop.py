@@ -12,5 +12,5 @@ class CoopCoop(CoopFragment):
     pass
 
 
-Coop.update_forward_refs()
-CoopCoop.update_forward_refs()
+Coop.model_rebuild()
+CoopCoop.model_rebuild()
