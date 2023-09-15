@@ -63,14 +63,22 @@ if(platform == "win32"):
 
 async def main():
     async with RippleEnergy(email = "YOUR_RIPPLE_EMAIL", password = "YOUR_RIPPLE_PASSWORD") as ripple:
+
+        await ripple.authenticate()
+
+        me = await ripple.me()
+
+        print(me)
         
         member = await ripple.member()
-        
-        print(member)
+
+        print(member.address)
 
         version = await ripple.version()
 
         print(version)
+
+        await ripple.deauthenticate()
 
 asyncio.run(main())
 ```
