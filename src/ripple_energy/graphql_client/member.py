@@ -12,5 +12,5 @@ class MemberMember(MemberFragment):
     pass
 
 
-Member.update_forward_refs()
-MemberMember.update_forward_refs()
+Member.model_rebuild()
+MemberMember.model_rebuild()

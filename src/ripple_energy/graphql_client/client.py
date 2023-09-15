@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Dict, Optional
 
 from .active_coop_status import ActiveCoopStatus, ActiveCoopStatusCoop
 from .async_base_client import AsyncBaseClient
@@ -15,6 +15,21 @@ def gql(q: str) -> str:
 
 
 class Client(AsyncBaseClient):
+    async def token_auth(self, input: TokenAuthenticationInput) -> TokenAuthTokenAuth:
+        query = gql(
+            """
+            mutation TokenAuth($input: TokenAuthenticationInput!) {
+              tokenAuth(input: $input) {
+                token
+              }
+            }
+            """
+        )
+        variables: Dict[str, object] = {"input": input}
+        response = await self.execute(query=query, variables=variables)
+        data = self.get_data(response)
+        return TokenAuth.model_validate(data).token_auth
+
     async def active_coop_status(self) -> Optional[ActiveCoopStatusCoop]:
         query = gql(
             """
@@ -26,10 +41,10 @@ class Client(AsyncBaseClient):
             }
             """
         )
-        variables: dict[str, object] = {}
+        variables: Dict[str, object] = {}
         response = await self.execute(query=query, variables=variables)
         data = self.get_data(response)
-        return ActiveCoopStatus.parse_obj(data).coop
+        return ActiveCoopStatus.model_validate(data).coop
 
     async def coop(self) -> Optional[CoopCoop]:
         query = gql(
@@ -101,10 +116,10 @@ class Client(AsyncBaseClient):
             }
             """
         )
-        variables: dict[str, object] = {}
+        variables: Dict[str, object] = {}
         response = await self.execute(query=query, variables=variables)
         data = self.get_data(response)
-        return Coop.parse_obj(data).coop
+        return Coop.model_validate(data).coop
 
     async def me(self) -> Optional[MeMe]:
         query = gql(
@@ -166,10 +181,10 @@ class Client(AsyncBaseClient):
             }
             """
         )
-        variables: dict[str, object] = {}
+        variables: Dict[str, object] = {}
         response = await self.execute(query=query, variables=variables)
         data = self.get_data(response)
-        return Me.parse_obj(data).me
+        return Me.model_validate(data).me
 
     async def member(self) -> Optional[MemberMember]:
         query = gql(
@@ -359,25 +374,10 @@ class Client(AsyncBaseClient):
             }
             """
         )
-        variables: dict[str, object] = {}
+        variables: Dict[str, object] = {}
         response = await self.execute(query=query, variables=variables)
         data = self.get_data(response)
-        return Member.parse_obj(data).member
-
-    async def token_auth(self, input: TokenAuthenticationInput) -> TokenAuthTokenAuth:
-        query = gql(
-            """
-            mutation TokenAuth($input: TokenAuthenticationInput!) {
-              tokenAuth(input: $input) {
-                token
-              }
-            }
-            """
-        )
-        variables: dict[str, object] = {"input": input}
-        response = await self.execute(query=query, variables=variables)
-        data = self.get_data(response)
-        return TokenAuth.parse_obj(data).token_auth
+        return Member.model_validate(data).member
 
     async def version(self) -> Optional[str]:
         query = gql(
@@ -387,7 +387,7 @@ class Client(AsyncBaseClient):
             }
             """
         )
-        variables: dict[str, object] = {}
+        variables: Dict[str, object] = {}
         response = await self.execute(query=query, variables=variables)
         data = self.get_data(response)
-        return Version.parse_obj(data).version
+        return Version.model_validate(data).version

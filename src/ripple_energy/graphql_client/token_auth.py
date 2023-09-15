@@ -13,5 +13,5 @@ class TokenAuthTokenAuth(BaseModel):
     token: Optional[str]
 
 
-TokenAuth.update_forward_refs()
-TokenAuthTokenAuth.update_forward_refs()
+TokenAuth.model_rebuild()
+TokenAuthTokenAuth.model_rebuild()

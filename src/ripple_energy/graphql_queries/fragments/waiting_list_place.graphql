@@ -1,0 +1,7 @@
+fragment WaitingListPlaceFragment on MemberCoopWaitingListPlace {
+  id
+  generationRequestedKwh
+  waitingList {
+    ...WaitingListFragment
+  }
+}

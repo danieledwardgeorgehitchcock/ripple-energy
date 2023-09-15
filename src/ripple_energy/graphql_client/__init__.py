@@ -1,6 +1,6 @@
 from .active_coop_status import ActiveCoopStatus, ActiveCoopStatusCoop
 from .async_base_client import AsyncBaseClient
-from .base_model import BaseModel
+from .base_model import BaseModel, Upload
 from .client import Client
 from .coop import Coop, CoopCoop
 from .enums import (
@@ -267,6 +267,7 @@ __all__ = [
     "UpdateSupplierQuotesInput",
     "UpdateUserCRMInput",
     "UpdateUserInput",
+    "Upload",
     "UserContactInput",
     "UserInput",
     "Version",

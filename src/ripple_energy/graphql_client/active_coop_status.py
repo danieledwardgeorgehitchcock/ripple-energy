@@ -13,5 +13,5 @@ class ActiveCoopStatusCoop(BaseModel):
     status: CoopCoopStatusChoices
 
 
-ActiveCoopStatus.update_forward_refs()
-ActiveCoopStatusCoop.update_forward_refs()
+ActiveCoopStatus.model_rebuild()
+ActiveCoopStatusCoop.model_rebuild()
