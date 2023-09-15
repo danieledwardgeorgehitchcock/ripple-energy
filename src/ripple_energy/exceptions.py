@@ -1,8 +1,17 @@
-class RippleEnergyError(Exception):
+class RippleEnergyException(Exception):
     """Generic Ripple Energy Exception"""
 
-class RippleEnergyEmailError(RippleEnergyError):
+class RippleEnergyEmailException(RippleEnergyException):
     """Ripple Energy Missing Email Exception"""
 
-class RippleEnergyPasswordError(RippleEnergyError):
+class RippleEnergyPasswordException(RippleEnergyException):
     """Ripple Energy Missing Password Exception"""
+
+class RippleEnergyAuthenticationException(RippleEnergyException):
+    """Ripple Energy Authentication Exception"""
+
+class RippleEnergyDeauthenticationException(RippleEnergyException):
+    """Ripple Energy Deauthentication Exception"""
+
+class RippleEnergyTokenDestroyException(RippleEnergyException):
+    """Ripple Energy Unable To Destroy Token Exception"""

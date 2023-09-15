@@ -2,12 +2,13 @@ from typing import Dict, List, Optional
 
 from .active_coop_status import ActiveCoopStatus, ActiveCoopStatusCoop
 from .async_base_client import AsyncBaseClient
+from .authenticate import Authenticate, AuthenticateTokenAuth
 from .coop import Coop, CoopCoop
+from .deauthenticate import Deauthenticate
 from .faqs import Faqs, FaqsFaqs
 from .input_types import TokenAuthenticationInput
 from .me import Me, MeMe
 from .member import Member, MemberMember
-from .token_auth import TokenAuth, TokenAuthTokenAuth
 from .tribe_url import TribeUrl
 from .version import Version
 
@@ -17,6 +18,24 @@ def gql(q: str) -> str:
 
 
 class Client(AsyncBaseClient):
+    async def deauthenticate(self) -> Deauthenticate:
+        query = gql(
+            """
+            mutation Deauthenticate {
+              authLogoutSession {
+                logoutSuccessful
+              }
+              deleteTokenCookie {
+                deleted
+              }
+            }
+            """
+        )
+        variables: Dict[str, object] = {}
+        response = await self.execute(query=query, variables=variables)
+        data = self.get_data(response)
+        return Deauthenticate.model_validate(data)
+
     async def coop(self) -> Optional[CoopCoop]:
         query = gql(
             """
@@ -285,10 +304,12 @@ class Client(AsyncBaseClient):
         data = self.get_data(response)
         return Member.model_validate(data).member
 
-    async def token_auth(self, input: TokenAuthenticationInput) -> TokenAuthTokenAuth:
+    async def authenticate(
+        self, input: TokenAuthenticationInput
+    ) -> AuthenticateTokenAuth:
         query = gql(
             """
-            mutation TokenAuth($input: TokenAuthenticationInput!) {
+            mutation Authenticate($input: TokenAuthenticationInput!) {
               tokenAuth(input: $input) {
                 token
               }
@@ -298,7 +319,7 @@ class Client(AsyncBaseClient):
         variables: Dict[str, object] = {"input": input}
         response = await self.execute(query=query, variables=variables)
         data = self.get_data(response)
-        return TokenAuth.model_validate(data).token_auth
+        return Authenticate.model_validate(data).token_auth
 
     async def active_coop_status(self) -> Optional[ActiveCoopStatusCoop]:
         query = gql(
