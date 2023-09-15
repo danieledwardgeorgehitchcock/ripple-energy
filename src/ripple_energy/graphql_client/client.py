@@ -7,6 +7,7 @@ from .input_types import TokenAuthenticationInput
 from .me import Me, MeMe
 from .member import Member, MemberMember
 from .token_auth import TokenAuth, TokenAuthTokenAuth
+from .tribe_url import TribeUrl
 from .version import Version
 
 
@@ -378,6 +379,19 @@ class Client(AsyncBaseClient):
         response = await self.execute(query=query, variables=variables)
         data = self.get_data(response)
         return Member.model_validate(data).member
+
+    async def tribe_url(self) -> str:
+        query = gql(
+            """
+            query TribeUrl {
+              tribeUrl
+            }
+            """
+        )
+        variables: Dict[str, object] = {}
+        response = await self.execute(query=query, variables=variables)
+        data = self.get_data(response)
+        return TribeUrl.model_validate(data).tribe_url
 
     async def version(self) -> Optional[str]:
         query = gql(
