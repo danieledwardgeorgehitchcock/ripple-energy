@@ -14,6 +14,22 @@ class RippleEnergy:
         else:
             self.password = password
 
+    async def __aenter__(self, client: Client | None = None, headers: dict[str, str] = None) -> RippleEnergy:
+        """Async enter"""
+        if headers is None:
+            self.headers = {}
+        else:
+            self.headers = headers        
+        if client is None:
+            self.client = Client(url = RIPPLE_GRAPH_URL, headers = self.headers)
+        await self.token_auth()   
+        return self
+
+    async def __aexit__(self, *args) -> None:
+        """Async exit"""
+        self.client = None
+        self.headers = None
+
     async def token_auth(self):
         """Authenticate with Ripple and generate JWT token"""
         data = await self.client.token_auth(input = {"email": self.email, "password": self.password})
@@ -45,18 +61,7 @@ class RippleEnergy:
         data = await self.client.coop()
         return data
 
-    async def __aenter__(self, client: Client | None = None, headers: dict[str, str] = None) -> RippleEnergy:
-        """Async enter"""
-        if headers is None:
-            self.headers = {}
-        else:
-            self.headers = headers        
-        if client is None:
-            self.client = Client(url = RIPPLE_GRAPH_URL, headers = self.headers)
-        await self.token_auth()   
-        return self
-
-    async def __aexit__(self, *args) -> None:
-        """Async exit"""
-        self.client = None
-        self.headers = None
+    async def tribe_url(self):
+        """Ripple Tribe URL"""
+        data = await self.client.tribe_url()
+        return data    

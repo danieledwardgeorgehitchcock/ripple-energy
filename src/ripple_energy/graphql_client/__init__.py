@@ -137,6 +137,7 @@ from .me import (
 )
 from .member import Member, MemberMember
 from .token_auth import TokenAuth, TokenAuthTokenAuth
+from .tribe_url import TribeUrl
 from .version import Version
 
 __all__ = [
@@ -261,6 +262,7 @@ __all__ = [
     "TokenAuth",
     "TokenAuthTokenAuth",
     "TokenAuthenticationInput",
+    "TribeUrl",
     "UpdateMemberBeneficiaryInput",
     "UpdateMemberConsumptionEvidenceSubmissionAdminNoteInput",
     "UpdateQuoteInput",
