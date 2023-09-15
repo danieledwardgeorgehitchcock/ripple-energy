@@ -1,8 +1,11 @@
 from __future__ import annotations
 from graphql_client.client import Client
 from constants import RIPPLE_GRAPH_URL
+from helpers import generate_jwt_header
 from exceptions import (RippleEnergyEmailException,
                         RippleEnergyPasswordException,
+                        RippleEnergyMissingCredentialsOrTokenException,
+                        RippleEnergyMissingAuthorizationHeaderException,
                         RippleEnergyAuthenticationException,
                         RippleEnergyDeauthenticationException,
                         RippleEnergyTokenDestroyException)
@@ -12,23 +15,21 @@ class RippleEnergy:
             self,
             email: str | None = None,
             password: str | None = None,
+            token: str | None = None,
             client: Client | None = None,
-            headers: dict[str, str] | None = None
+            headers: dict[str, str] = {}
             ):
         """Initialise Ripple object"""
-        if not email:
-            raise RippleEnergyEmailException
-        else:
+        self.headers = headers
+        if not email and not password and not token:
+            raise RippleEnergyMissingCredentialsOrTokenException      
+        if email:
             self.email = email
-        if not password:
-            raise RippleEnergyPasswordException
-        else:
-            self.password = password
-        if headers is None:
-            self.headers = {}
-        else:
-            self.headers = headers        
-        if client is None:
+        if password:
+            self.password = password           
+        if token:
+            self.headers.update(generate_jwt_header(token))
+        if not client:
             self.client = Client(url = RIPPLE_GRAPH_URL, headers = self.headers)
 
     async def __aenter__(self) -> RippleEnergy:
@@ -46,20 +47,34 @@ class RippleEnergy:
 
     async def authenticate(self):
         """Authenticate with Ripple Energy and generate JWT token"""
+        if not self.email:
+            raise RippleEnergyEmailException
+        if not self.password:
+            raise RippleEnergyPasswordException
+
         data = await self.client.authenticate(input = {"email": self.email, "password": self.password})
+
         if not data.token:
             raise RippleEnergyAuthenticationException
-        self.headers.update({"Authorization": f"JWT {data.token}"})
+        
+        self.headers.update(generate_jwt_header(data.token))
+
         return data
 
     async def deauthenticate(self):
         """De-Authenticate with Ripple Energy and destroy Ripple Energy JWT token"""
+        if not self.headers.get("Authorization"):
+            raise RippleEnergyMissingAuthorizationHeaderException
+
         data = await self.client.deauthenticate()
+
         if not data.auth_logout_session.logout_successful:
             raise RippleEnergyDeauthenticationException
         if not data.delete_token_cookie.deleted:
             raise RippleEnergyTokenDestroyException
-        self.headers.clear
+        
+        self.headers.pop("Authorization")
+
         return data
     
     async def version(self):

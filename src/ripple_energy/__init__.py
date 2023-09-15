@@ -6,6 +6,9 @@ from constants import RIPPLE_GRAPH_URL
 from exceptions import (RippleEnergyException,
                         RippleEnergyEmailException,
                         RippleEnergyPasswordException,
+                        RippleEnergyMissingTokenException,
+                        RippleEnergyMissingCredentialsOrTokenException,
+                        RippleEnergyMissingAuthorizationHeaderException,
                         RippleEnergyAuthenticationException,
                         RippleEnergyDeauthenticationException,
                         RippleEnergyTokenDestroyException)
@@ -15,6 +18,9 @@ __all__ = [
     RippleEnergyException,
     RippleEnergyEmailException,
     RippleEnergyPasswordException,
+    RippleEnergyMissingTokenException,
+    RippleEnergyMissingCredentialsOrTokenException,
+    RippleEnergyMissingAuthorizationHeaderException,
     RippleEnergyAuthenticationException,
     RippleEnergyDeauthenticationException,
     RippleEnergyTokenDestroyException
