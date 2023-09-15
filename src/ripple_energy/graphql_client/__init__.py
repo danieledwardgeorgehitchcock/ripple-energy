@@ -1,8 +1,14 @@
 from .active_coop_status import ActiveCoopStatus, ActiveCoopStatusCoop
 from .async_base_client import AsyncBaseClient
+from .authenticate import Authenticate, AuthenticateTokenAuth
 from .base_model import BaseModel, Upload
 from .client import Client
 from .coop import Coop, CoopCoop
+from .deauthenticate import (
+    Deauthenticate,
+    DeauthenticateAuthLogoutSession,
+    DeauthenticateDeleteTokenCookie,
+)
 from .enums import (
     AccountType,
     ApprovalStatus,
@@ -137,7 +143,6 @@ from .me import (
     MeMeReferredUserMember,
 )
 from .member import Member, MemberMember
-from .token_auth import TokenAuth, TokenAuthTokenAuth
 from .tribe_url import TribeUrl
 from .version import Version
 
@@ -152,6 +157,8 @@ __all__ = [
     "ApproveMemberConsumptionEvidenceSubmissionInput",
     "AsyncBaseClient",
     "AuthLoginSessionInputType",
+    "Authenticate",
+    "AuthenticateTokenAuth",
     "AuthenticationCreateAccountInput",
     "BaseModel",
     "BillingAddress",
@@ -186,6 +193,9 @@ __all__ = [
     "CreateReservedUserInput",
     "CreateUserMemoInputs",
     "CrmUserMemoChannelChoices",
+    "Deauthenticate",
+    "DeauthenticateAuthLogoutSession",
+    "DeauthenticateDeleteTokenCookie",
     "DirectDebitInput",
     "Faqs",
     "FaqsFaqs",
@@ -263,8 +273,6 @@ __all__ = [
     "StripePaymentType",
     "SupplierMemberInfoInput",
     "SurveyQuestionChoiceTypeChoices",
-    "TokenAuth",
-    "TokenAuthTokenAuth",
     "TokenAuthenticationInput",
     "TribeUrl",
     "UpdateMemberBeneficiaryInput",

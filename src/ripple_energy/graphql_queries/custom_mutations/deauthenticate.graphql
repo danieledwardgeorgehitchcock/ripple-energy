@@ -1,0 +1,8 @@
+mutation Deauthenticate {
+  authLogoutSession {
+    logoutSuccessful
+  }
+  deleteTokenCookie {
+    deleted
+  }
+}
