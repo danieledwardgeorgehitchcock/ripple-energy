@@ -3,7 +3,13 @@ from graphql_client.client import Client
 from constants import RIPPLE_GRAPH_URL
 
 class RippleEnergy:
-    def __init__(self, email: str = None, password: str = None):
+    def __init__(
+            self,
+            email: str | None = None,
+            password: str | None = None,
+            client: Client | None = None,
+            headers: dict[str, str] | None = None
+            ):
         """Initialise Ripple object"""
         if email is None:
             return #Replace with exception
@@ -13,19 +19,22 @@ class RippleEnergy:
             return #Replace with exception
         else:
             self.password = password
-
-    async def __aenter__(self, client: Client | None = None, headers: dict[str, str] = None) -> RippleEnergy:
-        """Async enter"""
         if headers is None:
             self.headers = {}
         else:
             self.headers = headers        
         if client is None:
             self.client = Client(url = RIPPLE_GRAPH_URL, headers = self.headers)
+
+    async def __aenter__(self) -> RippleEnergy:
+        """Async enter"""
         await self.token_auth()   
         return self
 
-    async def __aexit__(self, *args) -> None:
+    async def __aexit__(
+            self,
+            *args
+            ) -> None:
         """Async exit"""
         self.client = None
         self.headers = None
@@ -66,7 +75,10 @@ class RippleEnergy:
         data = await self.client.tribe_url()
         return data
     
-    async def faqs(self, tag: str = None):
+    async def faqs(
+            self,
+            tag: str | None = None
+            ):
         """Ripple Frequently Asked Questions"""
         if tag is None:
             tag = ""
