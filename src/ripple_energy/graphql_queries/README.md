@@ -50,7 +50,7 @@ The below lists consist of standard queries (the queries documented [here](https
  - [ ] quoteCalculator
  - [ ] coopTimelineProgression
  - [ ] getNews
- - [ ] faqs
+ - [x] faqs
  - [ ] searchFaqs
  - [ ] monthlySavingsData
  - [ ] cumulativeSavingsData

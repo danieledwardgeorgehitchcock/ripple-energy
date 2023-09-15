@@ -22,7 +22,7 @@ The primary purpose of this module is to create an interface for Home Assistant 
 
  - [ ] Complete function wrappers for all GraphQL queries
  - [ ] Complete function wrappers for all GraphQL mutations
- - [ ] Create function exceptions
+ - [x] Create exceptions
  - [x] Put functions into classes
  - [ ] Add linting
  - [ ] Create tests

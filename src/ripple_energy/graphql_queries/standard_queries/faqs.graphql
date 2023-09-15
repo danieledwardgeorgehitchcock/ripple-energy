@@ -1,0 +1,11 @@
+query Faqs($tag: String!) {
+  faqs(tag: $tag) {
+    id
+    question
+    answer
+    tags {
+      id
+      name
+    }
+  }
+}

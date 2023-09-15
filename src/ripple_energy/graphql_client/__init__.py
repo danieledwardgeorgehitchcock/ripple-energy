@@ -31,6 +31,7 @@ from .exceptions import (
     GraphQLClientHttpError,
     GraphQlClientInvalidResponseError,
 )
+from .faqs import Faqs, FaqsFaqs, FaqsFaqsTags
 from .fragments import (
     CoopFragment,
     CoopFragmentCurrency,
@@ -186,6 +187,9 @@ __all__ = [
     "CreateUserMemoInputs",
     "CrmUserMemoChannelChoices",
     "DirectDebitInput",
+    "Faqs",
+    "FaqsFaqs",
+    "FaqsFaqsTags",
     "FilterInput",
     "GenerationDataTitle",
     "GenerationGenerationFarmGenerationTypeChoices",
