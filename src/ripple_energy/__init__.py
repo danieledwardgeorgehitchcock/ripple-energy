@@ -2,7 +2,12 @@
 #
 # SPDX-License-Identifier: MIT
 from ripple_energy import RippleEnergy
+from constants import RIPPLE_GRAPH_URL
+from exceptions import RippleEnergyError, RippleEnergyEmailError, RippleEnergyPasswordError
 
 __all__ = [
-    RippleEnergy
+    RippleEnergy,
+    RippleEnergyError,
+    RippleEnergyEmailError,
+    RippleEnergyPasswordError
 ]

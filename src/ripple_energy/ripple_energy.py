@@ -1,6 +1,7 @@
 from __future__ import annotations
 from graphql_client.client import Client
 from constants import RIPPLE_GRAPH_URL
+from exceptions import RippleEnergyEmailError, RippleEnergyPasswordError
 
 class RippleEnergy:
     def __init__(
@@ -12,11 +13,11 @@ class RippleEnergy:
             ):
         """Initialise Ripple object"""
         if email is None:
-            return #Replace with exception
+            raise RippleEnergyEmailError
         else:
             self.email = email
         if password is None:
-            return #Replace with exception
+            raise RippleEnergyPasswordError
         else:
             self.password = password
         if headers is None:
@@ -40,38 +41,38 @@ class RippleEnergy:
         self.headers = None
 
     async def token_auth(self):
-        """Authenticate with Ripple and generate JWT token"""
+        """Authenticate with Ripple Energy and generate JWT token"""
         data = await self.client.token_auth(input = {"email": self.email, "password": self.password})
         self.headers.update({"Authorization": f"JWT {data.token}"})
         return data
     
     async def version(self):
-        """Ripple GraphQL API version"""
+        """Ripple Energy GraphQL API version"""
         data = await self.client.version()
         return data
     
     async def member(self):
-        """Ripple member data"""
+        """Ripple Energy member data"""
         data = await self.client.member()
         return data
 
     async def me(self):
-        """Ripple user data"""
+        """Ripple Energy user data"""
         data = await self.client.me()
         return data
 
     async def active_coop_status(self):
-        """Ripple active co-op status"""
+        """Ripple Energy active co-op status"""
         data = await self.client.active_coop_status()
         return data
 
     async def coop(self):
-        """Ripple co-op data"""
+        """Ripple Energy co-op data"""
         data = await self.client.coop()
         return data
 
     async def tribe_url(self):
-        """Ripple Tribe URL"""
+        """Ripple Energy Tribe URL"""
         data = await self.client.tribe_url()
         return data
     
@@ -79,7 +80,7 @@ class RippleEnergy:
             self,
             tag: str | None = None
             ):
-        """Ripple Frequently Asked Questions"""
+        """Ripple Energy Frequently Asked Questions"""
         if tag is None:
             tag = ""
         data = await self.client.faqs(tag)
