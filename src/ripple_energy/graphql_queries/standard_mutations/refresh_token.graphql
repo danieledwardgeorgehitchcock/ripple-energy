@@ -1,0 +1,7 @@
+mutation RefreshToken($token: String) {
+  refreshToken(token: $token) {
+    payload
+    refreshExpiresIn
+    token
+  }
+}

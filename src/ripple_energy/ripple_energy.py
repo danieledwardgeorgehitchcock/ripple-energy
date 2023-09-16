@@ -8,8 +8,9 @@ from exceptions import (RippleEnergyEmailException,
                         RippleEnergyMissingCredentialsOrTokenException,
                         RippleEnergyMissingAuthorizationHeaderException,
                         RippleEnergyDeauthenticationException,
-#                        RippleEnergyTokenDestroyException,                        
-                        RippleEnergyAuthenticationException)
+                        RippleEnergyTokenDestroyException,                        
+                        RippleEnergyAuthenticationException,
+                        RippleEnergyMissingTokenException)
 
 logging.getLogger(__name__)
 
@@ -19,6 +20,7 @@ class RippleEnergy:
         self.email = email
         self.password = password
         self.headers = headers
+        self.token = token
         if not email and not password and not token:
             raise RippleEnergyMissingCredentialsOrTokenException       
         if token:
@@ -28,10 +30,13 @@ class RippleEnergy:
 
     async def __aenter__(self) -> RippleEnergy:
         """Async enter"""
+        if not self.token:
+            await self.authenticate()
         return self
 
-    async def __aexit__(self,*args) -> None:
+    async def __aexit__(self, *args) -> None:
         """Async exit"""
+        await self.deauthenticate()
 
     async def authenticate(self):
         """Authenticate with Ripple Energy and generate JWT token"""
@@ -47,24 +52,24 @@ class RippleEnergy:
         
         logging.info(f"Authentication successful. Token: {data.token}")
         
+        self.token = data.token
         self.headers.update(generate_jwt_header(data.token))
 
         return data
 
     async def deauthenticate(self):
-        """De-Authenticate with Ripple Energy and destroy Ripple Energy JWT token"""
+        """De-Authenticate with Ripple Energy and destroy JWT token"""
         if not self.headers.get("Authorization"):
             raise RippleEnergyMissingAuthorizationHeaderException
 
         data = await self.client.deauthenticate()
 
         if not data.auth_logout_session.logout_successful:
-            logging.exception("Deauthentication Session Logout Unsuccessful")
             raise RippleEnergyDeauthenticationException
         if not data.delete_token_cookie.deleted:
-            logging.warn("Deauthentication Cookie Deletion Unsuccessful")
-#            raise RippleEnergyTokenDestroyException #This exception fires when using token (works fine for credentials) - Possibly a cookie issue
+            raise RippleEnergyTokenDestroyException
 
+        self.token = None
         self.headers.pop("Authorization")
 
         return data
@@ -104,4 +109,21 @@ class RippleEnergy:
         if tag is None:
             tag = ""
         data = await self.client.faqs(tag)
+        return data
+    
+    async def refresh_token(self):
+        """Ripple Energy refresh JWT token"""
+        if not self.token:
+            raise RippleEnergyMissingTokenException
+
+        data = await self.client.refresh_token(self.token)
+
+        if not data.token:
+            raise RippleEnergyAuthenticationException
+        
+        logging.info(f"Refresh successful. Token: {data.token}")
+        
+        self.token = data.token
+        self.headers.update(generate_jwt_header(data.token))
+
         return data

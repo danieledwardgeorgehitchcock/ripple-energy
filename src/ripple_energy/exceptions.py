@@ -24,3 +24,6 @@ class RippleEnergyDeauthenticationException(RippleEnergyException):
 
 class RippleEnergyTokenDestroyException(RippleEnergyException):
     """Ripple Energy Unable To Destroy Token Exception"""
+
+class RippleEnergyMissingTokenException(RippleEnergyException):
+    """Ripple Energy Missing Token Exception"""

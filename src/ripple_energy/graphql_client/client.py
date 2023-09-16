@@ -1,14 +1,16 @@
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Union
 
 from .active_coop_status import ActiveCoopStatus, ActiveCoopStatusCoop
 from .async_base_client import AsyncBaseClient
 from .authenticate import Authenticate, AuthenticateTokenAuth
+from .base_model import UNSET, UnsetType
 from .coop import Coop, CoopCoop
 from .deauthenticate import Deauthenticate
 from .faqs import Faqs, FaqsFaqs
 from .input_types import TokenAuthenticationInput
 from .me import Me, MeMe
 from .member import Member, MemberMember
+from .refresh_token import RefreshToken, RefreshTokenRefreshToken
 from .tribe_url import TribeUrl
 from .version import Version
 
@@ -320,6 +322,25 @@ class Client(AsyncBaseClient):
         response = await self.execute(query=query, variables=variables)
         data = self.get_data(response)
         return Authenticate.model_validate(data).token_auth
+
+    async def refresh_token(
+        self, token: Union[Optional[str], UnsetType] = UNSET
+    ) -> Optional[RefreshTokenRefreshToken]:
+        query = gql(
+            """
+            mutation RefreshToken($token: String) {
+              refreshToken(token: $token) {
+                payload
+                refreshExpiresIn
+                token
+              }
+            }
+            """
+        )
+        variables: Dict[str, object] = {"token": token}
+        response = await self.execute(query=query, variables=variables)
+        data = self.get_data(response)
+        return RefreshToken.model_validate(data).refresh_token
 
     async def active_coop_status(self) -> Optional[ActiveCoopStatusCoop]:
         query = gql(
