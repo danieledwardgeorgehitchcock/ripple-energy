@@ -155,7 +155,7 @@ The below lists consist of standard queries (the queries documented [here](https
  - [ ] removeGiftCard
  - [ ] openGiftCard
  - [ ] verifyToken
- - [ ] refreshToken
+ - [x] refreshToken
  - [ ] deleteTokenCookie
  - [ ] deleteRefreshTokenCookie
 
