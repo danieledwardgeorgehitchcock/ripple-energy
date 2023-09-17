@@ -27,7 +27,7 @@ class RippleEnergy:
                  headers: dict[str, str] = {},
                  auto_auth_deauth: bool = True
                  ):
-        """Initialise Ripple object"""
+        """Initialise Ripple Energy object"""
         self.email = email
         self.password = password
         self.headers = headers
@@ -41,7 +41,7 @@ class RippleEnergy:
             self.client = Client(url=RIPPLE_GRAPH_URL, headers=self.headers)
 
     async def __aenter__(self) -> RippleEnergy:
-        """Async enter"""
+        """Ripple Energy asyncronous enter"""
         if self.auto_auth_deauth:
             if not self.token:
                 await self.authenticate()
@@ -55,7 +55,7 @@ class RippleEnergy:
     async def __aexit__(self,
                         *args
                         ) -> None:
-        """Async exit"""
+        """Ripple Energy asyncronous exit"""
         if self.auto_auth_deauth:
             await self.deauthenticate()
 
@@ -96,7 +96,7 @@ class RippleEnergy:
         return data
 
     async def deauthenticate(self):
-        """De-Authenticate with Ripple Energy and destroy JWT token"""
+        """De-authenticate with Ripple Energy and destroy JWT token"""
         if not self.headers.get("Authorization"):
             raise RippleEnergyMissingAuthorizationHeaderException
 
@@ -108,6 +108,7 @@ class RippleEnergy:
             raise RippleEnergyTokenDestroyException
 
         self.token = None
+        self.token_expires = datetime.now()
         self.headers.pop("Authorization")
 
         return data
