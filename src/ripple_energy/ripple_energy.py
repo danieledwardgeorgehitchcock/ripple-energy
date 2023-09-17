@@ -60,7 +60,8 @@ class RippleEnergy:
             await self.deauthenticate()
 
     def check_expiry(function):
-        async def wrapper(*args, **kwargs):
+        """Ripple Energy decorator function to check JWT token expiry"""
+        async def decorator(*args, **kwargs):
             if args[0].token_expires < datetime.now():
                 if args[0].auto_auth_deauth:
                     await args[0].refresh_token()
@@ -69,7 +70,7 @@ class RippleEnergy:
 
             return await function(*args, **kwargs)
 
-        return wrapper
+        return decorator
 
     async def authenticate(self):
         """Authenticate with Ripple Energy and generate JWT token"""
@@ -185,4 +186,3 @@ class RippleEnergy:
             tag = ""
         data = await self.client.faqs(tag)
         return data
-
