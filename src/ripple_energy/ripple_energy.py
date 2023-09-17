@@ -151,8 +151,6 @@ class RippleEnergy:
         self.headers.update(generate_jwt_header(data.token))
         self.token_expires = datetime.fromtimestamp(data.refresh_expires_in)
 
-        print(data)
-
         return data
 
     async def verify_token(self):
