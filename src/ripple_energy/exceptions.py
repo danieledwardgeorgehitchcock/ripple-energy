@@ -32,3 +32,7 @@ class RippleEnergyDeauthenticationException(RippleEnergyException):
 
 class RippleEnergyTokenDestroyException(RippleEnergyException):
     """Ripple Energy Unable To Destroy Token Exception"""
+
+
+class RippleEnergyTokenExpiredException(RippleEnergyException):
+    """Ripple Energy Token Expired Exception"""
