@@ -7,7 +7,8 @@ from exceptions import (RippleEnergyException,
                         RippleEnergyAuthenticationException,
                         RippleEnergyDeauthenticationException,
                         RippleEnergyTokenDestroyException,
-                        RippleEnergyMissingTokenException
+                        RippleEnergyMissingTokenException,
+                        RippleEnergyTokenExpiredException
                         )
 
 __all__ = [
@@ -20,5 +21,6 @@ __all__ = [
     RippleEnergyAuthenticationException,
     RippleEnergyDeauthenticationException,
     RippleEnergyTokenDestroyException,
-    RippleEnergyMissingTokenException
+    RippleEnergyMissingTokenException,
+    RippleEnergyTokenExpiredException
 ]

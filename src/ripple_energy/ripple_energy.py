@@ -11,7 +11,8 @@ from exceptions import (RippleEnergyEmailException,
                         RippleEnergyDeauthenticationException,
                         RippleEnergyTokenDestroyException,
                         RippleEnergyAuthenticationException,
-                        RippleEnergyMissingTokenException
+                        RippleEnergyMissingTokenException,
+                        RippleEnergyTokenExpiredException
                         )
 
 logging.getLogger(__name__)
@@ -58,6 +59,18 @@ class RippleEnergy:
         if self.auto_auth_deauth:
             await self.deauthenticate()
 
+    def check_expiry(function):
+        async def wrapper(*args, **kwargs):
+            if args[0].token_expires < datetime.now():
+                if args[0].auto_auth_deauth:
+                    await args[0].refresh_token()
+                else:
+                    raise RippleEnergyTokenExpiredException
+
+            return await function(*args, **kwargs)
+
+        return wrapper
+
     async def authenticate(self):
         """Authenticate with Ripple Energy and generate JWT token"""
         if not self.email:
@@ -98,43 +111,6 @@ class RippleEnergy:
 
         return data
 
-    async def version(self):
-        """Ripple Energy GraphQL API version"""
-        data = await self.client.version()
-        return data
-
-    async def member(self):
-        """Ripple Energy member data"""
-        data = await self.client.member()
-        return data
-
-    async def me(self):
-        """Ripple Energy user data"""
-        data = await self.client.me()
-        return data
-
-    async def active_coop_status(self):
-        """Ripple Energy active co-op status"""
-        data = await self.client.active_coop_status()
-        return data
-
-    async def coop(self):
-        """Ripple Energy co-op data"""
-        data = await self.client.coop()
-        return data
-
-    async def tribe_url(self):
-        """Ripple Energy Tribe URL"""
-        data = await self.client.tribe_url()
-        return data
-
-    async def faqs(self, tag: str | None = None):
-        """Ripple Energy Frequently Asked Questions"""
-        if tag is None:
-            tag = ""
-        data = await self.client.faqs(tag)
-        return data
-
     async def refresh_token(self):
         """Ripple Energy refresh JWT token"""
         if not self.token:
@@ -165,3 +141,48 @@ class RippleEnergy:
         logging.info(f"Token verified. Expires: {self.token_expires}")
 
         return data
+
+    @check_expiry
+    async def version(self):
+        """Ripple Energy GraphQL API version"""
+        data = await self.client.version()
+        return data
+
+    @check_expiry
+    async def member(self):
+        """Ripple Energy member data"""
+        data = await self.client.member()
+        return data
+
+    @check_expiry
+    async def me(self):
+        """Ripple Energy user data"""
+        data = await self.client.me()
+        return data
+
+    @check_expiry
+    async def active_coop_status(self):
+        """Ripple Energy active co-op status"""
+        data = await self.client.active_coop_status()
+        return data
+
+    @check_expiry
+    async def coop(self):
+        """Ripple Energy co-op data"""
+        data = await self.client.coop()
+        return data
+
+    @check_expiry
+    async def tribe_url(self):
+        """Ripple Energy Tribe URL"""
+        data = await self.client.tribe_url()
+        return data
+
+    @check_expiry
+    async def faqs(self, tag: str | None = None):
+        """Ripple Energy Frequently Asked Questions"""
+        if tag is None:
+            tag = ""
+        data = await self.client.faqs(tag)
+        return data
+
