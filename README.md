@@ -52,7 +52,6 @@ You should then be able to use the package from within this environment.
 
 ## Example
 
-Get Member:
   ```python
 from ripple_energy import RippleEnergy
 import asyncio
