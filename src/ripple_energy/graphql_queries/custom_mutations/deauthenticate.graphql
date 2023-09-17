@@ -5,4 +5,7 @@ mutation Deauthenticate {
   deleteTokenCookie {
     deleted
   }
+  deleteRefreshTokenCookie{
+    deleted
+  }
 }

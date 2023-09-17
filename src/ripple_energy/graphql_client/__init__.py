@@ -7,6 +7,7 @@ from .coop import Coop, CoopCoop
 from .deauthenticate import (
     Deauthenticate,
     DeauthenticateAuthLogoutSession,
+    DeauthenticateDeleteRefreshTokenCookie,
     DeauthenticateDeleteTokenCookie,
 )
 from .enums import (
@@ -145,6 +146,7 @@ from .me import (
 from .member import Member, MemberMember
 from .refresh_token import RefreshToken, RefreshTokenRefreshToken
 from .tribe_url import TribeUrl
+from .verify_token import VerifyToken, VerifyTokenVerifyToken
 from .version import Version
 
 __all__ = [
@@ -196,6 +198,7 @@ __all__ = [
     "CrmUserMemoChannelChoices",
     "Deauthenticate",
     "DeauthenticateAuthLogoutSession",
+    "DeauthenticateDeleteRefreshTokenCookie",
     "DeauthenticateDeleteTokenCookie",
     "DirectDebitInput",
     "Faqs",
@@ -287,6 +290,8 @@ __all__ = [
     "Upload",
     "UserContactInput",
     "UserInput",
+    "VerifyToken",
+    "VerifyTokenVerifyToken",
     "Version",
     "WaitingListFragment",
     "WaitingListFragmentCoop",
