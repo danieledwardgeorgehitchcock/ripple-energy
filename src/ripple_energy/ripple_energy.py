@@ -1,5 +1,6 @@
 from __future__ import annotations
 import logging
+from datetime import datetime
 from graphql_client.client import Client
 from constants import RIPPLE_GRAPH_URL
 from helpers import generate_jwt_header
@@ -22,13 +23,15 @@ class RippleEnergy:
                  password: str | None = None,
                  token: str | None = None,
                  client: Client | None = None,
-                 headers: dict[str, str] = {}
+                 headers: dict[str, str] = {},
+                 auto_auth_deauth: bool = True
                  ):
         """Initialise Ripple object"""
         self.email = email
         self.password = password
         self.headers = headers
         self.token = token
+        self.auto_auth_deauth = auto_auth_deauth
         if not email and not password and not token:
             raise RippleEnergyMissingCredentialsOrTokenException
         if token:
@@ -38,15 +41,22 @@ class RippleEnergy:
 
     async def __aenter__(self) -> RippleEnergy:
         """Async enter"""
-        if not self.token:
-            await self.authenticate()
+        if self.auto_auth_deauth:
+            if not self.token:
+                await self.authenticate()
+            else:
+                await self.verify_token()
+            if self.token_expires < datetime.now():
+                await self.refresh_token()
+
         return self
 
     async def __aexit__(self,
                         *args
                         ) -> None:
         """Async exit"""
-        await self.deauthenticate()
+        if self.auto_auth_deauth:
+            await self.deauthenticate()
 
     async def authenticate(self):
         """Authenticate with Ripple Energy and generate JWT token"""
@@ -66,6 +76,8 @@ class RippleEnergy:
 
         self.token = data.token
         self.headers.update(generate_jwt_header(data.token))
+
+        await self.verify_token()
 
         return data
 
@@ -133,9 +145,25 @@ class RippleEnergy:
         if not data.token:
             raise RippleEnergyAuthenticationException
 
-        logging.info(f"Refresh successful. Token: {data.token}")
+        logging.info(f"Token refresh successful. Token: {data.token}")
 
         self.token = data.token
         self.headers.update(generate_jwt_header(data.token))
+        self.token_expires = datetime.fromtimestamp(data.refresh_expires_in)
+
+        print(data)
+
+        return data
+
+    async def verify_token(self):
+        """Ripple Energy verify JWT token"""
+        if not self.token:
+            raise RippleEnergyMissingTokenException
+
+        data = await self.client.verify_token(self.token)
+
+        self.token_expires = datetime.fromtimestamp(data.payload["exp"])
+
+        logging.info(f"Token verified. Expires: {self.token_expires}")
 
         return data

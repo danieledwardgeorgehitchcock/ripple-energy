@@ -12,6 +12,7 @@ from .me import Me, MeMe
 from .member import Member, MemberMember
 from .refresh_token import RefreshToken, RefreshTokenRefreshToken
 from .tribe_url import TribeUrl
+from .verify_token import VerifyToken, VerifyTokenVerifyToken
 from .version import Version
 
 
@@ -28,6 +29,9 @@ class Client(AsyncBaseClient):
                 logoutSuccessful
               }
               deleteTokenCookie {
+                deleted
+              }
+              deleteRefreshTokenCookie {
                 deleted
               }
             }
@@ -341,6 +345,23 @@ class Client(AsyncBaseClient):
         response = await self.execute(query=query, variables=variables)
         data = self.get_data(response)
         return RefreshToken.model_validate(data).refresh_token
+
+    async def verify_token(
+        self, token: Union[Optional[str], UnsetType] = UNSET
+    ) -> Optional[VerifyTokenVerifyToken]:
+        query = gql(
+            """
+            mutation VerifyToken($token: String) {
+              verifyToken(token: $token) {
+                payload
+              }
+            }
+            """
+        )
+        variables: Dict[str, object] = {"token": token}
+        response = await self.execute(query=query, variables=variables)
+        data = self.get_data(response)
+        return VerifyToken.model_validate(data).verify_token
 
     async def active_coop_status(self) -> Optional[ActiveCoopStatusCoop]:
         query = gql(

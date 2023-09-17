@@ -80,7 +80,8 @@ async def main():
         #Simple type response
         print(version)
 
-asyncio.run(main())
+if __name__ == "__main__":
+    asyncio.run(main())
 ```
 
 ## Contributing
