@@ -1,8 +1,14 @@
 # Ripple Energy
 
-Python Module For Ripple Energy.
+A Python Module For interacting with the Ripple Energy GraphQL API.
 
 The primary purpose of this module is to create an interface for Home Assistant to communicate with the Ripple Energy GraphQL API however, the facility is available to develop this module further by adding additional queries / functions.
+
+-----
+
+**Disclaimer** - I do not work for Ripple Energy however, I have memberships in some of their co-ops. While this module has been developed in consultation with Ripple Energy, I cannot guarantee it's long-term support or stability.
+
+-----
 
 [![PyPI - Version](https://img.shields.io/pypi/v/ripple-energy.svg)](https://pypi.org/project/ripple-energy)
 
