@@ -1,8 +1,8 @@
 # Ripple Energy
 
-A Python Module For interacting with the Ripple Energy GraphQL API.
+A Python package For interacting with the Ripple Energy GraphQL API.
 
-The primary purpose of this module is to create an interface for Home Assistant to communicate with the Ripple Energy GraphQL API however, the facility is available to develop this module further by adding additional queries / functions.
+The primary purpose of this package is to create an interface for Home Assistant to communicate with the Ripple Energy GraphQL API however, the facility is available to develop this module further by adding additional queries / functions.
 
 -----
 
