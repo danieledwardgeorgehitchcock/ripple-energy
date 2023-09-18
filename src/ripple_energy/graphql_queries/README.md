@@ -48,12 +48,12 @@ The below lists consist of standard queries (the queries documented [here](https
  - [ ] pendingQuote
  - [x] activeCoopStats
  - [ ] quoteCalculator
- - [ ] coopTimelineProgression
+ - [x] coopTimelineProgression
  - [ ] getNews
  - [x] faqs
  - [ ] searchFaqs
- - [ ] monthlySavingsData
- - [ ] cumulativeSavingsData
+ - [x] monthlySavingsData
+ - [x] cumulativeSavingsData
  - [ ] currencies
  - [ ] currency
  - [ ] payments
@@ -164,6 +164,7 @@ The below lists consist of standard queries (the queries documented [here](https
  - member
  - coop
  - windFarmGenerationData
+ - consumption
 
 ## Custom Fragments
 
@@ -171,3 +172,4 @@ The below lists consist of standard queries (the queries documented [here](https
  - member
  - waitingListPlace
  - waitingList
+ - consumption

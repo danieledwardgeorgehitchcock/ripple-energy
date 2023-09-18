@@ -1,0 +1,15 @@
+query MonthlySavings($date: String!) {
+  monthlySavingsData(date: $date) {
+    currency {
+      code
+      precision
+    }
+    month
+    year
+    savings
+    referredSavings
+    generation
+    co2Saved
+    treeEquivalent
+  }
+}

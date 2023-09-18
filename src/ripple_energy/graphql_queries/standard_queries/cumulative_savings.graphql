@@ -1,0 +1,12 @@
+query CumulativeSavings {
+  cumulativeSavingsData {
+    currency {
+      code
+      precision
+    }
+    savings
+    generation
+    co2Saved
+    lastUpdate
+  }
+}

@@ -36,3 +36,7 @@ class RippleEnergyTokenDestroyException(RippleEnergyException):
 
 class RippleEnergyTokenExpiredException(RippleEnergyException):
     """Ripple Energy Token Expired Exception"""
+
+
+class RippleEnergyCoOpCodeMissingException(RippleEnergyException):
+    """Ripple Energy Token Expired Exception"""

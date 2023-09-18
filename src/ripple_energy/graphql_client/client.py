@@ -4,12 +4,22 @@ from .active_coop_status import ActiveCoopStatus, ActiveCoopStatusCoop
 from .async_base_client import AsyncBaseClient
 from .authenticate import Authenticate, AuthenticateTokenAuth
 from .base_model import UNSET, UnsetType
+from .consumption import Consumption, ConsumptionConsumption
 from .coop import Coop, CoopCoop
+from .coop_timeline_progression import (
+    CoopTimelineProgression,
+    CoopTimelineProgressionCoopTimelineProgression,
+)
+from .cumulative_savings import (
+    CumulativeSavings,
+    CumulativeSavingsCumulativeSavingsData,
+)
 from .deauthenticate import Deauthenticate
 from .faqs import Faqs, FaqsFaqs
 from .input_types import TokenAuthenticationInput
 from .me import Me, MeMe
 from .member import Member, MemberMember
+from .monthly_savings import MonthlySavings, MonthlySavingsMonthlySavingsData
 from .refresh_token import RefreshToken, RefreshTokenRefreshToken
 from .tribe_url import TribeUrl
 from .verify_token import VerifyToken, VerifyTokenVerifyToken
@@ -42,6 +52,35 @@ class Client(AsyncBaseClient):
         response = await self.execute(query=query, variables=variables)
         data = self.get_data(response)
         return Deauthenticate.model_validate(data)
+
+    async def consumption(self) -> Optional[ConsumptionConsumption]:
+        query = gql(
+            """
+            query Consumption {
+              consumption {
+                ...ConsumptionFragment
+              }
+            }
+
+            fragment ConsumptionFragment on MemberConsumption {
+              id
+              electricityAnnualKwh
+              fromCalculator
+              peopleCount
+              bedroomsCount
+              hasElectricVehicle
+              hasElectricHeating
+              hasHeatPump
+              hasSolarPanels
+              solarPanelsCapacity
+              acknowledgesToProvideBillEvidence
+            }
+            """
+        )
+        variables: Dict[str, object] = {}
+        response = await self.execute(query=query, variables=variables)
+        data = self.get_data(response)
+        return Consumption.model_validate(data).consumption
 
     async def coop(self) -> Optional[CoopCoop]:
         query = gql(
@@ -423,6 +462,47 @@ class Client(AsyncBaseClient):
         data = self.get_data(response)
         return ActiveCoopStatus.model_validate(data).coop
 
+    async def coop_timeline_progression(
+        self, coop_code: str
+    ) -> CoopTimelineProgressionCoopTimelineProgression:
+        query = gql(
+            """
+            query CoopTimelineProgression($coopCode: String!) {
+              coopTimelineProgression(coopCode: $coopCode) {
+                timelineProgression
+              }
+            }
+            """
+        )
+        variables: Dict[str, object] = {"coopCode": coop_code}
+        response = await self.execute(query=query, variables=variables)
+        data = self.get_data(response)
+        return CoopTimelineProgression.model_validate(data).coop_timeline_progression
+
+    async def cumulative_savings(
+        self,
+    ) -> Optional[CumulativeSavingsCumulativeSavingsData]:
+        query = gql(
+            """
+            query CumulativeSavings {
+              cumulativeSavingsData {
+                currency {
+                  code
+                  precision
+                }
+                savings
+                generation
+                co2Saved
+                lastUpdate
+              }
+            }
+            """
+        )
+        variables: Dict[str, object] = {}
+        response = await self.execute(query=query, variables=variables)
+        data = self.get_data(response)
+        return CumulativeSavings.model_validate(data).cumulative_savings_data
+
     async def faqs(self, tag: str) -> List[FaqsFaqs]:
         query = gql(
             """
@@ -508,6 +588,33 @@ class Client(AsyncBaseClient):
         response = await self.execute(query=query, variables=variables)
         data = self.get_data(response)
         return Me.model_validate(data).me
+
+    async def monthly_savings(
+        self, date: str
+    ) -> Optional[MonthlySavingsMonthlySavingsData]:
+        query = gql(
+            """
+            query MonthlySavings($date: String!) {
+              monthlySavingsData(date: $date) {
+                currency {
+                  code
+                  precision
+                }
+                month
+                year
+                savings
+                referredSavings
+                generation
+                co2Saved
+                treeEquivalent
+              }
+            }
+            """
+        )
+        variables: Dict[str, object] = {"date": date}
+        response = await self.execute(query=query, variables=variables)
+        data = self.get_data(response)
+        return MonthlySavings.model_validate(data).monthly_savings_data
 
     async def tribe_url(self) -> str:
         query = gql(

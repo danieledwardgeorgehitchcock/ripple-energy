@@ -11,6 +11,22 @@ from .enums import (
 )
 
 
+class ConsumptionFragment(BaseModel):
+    id: str
+    electricity_annual_kwh: float = Field(alias="electricityAnnualKwh")
+    from_calculator: bool = Field(alias="fromCalculator")
+    people_count: int = Field(alias="peopleCount")
+    bedrooms_count: int = Field(alias="bedroomsCount")
+    has_electric_vehicle: bool = Field(alias="hasElectricVehicle")
+    has_electric_heating: bool = Field(alias="hasElectricHeating")
+    has_heat_pump: bool = Field(alias="hasHeatPump")
+    has_solar_panels: bool = Field(alias="hasSolarPanels")
+    solar_panels_capacity: float = Field(alias="solarPanelsCapacity")
+    acknowledges_to_provide_bill_evidence: bool = Field(
+        alias="acknowledgesToProvideBillEvidence"
+    )
+
+
 class CoopFragment(BaseModel):
     id: str
     name: str
@@ -259,6 +275,7 @@ class MemberFragmentWaitingListPlaces(WaitingListPlaceFragment):
     pass
 
 
+ConsumptionFragment.model_rebuild()
 CoopFragment.model_rebuild()
 CoopFragmentCurrency.model_rebuild()
 CoopFragmentGenerationfarm.model_rebuild()

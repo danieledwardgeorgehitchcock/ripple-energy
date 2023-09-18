@@ -1,0 +1,5 @@
+query CoopTimelineProgression($coopCode: String!) {
+  coopTimelineProgression(coopCode: $coopCode) {
+    timelineProgression
+  }
+}
