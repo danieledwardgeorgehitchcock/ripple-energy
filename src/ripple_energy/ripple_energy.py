@@ -12,7 +12,8 @@ from exceptions import (RippleEnergyEmailException,
                         RippleEnergyTokenDestroyException,
                         RippleEnergyAuthenticationException,
                         RippleEnergyMissingTokenException,
-                        RippleEnergyTokenExpiredException
+                        RippleEnergyTokenExpiredException,
+                        RippleEnergyCoOpCodeMissingException
                         )
 
 logging.getLogger(__name__)
@@ -170,7 +171,7 @@ class RippleEnergy:
 
     @check_expiry
     async def coop(self):
-        """Ripple Energy co-op data"""
+        """Ripple Energy co-op"""
         data = await self.client.coop()
         return data
 
@@ -183,13 +184,52 @@ class RippleEnergy:
     @check_expiry
     async def faqs(self, tag: str | None = None):
         """Ripple Energy Frequently Asked Questions"""
-        if tag is None:
+        if not tag:
             tag = ""
-        data = await self.client.faqs(tag)
+            logging.info("Querying all FAQs")
+        else:
+            logging.info(f"Querying FAQs for tag: {tag}")
+
+        data = await self.client.faqs(tag=tag)
+
         return data
 
     @check_expiry
     async def wind_farm_generation(self):
-        """Ripple Energy Wind Farm Generation"""
+        """Ripple Energy wind farm generation"""
         data = await self.client.wind_farm_generation()
+        return data
+
+    @check_expiry
+    async def monthly_savings(self, date: datetime | None = None):
+        """Ripple Energy monthly savings"""
+        if not date:
+            date = datetime.now()
+
+        datestr: str = date.strftime("%Y-%m-%d")
+
+        logging.info(f"Querying monthly savings for date: {datestr}")
+
+        data = await self.client.monthly_savings(date=datestr)
+
+        return data
+
+    @check_expiry
+    async def cumulative_savings(self):
+        """Ripple Energy cumulative savings"""
+        data = await self.client.cumulative_savings()
+        return data
+
+    @check_expiry
+    async def coop_timeline_progression(self, coop_code: str | None = None):
+        """Ripple Energy co-op timeline progression"""
+        if not coop_code:
+            raise RippleEnergyCoOpCodeMissingException
+        data = await self.client.coop_timeline_progression(coop_code)
+        return data
+
+    @check_expiry
+    async def consumption(self):
+        """Ripple Energy estimated household consumption"""
+        data = await self.client.consumption()
         return data

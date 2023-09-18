@@ -3,7 +3,17 @@ from .async_base_client import AsyncBaseClient
 from .authenticate import Authenticate, AuthenticateTokenAuth
 from .base_model import BaseModel, Upload
 from .client import Client
+from .consumption import Consumption, ConsumptionConsumption
 from .coop import Coop, CoopCoop
+from .coop_timeline_progression import (
+    CoopTimelineProgression,
+    CoopTimelineProgressionCoopTimelineProgression,
+)
+from .cumulative_savings import (
+    CumulativeSavings,
+    CumulativeSavingsCumulativeSavingsData,
+    CumulativeSavingsCumulativeSavingsDataCurrency,
+)
 from .deauthenticate import (
     Deauthenticate,
     DeauthenticateAuthLogoutSession,
@@ -40,6 +50,7 @@ from .exceptions import (
 )
 from .faqs import Faqs, FaqsFaqs, FaqsFaqsTags
 from .fragments import (
+    ConsumptionFragment,
     CoopFragment,
     CoopFragmentCurrency,
     CoopFragmentDocuments,
@@ -144,6 +155,11 @@ from .me import (
     MeMeReferredUserMember,
 )
 from .member import Member, MemberMember
+from .monthly_savings import (
+    MonthlySavings,
+    MonthlySavingsMonthlySavingsData,
+    MonthlySavingsMonthlySavingsDataCurrency,
+)
 from .refresh_token import RefreshToken, RefreshTokenRefreshToken
 from .tribe_url import TribeUrl
 from .verify_token import VerifyToken, VerifyTokenVerifyToken
@@ -184,7 +200,10 @@ __all__ = [
     "ChangeUserPasswordInput",
     "Client",
     "ClientEnvInput",
+    "Consumption",
+    "ConsumptionConsumption",
     "ConsumptionEvidenceInput",
+    "ConsumptionFragment",
     "ConsumptionInput",
     "Coop",
     "CoopCoop",
@@ -196,6 +215,8 @@ __all__ = [
     "CoopFragmentDocumentsDocumentDocumentTags",
     "CoopFragmentGenerationfarm",
     "CoopFragmentGenerationfarmCurrency",
+    "CoopTimelineProgression",
+    "CoopTimelineProgressionCoopTimelineProgression",
     "CreateAccountInput",
     "CreateContactUsMessageInput",
     "CreateEmployerContactInput",
@@ -206,6 +227,9 @@ __all__ = [
     "CreateReservedUserInput",
     "CreateUserMemoInputs",
     "CrmUserMemoChannelChoices",
+    "CumulativeSavings",
+    "CumulativeSavingsCumulativeSavingsData",
+    "CumulativeSavingsCumulativeSavingsDataCurrency",
     "Deauthenticate",
     "DeauthenticateAuthLogoutSession",
     "DeauthenticateDeleteRefreshTokenCookie",
@@ -257,6 +281,9 @@ __all__ = [
     "MemberFragmentWaitingListPlaces",
     "MemberMember",
     "MembersMemberConsumptionEvidenceSubmissionStatusChoices",
+    "MonthlySavings",
+    "MonthlySavingsMonthlySavingsData",
+    "MonthlySavingsMonthlySavingsDataCurrency",
     "OctopusApiAddressInput",
     "OrderInput",
     "PaginationInput",

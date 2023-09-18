@@ -8,19 +8,21 @@ from exceptions import (RippleEnergyException,
                         RippleEnergyDeauthenticationException,
                         RippleEnergyTokenDestroyException,
                         RippleEnergyMissingTokenException,
-                        RippleEnergyTokenExpiredException
+                        RippleEnergyTokenExpiredException,
+                        RippleEnergyCoOpCodeMissingException
                         )
 
 __all__ = [
-    RippleEnergy,
-    RippleEnergyException,
-    RippleEnergyEmailException,
-    RippleEnergyPasswordException,
-    RippleEnergyMissingCredentialsOrTokenException,
-    RippleEnergyMissingAuthorizationHeaderException,
-    RippleEnergyAuthenticationException,
-    RippleEnergyDeauthenticationException,
-    RippleEnergyTokenDestroyException,
-    RippleEnergyMissingTokenException,
-    RippleEnergyTokenExpiredException
+    "RippleEnergy",
+    "RippleEnergyException",
+    "RippleEnergyEmailException",
+    "RippleEnergyPasswordException",
+    "RippleEnergyMissingCredentialsOrTokenException",
+    "RippleEnergyMissingAuthorizationHeaderException",
+    "RippleEnergyAuthenticationException",
+    "RippleEnergyDeauthenticationException",
+    "RippleEnergyTokenDestroyException",
+    "RippleEnergyMissingTokenException",
+    "RippleEnergyTokenExpiredException",
+    "RippleEnergyCoOpCodeMissingException"
 ]
