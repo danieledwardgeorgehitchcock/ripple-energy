@@ -206,11 +206,11 @@ class RippleEnergy:
         if not date:
             date = datetime.now()
 
-        datestr: str = date.strftime("%Y-%m-%d")
+        date_str: str = date.strftime("%Y-%m-%d")
 
-        logging.info(f"Querying monthly savings for date: {datestr}")
+        logging.info(f"Querying monthly savings for date: {date_str}")
 
-        data = await self.client.monthly_savings(date=datestr)
+        data = await self.client.monthly_savings(date=date_str)
 
         return data
 
