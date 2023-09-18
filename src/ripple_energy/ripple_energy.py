@@ -45,10 +45,10 @@ class RippleEnergy:
         if self.auto_auth_deauth:
             if not self.token:
                 await self.authenticate()
-            else:
-                await self.verify_token()
             if self.token_expires < datetime.now():
                 await self.refresh_token()
+        else:
+            await self.verify_token()
 
         return self
 
@@ -186,4 +186,10 @@ class RippleEnergy:
         if tag is None:
             tag = ""
         data = await self.client.faqs(tag)
+        return data
+
+    @check_expiry
+    async def wind_farm_generation(self):
+        """Ripple Energy Wind Farm Generation"""
+        data = await self.client.wind_farm_generation()
         return data

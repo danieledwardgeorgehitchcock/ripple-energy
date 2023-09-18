@@ -14,6 +14,7 @@ from .refresh_token import RefreshToken, RefreshTokenRefreshToken
 from .tribe_url import TribeUrl
 from .verify_token import VerifyToken, VerifyTokenVerifyToken
 from .version import Version
+from .wind_farm_generation import WindFarmGeneration, WindFarmGenerationMember
 
 
 def gql(q: str) -> str:
@@ -309,6 +310,49 @@ class Client(AsyncBaseClient):
         response = await self.execute(query=query, variables=variables)
         data = self.get_data(response)
         return Member.model_validate(data).member
+
+    async def wind_farm_generation(self) -> Optional[WindFarmGenerationMember]:
+        query = gql(
+            """
+            query WindFarmGeneration {
+              member {
+                id
+                memberships {
+                  id
+                  capacity
+                  coop {
+                    id
+                    firstYearEstimatedBillSavingsPerWattHour
+                    currency {
+                      precision
+                      code
+                      symbol
+                    }
+                    generationfarm {
+                      id
+                      name
+                      capacity
+                      operationalStatus
+                      generationData {
+                        title
+                        dataSet {
+                          netPowerOutputKwh
+                          dateTime
+                          isForecastData
+                          savingsForPeriod
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+            """
+        )
+        variables: Dict[str, object] = {}
+        response = await self.execute(query=query, variables=variables)
+        data = self.get_data(response)
+        return WindFarmGeneration.model_validate(data).member
 
     async def authenticate(
         self, input: TokenAuthenticationInput
