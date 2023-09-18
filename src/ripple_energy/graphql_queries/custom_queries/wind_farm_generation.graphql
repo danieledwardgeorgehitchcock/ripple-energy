@@ -1,0 +1,33 @@
+query WindFarmGeneration {
+  member {
+    id
+    memberships {
+      id
+      capacity
+      coop {
+        id
+        firstYearEstimatedBillSavingsPerWattHour
+        currency {
+          precision
+          code
+          symbol
+        }
+        generationfarm {
+          id
+          name
+          capacity
+          operationalStatus
+          generationData {
+            title
+            dataSet {
+              netPowerOutputKwh
+              dateTime
+              isForecastData
+              savingsForPeriod
+            }
+          }
+        }
+      }
+    }
+  }
+}

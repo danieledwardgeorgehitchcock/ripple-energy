@@ -163,6 +163,7 @@ The below lists consist of standard queries (the queries documented [here](https
 
  - member
  - coop
+ - windFarmGenerationData
 
 ## Custom Fragments
 

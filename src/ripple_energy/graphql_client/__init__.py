@@ -148,6 +148,16 @@ from .refresh_token import RefreshToken, RefreshTokenRefreshToken
 from .tribe_url import TribeUrl
 from .verify_token import VerifyToken, VerifyTokenVerifyToken
 from .version import Version
+from .wind_farm_generation import (
+    WindFarmGeneration,
+    WindFarmGenerationMember,
+    WindFarmGenerationMemberMemberships,
+    WindFarmGenerationMemberMembershipsCoop,
+    WindFarmGenerationMemberMembershipsCoopCurrency,
+    WindFarmGenerationMemberMembershipsCoopGenerationfarm,
+    WindFarmGenerationMemberMembershipsCoopGenerationfarmGenerationData,
+    WindFarmGenerationMemberMembershipsCoopGenerationfarmGenerationDataDataSet,
+)
 
 __all__ = [
     "AccountType",
@@ -297,4 +307,12 @@ __all__ = [
     "WaitingListFragmentCoop",
     "WaitingListPlaceFragment",
     "WaitingListPlaceFragmentWaitingList",
+    "WindFarmGeneration",
+    "WindFarmGenerationMember",
+    "WindFarmGenerationMemberMemberships",
+    "WindFarmGenerationMemberMembershipsCoop",
+    "WindFarmGenerationMemberMembershipsCoopCurrency",
+    "WindFarmGenerationMemberMembershipsCoopGenerationfarm",
+    "WindFarmGenerationMemberMembershipsCoopGenerationfarmGenerationData",
+    "WindFarmGenerationMemberMembershipsCoopGenerationfarmGenerationDataDataSet",
 ]
