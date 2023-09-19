@@ -1,4 +1,5 @@
 from .active_coop_status import ActiveCoopStatus, ActiveCoopStatusCoop
+from .all_coops import AllCoops, AllCoopsAllCoops
 from .async_base_client import AsyncBaseClient
 from .authenticate import Authenticate, AuthenticateTokenAuth
 from .base_model import BaseModel, Upload
@@ -182,6 +183,8 @@ __all__ = [
     "AddAdditionalWattsInputs",
     "AddMemberToCoopWaitingListInput",
     "AddressInput",
+    "AllCoops",
+    "AllCoopsAllCoops",
     "ApprovalStatus",
     "ApproveMemberConsumptionEvidenceSubmissionInput",
     "AsyncBaseClient",
