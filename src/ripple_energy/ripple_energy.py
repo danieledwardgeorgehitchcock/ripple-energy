@@ -1,54 +1,53 @@
 from __future__ import annotations
 import logging
 from datetime import datetime
+from pydantic import validate_call
 from graphql_client.client import Client
 from constants import RIPPLE_GRAPH_URL
 from helpers import generate_jwt_header
-from exceptions import (RippleEnergyEmailException,
-                        RippleEnergyPasswordException,
-                        RippleEnergyMissingCredentialsOrTokenException,
-                        RippleEnergyMissingAuthorizationHeaderException,
+from exceptions import (RippleEnergyMissingAuthorizationHeaderException,
                         RippleEnergyDeauthenticationException,
                         RippleEnergyTokenDestroyException,
                         RippleEnergyAuthenticationException,
-                        RippleEnergyMissingTokenException,
                         RippleEnergyTokenExpiredException,
                         RippleEnergyCoOpCodeMissingException
                         )
+from models import (RippleEnergyCredentialAuth,
+                    RippleEnergyTokenAuth
+                    )
 
 logging.getLogger(__name__)
 
 
 class RippleEnergy:
+    @validate_call
     def __init__(self,
-                 email: str | None = None,
-                 password: str | None = None,
-                 token: str | None = None,
-                 client: Client | None = None,
-                 headers: dict[str, str] = {},
+                 auth: RippleEnergyCredentialAuth | RippleEnergyTokenAuth,
                  auto_auth_deauth: bool = True
                  ):
         """Initialise Ripple Energy object"""
-        self.email = email
-        self.password = password
-        self.headers = headers
-        self.token = token
+        if isinstance(auth, RippleEnergyCredentialAuth):
+            self.auth_method = "credential"
+        elif isinstance(auth, RippleEnergyTokenAuth):
+            self.auth_method = "token"
+
+        if self.auth_method == "credential":
+            self.email = auth.email
+            self.password = auth.password
+            self.headers = {}
+        if self.auth_method == "token":
+            self.token = auth.token
+            self.headers = generate_jwt_header(auth.token)
+
         self.auto_auth_deauth = auto_auth_deauth
-        if not email and not password and not token:
-            raise RippleEnergyMissingCredentialsOrTokenException
-        if token:
-            self.headers.update(generate_jwt_header(token))
-        if not client:
-            self.client = Client(url=RIPPLE_GRAPH_URL, headers=self.headers)
+        self.client = Client(url=RIPPLE_GRAPH_URL, headers=self.headers)
 
     async def __aenter__(self) -> RippleEnergy:
         """Ripple Energy asyncronous enter"""
         if self.auto_auth_deauth:
-            if not self.token:
+            if self.auth_method == "credential":
                 await self.authenticate()
-            if self.token_expires < datetime.now():
-                await self.refresh_token()
-        else:
+        elif self.auth_method == "token":
             await self.verify_token()
 
         return self
@@ -75,14 +74,10 @@ class RippleEnergy:
 
     async def authenticate(self):
         """Authenticate with Ripple Energy and generate JWT token"""
-        if not self.email:
-            raise RippleEnergyEmailException
-        if not self.password:
-            raise RippleEnergyPasswordException
+        input = {"email": self.email,
+                 "password": self.password}
 
-        data = await self.client.authenticate(input={"email": self.email,
-                                                     "password": self.password}
-                                              )
+        data = await self.client.authenticate(input=input)
 
         if not data.token:
             raise RippleEnergyAuthenticationException
@@ -116,9 +111,6 @@ class RippleEnergy:
 
     async def refresh_token(self):
         """Ripple Energy refresh JWT token"""
-        if not self.token:
-            raise RippleEnergyMissingTokenException
-
         data = await self.client.refresh_token(self.token)
 
         if not data.token:
@@ -134,9 +126,6 @@ class RippleEnergy:
 
     async def verify_token(self):
         """Ripple Energy verify JWT token"""
-        if not self.token:
-            raise RippleEnergyMissingTokenException
-
         data = await self.client.verify_token(self.token)
 
         self.token_expires = datetime.fromtimestamp(data.payload["exp"])
@@ -206,11 +195,11 @@ class RippleEnergy:
         if not date:
             date = datetime.now()
 
-        datestr: str = date.strftime("%Y-%m-%d")
+        date_str: str = date.strftime("%Y-%m-%d")
 
-        logging.info(f"Querying monthly savings for date: {datestr}")
+        logging.info(f"Querying monthly savings for date: {date_str}")
 
-        data = await self.client.monthly_savings(date=datestr)
+        data = await self.client.monthly_savings(date=date_str)
 
         return data
 
