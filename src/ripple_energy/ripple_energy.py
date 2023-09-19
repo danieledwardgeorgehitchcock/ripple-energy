@@ -28,16 +28,15 @@ class RippleEnergy:
         """Initialise Ripple Energy object"""
         if isinstance(auth, RippleEnergyCredentialAuth):
             self.auth_method = "credential"
-        elif isinstance(auth, RippleEnergyTokenAuth):
-            self.auth_method = "token"
-
-        if self.auth_method == "credential":
             self.email = auth.email
             self.password = auth.password
-            self.headers = {}
-        if self.auth_method == "token":
+            self.headers: dict[str, str] = {}
+        elif isinstance(auth, RippleEnergyTokenAuth):
+            self.auth_method = "token"
             self.token = auth.token
             self.headers = generate_jwt_header(auth.token)
+
+        logging.info(f"Using authentication method: {self.auth_method}")
 
         self.auto_auth_deauth = auto_auth_deauth
         self.client = Client(url=RIPPLE_GRAPH_URL, headers=self.headers)
@@ -61,7 +60,7 @@ class RippleEnergy:
 
     def check_expiry(function):
         """Ripple Energy decorator function to check JWT token expiry"""
-        async def decorator(*args, **kwargs):
+        async def wrapper(*args, **kwargs):
             if args[0].token_expires < datetime.now():
                 if args[0].auto_auth_deauth:
                     await args[0].refresh_token()
@@ -70,7 +69,7 @@ class RippleEnergy:
 
             return await function(*args, **kwargs)
 
-        return decorator
+        return wrapper
 
     async def authenticate(self):
         """Authenticate with Ripple Energy and generate JWT token"""
