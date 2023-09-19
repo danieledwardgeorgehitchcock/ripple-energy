@@ -6,10 +6,6 @@ class RippleEnergyMissingAuthorizationHeaderException(RippleEnergyException):
     """Ripple Energy Missing Authorization Header Exception"""
 
 
-class RippleEnergyMissingTokenException(RippleEnergyException):
-    """Ripple Energy Missing Authorization Header Exception"""
-
-
 class RippleEnergyAuthenticationException(RippleEnergyException):
     """Ripple Energy Authentication Exception"""
 
@@ -23,8 +19,4 @@ class RippleEnergyTokenDestroyException(RippleEnergyException):
 
 
 class RippleEnergyTokenExpiredException(RippleEnergyException):
-    """Ripple Energy Token Expired Exception"""
-
-
-class RippleEnergyCoOpCodeMissingException(RippleEnergyException):
     """Ripple Energy Token Expired Exception"""
