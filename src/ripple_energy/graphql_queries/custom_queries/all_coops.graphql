@@ -1,0 +1,5 @@
+query AllCoops {
+  allCoops {
+    ...CoopFragment
+  }
+}

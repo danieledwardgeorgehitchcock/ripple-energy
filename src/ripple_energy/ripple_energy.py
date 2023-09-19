@@ -4,7 +4,8 @@ from datetime import datetime
 from pydantic import validate_call
 from graphql_client.client import Client
 from constants import RIPPLE_GRAPH_URL
-from helpers import generate_jwt_header
+from helpers import (generate_jwt_header,
+                     check_date)
 from exceptions import (RippleEnergyMissingAuthorizationHeaderException,
                         RippleEnergyDeauthenticationException,
                         RippleEnergyTokenDestroyException,
@@ -61,11 +62,8 @@ class RippleEnergy:
     def check_expiry(function):
         """Ripple Energy decorator function to check JWT token expiry"""
         async def wrapper(*args, **kwargs):
-            if args[0].token_expires < datetime.now():
-                if args[0].auto_auth_deauth:
-                    await args[0].refresh_token()
-                else:
-                    raise RippleEnergyTokenExpiredException
+            if check_date(args[0].token_expires, args[0].auto_auth_deauth):
+                await args[0].refresh_token()
 
             return await function(*args, **kwargs)
 
@@ -170,16 +168,12 @@ class RippleEnergy:
         return data
 
     @check_expiry
-    async def faqs(self, tag: str | None = None):
-        """Ripple Energy Frequently Asked Questions"""
-        if not tag:
-            tag = ""
-            logging.info("Querying all FAQs")
-        else:
-            logging.info(f"Querying FAQs for tag: {tag}")
+    @validate_call
+    async def faqs(self, tag: str = ""):
+        """Ripple Energy Frequently Asked Questions
 
-        data = await self.client.faqs(tag=tag)
-
+        If you want to display all faqs, do not pass the tag argument"""
+        data = await self.client.faqs(tag=tag.tag)
         return data
 
     @check_expiry
@@ -189,11 +183,11 @@ class RippleEnergy:
         return data
 
     @check_expiry
-    async def monthly_savings(self, date: datetime | None = None):
-        """Ripple Energy monthly savings"""
-        if not date:
-            date = datetime.now()
+    @validate_call
+    async def monthly_savings(self, date: datetime = datetime.now()):
+        """Ripple Energy monthly savings
 
+        If you want to display from today, do not pass the tag argument"""
         date_str: str = date.strftime("%Y-%m-%d")
 
         logging.info(f"Querying monthly savings for date: {date_str}")
@@ -209,7 +203,8 @@ class RippleEnergy:
         return data
 
     @check_expiry
-    async def coop_timeline_progression(self, coop_code: str | None = None):
+    @validate_call
+    async def coop_timeline_progression(self, coop_code: str):
         """Ripple Energy co-op timeline progression"""
         if not coop_code:
             raise RippleEnergyCoOpCodeMissingException
@@ -220,4 +215,10 @@ class RippleEnergy:
     async def consumption(self):
         """Ripple Energy estimated household consumption"""
         data = await self.client.consumption()
+        return data
+
+    @check_expiry
+    async def all_coops(self):
+        """Ripple Energy all co-op's"""
+        data = await self.client.all_coops()
         return data

@@ -165,6 +165,7 @@ The below lists consist of standard queries (the queries documented [here](https
  - coop
  - windFarmGenerationData
  - consumption
+ - allCoops
 
 ## Custom Fragments
 

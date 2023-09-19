@@ -1,6 +1,7 @@
 from typing import Dict, List, Optional, Union
 
 from .active_coop_status import ActiveCoopStatus, ActiveCoopStatusCoop
+from .all_coops import AllCoops, AllCoopsAllCoops
 from .async_base_client import AsyncBaseClient
 from .authenticate import Authenticate, AuthenticateTokenAuth
 from .base_model import UNSET, UnsetType
@@ -52,6 +53,81 @@ class Client(AsyncBaseClient):
         response = await self.execute(query=query, variables=variables)
         data = self.get_data(response)
         return Deauthenticate.model_validate(data)
+
+    async def all_coops(self) -> Optional[List[AllCoopsAllCoops]]:
+        query = gql(
+            """
+            query AllCoops {
+              allCoops {
+                ...CoopFragment
+              }
+            }
+
+            fragment CoopFragment on Coop {
+              id
+              name
+              code
+              wattageSku
+              status
+              active
+              description
+              maxGenerationPerMember
+              minGenerationPerMember
+              percentageFunded
+              publicCloseDate
+              estimatedBillSavingsPerWattHour
+              firstYearEstimatedBillSavingsPerWattHour
+              costTotalPerWattHour
+              isAvailableForLocalPurchase
+              localPurchasePostcodes
+              currency {
+                id
+                code
+                precision
+                symbol
+              }
+              generationfarm {
+                id
+                name
+                latitude
+                longitude
+                isLocationConfirmed
+                startDate
+                operationalStatus
+                generationType
+                capacity
+                capacityToGenerationFactor
+                lightShowImage
+                currency {
+                  id
+                  code
+                  precision
+                  symbol
+                }
+              }
+              documents {
+                documentUrl
+                version
+                document {
+                  id
+                  name
+                  category
+                  subcategory
+                  description
+                  updatedAt
+                  documentTags {
+                    id
+                    name
+                  }
+                }
+              }
+            }
+            """
+        )
+        variables: Dict[str, object] = {}
+        response = await self.execute(query=query, variables=variables)
+        data = self.get_data(response)
+        return AllCoops.model_validate(data).all_coops
 
     async def consumption(self) -> Optional[ConsumptionConsumption]:
         query = gql(
