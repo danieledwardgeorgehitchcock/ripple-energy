@@ -173,7 +173,7 @@ class RippleEnergy:
 
         If you want to display all faqs, do not pass the tag argument"""
         if not tag:
-            logging.info(f"Querying all FAQs.")
+            logging.info("Querying all FAQs.")
         else:
             logging.info(f"Querying FAQs with tag: {tag}")
 
