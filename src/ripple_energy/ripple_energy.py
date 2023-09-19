@@ -30,7 +30,7 @@ class RippleEnergy:
             self.auth_method = "credential"
             self.email = auth.email
             self.password = auth.password
-            self.headers = {}
+            self.headers: dict[str, str] = {}
         elif isinstance(auth, RippleEnergyTokenAuth):
             self.auth_method = "token"
             self.token = auth.token
