@@ -28,14 +28,11 @@ class RippleEnergy:
         """Initialise Ripple Energy object"""
         if isinstance(auth, RippleEnergyCredentialAuth):
             self.auth_method = "credential"
-        elif isinstance(auth, RippleEnergyTokenAuth):
-            self.auth_method = "token"
-
-        if self.auth_method == "credential":
             self.email = auth.email
             self.password = auth.password
             self.headers = {}
-        if self.auth_method == "token":
+        elif isinstance(auth, RippleEnergyTokenAuth):
+            self.auth_method = "token"
             self.token = auth.token
             self.headers = generate_jwt_header(auth.token)
 
