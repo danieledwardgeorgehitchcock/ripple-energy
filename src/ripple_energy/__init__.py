@@ -1,12 +1,11 @@
 from ripple_energy import RippleEnergy
+
 from exceptions import (RippleEnergyException,
-                        RippleEnergyMissingAuthorizationHeaderException,
                         RippleEnergyAuthenticationException,
                         RippleEnergyDeauthenticationException,
                         RippleEnergyTokenDestroyException,
-                        RippleEnergyMissingTokenException,
                         RippleEnergyTokenExpiredException,
-                        RippleEnergyCoOpCodeMissingException
+                        RippleEnergyMissingAuthorizationHeaderException
                         )
 from models import (RippleEnergyCredentialAuth,
                     RippleEnergyTokenAuth)
@@ -17,9 +16,7 @@ __all__ = [
     "RippleEnergyAuthenticationException",
     "RippleEnergyDeauthenticationException",
     "RippleEnergyTokenDestroyException",
-    "RippleEnergyMissingTokenException",
     "RippleEnergyTokenExpiredException",
-    "RippleEnergyCoOpCodeMissingException",
     "RippleEnergyCredentialAuth",
     "RippleEnergyTokenAuth"
 ]

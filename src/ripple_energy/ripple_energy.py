@@ -9,8 +9,7 @@ from helpers import (generate_jwt_header,
 from exceptions import (RippleEnergyMissingAuthorizationHeaderException,
                         RippleEnergyDeauthenticationException,
                         RippleEnergyTokenDestroyException,
-                        RippleEnergyAuthenticationException,
-                        RippleEnergyCoOpCodeMissingException
+                        RippleEnergyAuthenticationException
                         )
 from models import (RippleEnergyCredentialAuth,
                     RippleEnergyTokenAuth
@@ -142,6 +141,9 @@ class RippleEnergy:
     async def version(self):
         """Ripple Energy GraphQL API version"""
         data = await self.client.version()
+
+        logging.debug(f"Version response: {data}")
+
         return data
 
     @check_expiry
