@@ -75,6 +75,8 @@ class RippleEnergy:
 
         data = await self.client.authenticate(input=input)
 
+        logging.debug(f"Authentication response: {data}")
+
         if not data.token:
             raise RippleEnergyAuthenticationException
 
@@ -94,6 +96,8 @@ class RippleEnergy:
 
         data = await self.client.deauthenticate()
 
+        logging.debug(f"De-authentication response: {data}")
+
         if not data.auth_logout_session.logout_successful:
             raise RippleEnergyDeauthenticationException
         if not data.delete_token_cookie.deleted:
@@ -109,6 +113,8 @@ class RippleEnergy:
         """Ripple Energy refresh JWT token"""
         data = await self.client.refresh_token(self.token)
 
+        logging.debug(f"Refresh token response: {data}")
+
         if not data.token:
             raise RippleEnergyAuthenticationException
 
@@ -123,6 +129,8 @@ class RippleEnergy:
     async def verify_token(self):
         """Ripple Energy verify JWT token"""
         data = await self.client.verify_token(self.token)
+
+        logging.debug(f"Verify token response: {data}")
 
         self.token_expires = datetime.fromtimestamp(data.payload["exp"])
 
@@ -140,30 +148,45 @@ class RippleEnergy:
     async def member(self):
         """Ripple Energy member data"""
         data = await self.client.member()
+
+        logging.debug(f"Member response: {data}")
+
         return data
 
     @check_expiry
     async def me(self):
         """Ripple Energy user data"""
         data = await self.client.me()
+
+        logging.debug(f"Me response: {data}")
+
         return data
 
     @check_expiry
     async def active_coop_status(self):
         """Ripple Energy active co-op status"""
         data = await self.client.active_coop_status()
+
+        logging.debug(f"Active co-op status response: {data}")
+
         return data
 
     @check_expiry
     async def coop(self):
         """Ripple Energy co-op"""
         data = await self.client.coop()
+
+        logging.debug(f"Co-op response: {data}")
+
         return data
 
     @check_expiry
     async def tribe_url(self):
         """Ripple Energy Tribe URL"""
         data = await self.client.tribe_url()
+
+        logging.debug(f"Tribe URL response: {data}")
+
         return data
 
     @check_expiry
@@ -179,12 +202,17 @@ class RippleEnergy:
 
         data = await self.client.faqs(tag=tag)
 
+        logging.debug(f"FAQs response: {data}")
+
         return data
 
     @check_expiry
     async def wind_farm_generation(self):
         """Ripple Energy wind farm generation"""
         data = await self.client.wind_farm_generation()
+
+        logging.debug(f"Wind farm generation response: {data}")
+
         return data
 
     @check_expiry
@@ -199,31 +227,43 @@ class RippleEnergy:
 
         data = await self.client.monthly_savings(date=date_str)
 
+        logging.debug(f"Monthly savings response: {data}")
+
         return data
 
     @check_expiry
     async def cumulative_savings(self):
         """Ripple Energy cumulative savings"""
         data = await self.client.cumulative_savings()
+
+        logging.debug(f"Cumulative savings response: {data}")
+
         return data
 
     @check_expiry
     @validate_call
     async def coop_timeline_progression(self, coop_code: str):
         """Ripple Energy co-op timeline progression"""
-        if not coop_code:
-            raise RippleEnergyCoOpCodeMissingException
         data = await self.client.coop_timeline_progression(coop_code)
+
+        logging.debug(f"Co-op timeline progression response: {data}")
+
         return data
 
     @check_expiry
     async def consumption(self):
         """Ripple Energy estimated household consumption"""
         data = await self.client.consumption()
+
+        logging.debug(f"Consumption response: {data}")
+
         return data
 
     @check_expiry
     async def all_coops(self):
         """Ripple Energy all co-op's"""
         data = await self.client.all_coops()
+
+        logging.debug(f"All co-op's response: {data}")
+
         return data
