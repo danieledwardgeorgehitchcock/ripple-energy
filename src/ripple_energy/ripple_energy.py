@@ -10,7 +10,6 @@ from exceptions import (RippleEnergyMissingAuthorizationHeaderException,
                         RippleEnergyDeauthenticationException,
                         RippleEnergyTokenDestroyException,
                         RippleEnergyAuthenticationException,
-                        RippleEnergyTokenExpiredException,
                         RippleEnergyCoOpCodeMissingException
                         )
 from models import (RippleEnergyCredentialAuth,
@@ -173,7 +172,13 @@ class RippleEnergy:
         """Ripple Energy Frequently Asked Questions
 
         If you want to display all faqs, do not pass the tag argument"""
-        data = await self.client.faqs(tag=tag.tag)
+        if not tag:
+            logging.info(f"Querying all FAQs.")
+        else:
+            logging.info(f"Querying FAQs with tag: {tag}")
+
+        data = await self.client.faqs(tag=tag)
+
         return data
 
     @check_expiry
@@ -187,7 +192,7 @@ class RippleEnergy:
     async def monthly_savings(self, date: datetime = datetime.now()):
         """Ripple Energy monthly savings
 
-        If you want to display from today, do not pass the tag argument"""
+        If you want to display from today, do not pass the date argument"""
         date_str: str = date.strftime("%Y-%m-%d")
 
         logging.info(f"Querying monthly savings for date: {date_str}")
