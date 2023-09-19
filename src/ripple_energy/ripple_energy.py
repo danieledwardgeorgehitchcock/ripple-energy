@@ -4,7 +4,8 @@ from datetime import datetime
 from pydantic import validate_call
 from graphql_client.client import Client
 from constants import RIPPLE_GRAPH_URL
-from helpers import generate_jwt_header
+from helpers import (generate_jwt_header,
+                     check_date)
 from exceptions import (RippleEnergyMissingAuthorizationHeaderException,
                         RippleEnergyDeauthenticationException,
                         RippleEnergyTokenDestroyException,
@@ -61,11 +62,8 @@ class RippleEnergy:
     def check_expiry(function):
         """Ripple Energy decorator function to check JWT token expiry"""
         async def wrapper(*args, **kwargs):
-            if args[0].token_expires < datetime.now():
-                if args[0].auto_auth_deauth:
-                    await args[0].refresh_token()
-                else:
-                    raise RippleEnergyTokenExpiredException
+            if check_date(args[0].token_expires, args[0].auto_auth_deauth):
+                await args[0].refresh_token()
 
             return await function(*args, **kwargs)
 
