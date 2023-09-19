@@ -36,6 +36,8 @@ class RippleEnergy:
             self.token = auth.token
             self.headers = generate_jwt_header(auth.token)
 
+        logging.info(f"Using authentication method: {self.auth_method}")
+
         self.auto_auth_deauth = auto_auth_deauth
         self.client = Client(url=RIPPLE_GRAPH_URL, headers=self.headers)
 
