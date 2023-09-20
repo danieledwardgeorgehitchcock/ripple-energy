@@ -48,12 +48,14 @@ no-cov = "cov --no-cov {args}"
 [tool.hatch.envs.checks]
 dependencies = [
   "black",
-  "ruff",
+  "mypy",
+  "ariadne-codegen",
+  "websockets", # This is only here to prevent MyPy error - upstream PR submitted
 ]
 
 [tool.hatch.envs.checks.scripts]
-lint = ["black --check --diff {args:.}", "ruff check {args:.}"]
-format = ["black {args:.}", "ruff --fix --exit-non-zero-on-fix {args:.}"]
+lint = ["black --check --diff {args:.}", "mypy {args:.}"]
+format = ["black {args:.}"]
 
 [[tool.hatch.envs.test.matrix]]
 python = ["37", "38", "39", "310", "311"]
@@ -78,3 +80,24 @@ remote_schema_url = "https://rippleenergy.com/graphql"
 queries_path = "src/ripple_energy/graphql_queries"
 target_package_path = "src/ripple_energy"
 include_comments = false
+
+[tool.mypy]
+mypy_path = "src"
+follow_imports = "normal"
+# be strict
+check_untyped_defs = true
+disallow_any_generics = true
+disallow_incomplete_defs = true
+disallow_subclassing_any = true
+disallow_untyped_calls = true
+disallow_untyped_decorators = true
+disallow_untyped_defs = true
+no_implicit_optional = true
+no_implicit_reexport = true
+strict_optional = true
+warn_incomplete_stub = true
+warn_no_return = true
+warn_redundant_casts = true
+warn_return_any = true
+warn_unused_configs = true
+warn_unused_ignores = false

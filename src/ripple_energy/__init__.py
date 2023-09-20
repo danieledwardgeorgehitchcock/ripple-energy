@@ -1,5 +1,5 @@
-from ripple_energy import RippleEnergy
-from exceptions import (
+from .ripple_energy import RippleEnergy
+from .exceptions import (
     RippleEnergyException,
     RippleEnergyAuthenticationException,
     RippleEnergyDeauthenticationException,
@@ -7,7 +7,7 @@ from exceptions import (
     RippleEnergyTokenExpiredException,
     RippleEnergyMissingAuthorizationHeaderException,
 )
-from models import RippleEnergyCredentialAuth, RippleEnergyTokenAuth
+from .models import RippleEnergyCredentialAuth, RippleEnergyTokenAuth
 
 __all__ = [
     "RippleEnergy",
