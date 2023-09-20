@@ -26,11 +26,10 @@ classifiers = [
 dependencies = [
   "ariadne-codegen~=0.9.0"
 ]
+dynamic = ["version"]
 
 [project.optional-dependencies]
 checks = ["hatch"]
-
-dynamic = ["version"]
 
 [project.urls]
 Documentation = "https://github.com/danieledwardgeorgehitchcock/ripple-energy#readme"
@@ -49,14 +48,15 @@ dependencies = [
 cov = "pytest --cov-report=term-missing --cov-config=pyproject.toml --cov=ripple_energy --cov=tests {args}"
 no-cov = "cov --no-cov {args}"
 
-[tool.hatch.envs.checks]
+[tool.hatch.envs.style]
 dependencies = [
   "black",
   "ruff",
 ]
 
-[tool.hatch.envs.checks.scripts]
+[tool.hatch.envs.style.scripts]
 lint = ["black --check --diff {args:.}", "ruff check {args:.}"]
+format = ["black {args:.}", "ruff --fix --exit-non-zero-on-fix {args:.}"]
 
 [[tool.hatch.envs.test.matrix]]
 python = ["37", "38", "39", "310", "311"]
