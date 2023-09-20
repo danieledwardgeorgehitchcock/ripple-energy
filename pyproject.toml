@@ -49,13 +49,14 @@ no-cov = "cov --no-cov {args}"
 dependencies = [
   "black",
   "mypy",
+  "isort",
   "ariadne-codegen",
   "websockets", # This is only here to prevent MyPy error - upstream PR submitted
 ]
 
 [tool.hatch.envs.checks.scripts]
-lint = ["black --check --diff {args:.}", "mypy {args:.}"]
-format = ["black {args:.}"]
+lint = ["black --check --diff {args:.}", "isort --check --diff {args:.}", "mypy {args:.}",]
+format = ["black {args:.}", "isort {args:.}"]
 
 [[tool.hatch.envs.test.matrix]]
 python = ["37", "38", "39", "310", "311"]
@@ -101,3 +102,6 @@ warn_redundant_casts = true
 warn_return_any = true
 warn_unused_configs = true
 warn_unused_ignores = false
+
+[tool.isort]
+profile = "black"
