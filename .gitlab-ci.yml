@@ -8,5 +8,5 @@ lint:
   image: python:latest
 
   script:
-    - pip install .
+    - pip install hatch
     - hatch run style:lint
