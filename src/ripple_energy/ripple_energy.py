@@ -15,7 +15,7 @@ from models import (RippleEnergyCredentialAuth,
                     RippleEnergyTokenAuth
                     )
 
-logging.getLogger(__name__)
+logger = logging.getLogger(__name__)
 
 
 class RippleEnergy:
@@ -35,7 +35,7 @@ class RippleEnergy:
             self.token = auth.token
             self.headers = generate_jwt_header(auth.token)
 
-        logging.info(f"Using authentication method: {self.auth_method}")
+        logger.info(f"Using authentication method: {self.auth_method}")
 
         self.auto_auth_deauth = auto_auth_deauth
         self.client = Client(url=RIPPLE_GRAPH_URL, headers=self.headers)
@@ -74,12 +74,12 @@ class RippleEnergy:
 
         data = await self.client.authenticate(input=input)
 
-        logging.debug(f"Authentication response: {data}")
+        logger.debug(f"Authentication response: {data}")
 
         if not data.token:
             raise RippleEnergyAuthenticationException
 
-        logging.info(f"Authentication successful. Token: {data.token}")
+        logger.info(f"Authentication successful. Token: {data.token}")
 
         self.token = data.token
         self.headers.update(generate_jwt_header(data.token))
@@ -95,7 +95,7 @@ class RippleEnergy:
 
         data = await self.client.deauthenticate()
 
-        logging.debug(f"De-authentication response: {data}")
+        logger.debug(f"De-authentication response: {data}")
 
         if not data.auth_logout_session.logout_successful:
             raise RippleEnergyDeauthenticationException
@@ -112,12 +112,12 @@ class RippleEnergy:
         """Ripple Energy refresh JWT token"""
         data = await self.client.refresh_token(self.token)
 
-        logging.debug(f"Refresh token response: {data}")
+        logger.debug(f"Refresh token response: {data}")
 
         if not data.token:
             raise RippleEnergyAuthenticationException
 
-        logging.info(f"Token refresh successful. Token: {data.token}")
+        logger.info(f"Token refresh successful. Token: {data.token}")
 
         self.token = data.token
         self.headers.update(generate_jwt_header(data.token))
@@ -129,11 +129,11 @@ class RippleEnergy:
         """Ripple Energy verify JWT token"""
         data = await self.client.verify_token(self.token)
 
-        logging.debug(f"Verify token response: {data}")
+        logger.debug(f"Verify token response: {data}")
 
         self.token_expires = datetime.fromtimestamp(data.payload["exp"])
 
-        logging.info(f"Token verified. Expires: {self.token_expires}")
+        logger.info(f"Token verified. Expires: {self.token_expires}")
 
         return data
 
@@ -142,7 +142,7 @@ class RippleEnergy:
         """Ripple Energy GraphQL API version"""
         data = await self.client.version()
 
-        logging.debug(f"Version response: {data}")
+        logger.debug(f"Version response: {data}")
 
         return data
 
@@ -151,7 +151,7 @@ class RippleEnergy:
         """Ripple Energy member data"""
         data = await self.client.member()
 
-        logging.debug(f"Member response: {data}")
+        logger.debug(f"Member response: {data}")
 
         return data
 
@@ -160,7 +160,7 @@ class RippleEnergy:
         """Ripple Energy user data"""
         data = await self.client.me()
 
-        logging.debug(f"Me response: {data}")
+        logger.debug(f"Me response: {data}")
 
         return data
 
@@ -169,7 +169,7 @@ class RippleEnergy:
         """Ripple Energy active co-op status"""
         data = await self.client.active_coop_status()
 
-        logging.debug(f"Active co-op status response: {data}")
+        logger.debug(f"Active co-op status response: {data}")
 
         return data
 
@@ -178,7 +178,7 @@ class RippleEnergy:
         """Ripple Energy co-op"""
         data = await self.client.coop()
 
-        logging.debug(f"Co-op response: {data}")
+        logger.debug(f"Co-op response: {data}")
 
         return data
 
@@ -187,7 +187,7 @@ class RippleEnergy:
         """Ripple Energy Tribe URL"""
         data = await self.client.tribe_url()
 
-        logging.debug(f"Tribe URL response: {data}")
+        logger.debug(f"Tribe URL response: {data}")
 
         return data
 
@@ -198,13 +198,13 @@ class RippleEnergy:
 
         If you want to display all faqs, do not pass the tag argument"""
         if not tag:
-            logging.info("Querying all FAQs.")
+            logger.info("Querying all FAQs.")
         else:
-            logging.info(f"Querying FAQs with tag: {tag}")
+            logger.info(f"Querying FAQs with tag: {tag}")
 
         data = await self.client.faqs(tag=tag)
 
-        logging.debug(f"FAQs response: {data}")
+        logger.debug(f"FAQs response: {data}")
 
         return data
 
@@ -213,7 +213,7 @@ class RippleEnergy:
         """Ripple Energy wind farm generation"""
         data = await self.client.wind_farm_generation()
 
-        logging.debug(f"Wind farm generation response: {data}")
+        logger.debug(f"Wind farm generation response: {data}")
 
         return data
 
@@ -225,11 +225,11 @@ class RippleEnergy:
         If you want to display from today, do not pass the date argument"""
         date_str: str = date.strftime("%Y-%m-%d")
 
-        logging.info(f"Querying monthly savings for date: {date_str}")
+        logger.info(f"Querying monthly savings for date: {date_str}")
 
         data = await self.client.monthly_savings(date=date_str)
 
-        logging.debug(f"Monthly savings response: {data}")
+        logger.debug(f"Monthly savings response: {data}")
 
         return data
 
@@ -238,7 +238,7 @@ class RippleEnergy:
         """Ripple Energy cumulative savings"""
         data = await self.client.cumulative_savings()
 
-        logging.debug(f"Cumulative savings response: {data}")
+        logger.debug(f"Cumulative savings response: {data}")
 
         return data
 
@@ -248,7 +248,7 @@ class RippleEnergy:
         """Ripple Energy co-op timeline progression"""
         data = await self.client.coop_timeline_progression(coop_code)
 
-        logging.debug(f"Co-op timeline progression response: {data}")
+        logger.debug(f"Co-op timeline progression response: {data}")
 
         return data
 
@@ -257,7 +257,7 @@ class RippleEnergy:
         """Ripple Energy estimated household consumption"""
         data = await self.client.consumption()
 
-        logging.debug(f"Consumption response: {data}")
+        logger.debug(f"Consumption response: {data}")
 
         return data
 
@@ -266,6 +266,6 @@ class RippleEnergy:
         """Ripple Energy all co-op's"""
         data = await self.client.all_coops()
 
-        logging.debug(f"All co-op's response: {data}")
+        logger.debug(f"All co-op's response: {data}")
 
         return data
