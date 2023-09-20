@@ -28,7 +28,7 @@ The primary purpose of this package is to create an interface for Home Assistant
 
  - [x] Create exceptions
  - [x] Put functions into classes
- - [ ] Add linting
+ - [x] Add linting
  - [ ] Create tests
  - [ ] Create build pipeline 
  - [ ] Publish to PyPi 
