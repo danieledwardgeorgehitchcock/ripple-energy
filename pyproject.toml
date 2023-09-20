@@ -28,9 +28,6 @@ dependencies = [
 ]
 dynamic = ["version"]
 
-[project.optional-dependencies]
-checks = ["hatch"]
-
 [project.urls]
 Documentation = "https://github.com/danieledwardgeorgehitchcock/ripple-energy#readme"
 Issues = "https://github.com/danieledwardgeorgehitchcock/ripple-energy/issues"
