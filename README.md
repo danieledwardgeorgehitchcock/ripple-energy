@@ -29,6 +29,9 @@ The primary purpose of this package is to create an interface for Home Assistant
  - [x] Create exceptions
  - [x] Put functions into classes
  - [x] Add linting
+    - [x] [PEP8](https://peps.python.org/pep-0008/) compliance
+    - [x] [PEP257](https://peps.python.org/pep-0257/) compliance
+    - [x] [PEP484](https://peps.python.org/pep-0484/) compliance
  - [ ] Create tests
  - [ ] Create build pipeline 
  - [ ] Publish to PyPi 
@@ -59,7 +62,7 @@ You should then be able to use the package from within this environment.
 ## Example
 
   ```python
-from ripple_energy import RippleEnergy
+from ripple_energy import RippleEnergy, RippleEnergyCredentialAuth
 import asyncio
 from sys import platform
 
@@ -68,8 +71,7 @@ if(platform == "win32"):
 
 async def main():
 
-    auth: dict[str, str] = {"email": "YOUR_RIPPLE_EMAIL",
-                            "password": "YOUR_RIPPLE_PASSWORD"}
+    auth = RippleEnergyCredentialAuth(email="YOUR_RIPPLE_EMAIL", password="YOUR_RIPPLE_PASSWORD")
 
     async with RippleEnergy(auth=auth) as ripple:
 

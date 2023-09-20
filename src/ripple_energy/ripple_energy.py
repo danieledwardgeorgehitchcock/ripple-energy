@@ -2,16 +2,36 @@ from __future__ import annotations
 import logging
 from datetime import datetime
 from pydantic import validate_call
-from graphql_client.client import Client
-from constants import RIPPLE_GRAPH_URL
-from helpers import generate_jwt_header, check_date
-from exceptions import (
+from typing import Optional, Type, List
+from types import TracebackType
+from .graphql_client import (
+    Client,
+    AuthenticateTokenAuth,
+    Deauthenticate,
+    RefreshTokenRefreshToken,
+    VerifyTokenVerifyToken,
+    TokenAuthenticationInput,
+    MemberMember,
+    MeMe,
+    ActiveCoopStatusCoop,
+    CoopCoop,
+    FaqsFaqs,
+    WindFarmGenerationMember,
+    MonthlySavingsMonthlySavingsData,
+    CumulativeSavingsCumulativeSavingsData,
+    CoopTimelineProgressionCoopTimelineProgression,
+    ConsumptionConsumption,
+    AllCoopsAllCoops,
+)
+from .constants import RIPPLE_GRAPH_URL
+from .helpers import generate_jwt_header, check_date
+from .exceptions import (
     RippleEnergyMissingAuthorizationHeaderException,
     RippleEnergyDeauthenticationException,
     RippleEnergyTokenDestroyException,
     RippleEnergyAuthenticationException,
 )
-from models import RippleEnergyCredentialAuth, RippleEnergyTokenAuth
+from .models import RippleEnergyCredentialAuth, RippleEnergyTokenAuth
 
 logger = logging.getLogger(__name__)
 
@@ -29,6 +49,7 @@ class RippleEnergy:
             self.email = auth.email
             self.password = auth.password
             self.headers: dict[str, str] = {}
+            self.token = None
         elif isinstance(auth, RippleEnergyTokenAuth):
             self.auth_method = "token"
             self.token = auth.token
@@ -49,15 +70,20 @@ class RippleEnergy:
 
         return self
 
-    async def __aexit__(self, *args) -> None:
+    async def __aexit__(
+        self,
+        exception_type: Optional[Type[BaseException]],
+        exception_value: Optional[BaseException],
+        traceback: Optional[TracebackType],
+    ) -> None:
         """Ripple Energy asyncronous exit"""
         if self.auto_auth_deauth:
             await self.deauthenticate()
 
-    def check_expiry(function):
+    def check_expiry(function: Any):  # type: ignore
         """Ripple Energy decorator function to check JWT token expiry"""
 
-        async def wrapper(*args, **kwargs):
+        async def wrapper(*args, **kwargs):  # type: ignore
             if check_date(args[0].token_expires, args[0].auto_auth_deauth):
                 await args[0].refresh_token()
 
@@ -65,9 +91,9 @@ class RippleEnergy:
 
         return wrapper
 
-    async def authenticate(self):
+    async def authenticate(self) -> AuthenticateTokenAuth:
         """Authenticate with Ripple Energy and generate JWT token"""
-        input: dict[str, str] = {"email": self.email, "password": self.password}
+        input = TokenAuthenticationInput(email=self.email, password=self.password)
 
         data = await self.client.authenticate(input=input)
 
@@ -85,7 +111,7 @@ class RippleEnergy:
 
         return data
 
-    async def deauthenticate(self):
+    async def deauthenticate(self) -> Deauthenticate:
         """De-authenticate with Ripple Energy and destroy JWT token"""
         if not self.headers.get("Authorization"):
             raise RippleEnergyMissingAuthorizationHeaderException
@@ -94,9 +120,9 @@ class RippleEnergy:
 
         logger.debug(f"De-authentication response: {data}")
 
-        if not data.auth_logout_session.logout_successful:
+        if not data.auth_logout_session.logout_successful:  # type: ignore
             raise RippleEnergyDeauthenticationException
-        if not data.delete_token_cookie.deleted:
+        if not data.delete_token_cookie.deleted:  # type: ignore
             raise RippleEnergyTokenDestroyException
 
         self.token = None
@@ -105,37 +131,37 @@ class RippleEnergy:
 
         return data
 
-    async def refresh_token(self):
+    async def refresh_token(self) -> RefreshTokenRefreshToken | None:
         """Ripple Energy refresh JWT token"""
         data = await self.client.refresh_token(self.token)
 
         logger.debug(f"Refresh token response: {data}")
 
-        if not data.token:
+        if not data.token:  # type: ignore
             raise RippleEnergyAuthenticationException
 
-        logger.info(f"Token refresh successful. Token: {data.token}")
+        logger.info(f"Token refresh successful. Token: {data.token}")  # type: ignore
 
-        self.token = data.token
-        self.headers.update(generate_jwt_header(data.token))
-        self.token_expires = datetime.fromtimestamp(data.refresh_expires_in)
+        self.token = data.token  # type: ignore
+        self.headers.update(generate_jwt_header(data.token))  # type: ignore
+        self.token_expires = datetime.fromtimestamp(data.refresh_expires_in)  # type: ignore
 
         return data
 
-    async def verify_token(self):
+    async def verify_token(self) -> VerifyTokenVerifyToken | None:
         """Ripple Energy verify JWT token"""
         data = await self.client.verify_token(self.token)
 
         logger.debug(f"Verify token response: {data}")
 
-        self.token_expires = datetime.fromtimestamp(data.payload["exp"])
+        self.token_expires = datetime.fromtimestamp(data.payload["exp"])  # type: ignore
 
         logger.info(f"Token verified. Expires: {self.token_expires}")
 
         return data
 
     @check_expiry
-    async def version(self):
+    async def version(self) -> str | None:
         """Ripple Energy GraphQL API version"""
         data = await self.client.version()
 
@@ -144,7 +170,7 @@ class RippleEnergy:
         return data
 
     @check_expiry
-    async def member(self):
+    async def member(self) -> MemberMember | None:
         """Ripple Energy member data"""
         data = await self.client.member()
 
@@ -153,7 +179,7 @@ class RippleEnergy:
         return data
 
     @check_expiry
-    async def me(self):
+    async def me(self) -> MeMe | None:
         """Ripple Energy user data"""
         data = await self.client.me()
 
@@ -162,7 +188,7 @@ class RippleEnergy:
         return data
 
     @check_expiry
-    async def active_coop_status(self):
+    async def active_coop_status(self) -> ActiveCoopStatusCoop | None:
         """Ripple Energy active co-op status"""
         data = await self.client.active_coop_status()
 
@@ -171,7 +197,7 @@ class RippleEnergy:
         return data
 
     @check_expiry
-    async def coop(self):
+    async def coop(self) -> CoopCoop | None:
         """Ripple Energy co-op"""
         data = await self.client.coop()
 
@@ -180,7 +206,7 @@ class RippleEnergy:
         return data
 
     @check_expiry
-    async def tribe_url(self):
+    async def tribe_url(self) -> str:
         """Ripple Energy Tribe URL"""
         data = await self.client.tribe_url()
 
@@ -190,7 +216,7 @@ class RippleEnergy:
 
     @check_expiry
     @validate_call
-    async def faqs(self, tag: str = ""):
+    async def faqs(self, tag: str = "") -> List[FaqsFaqs]:
         """Ripple Energy Frequently Asked Questions
 
         If you want to display all faqs, do not pass the tag argument"""
@@ -206,7 +232,7 @@ class RippleEnergy:
         return data
 
     @check_expiry
-    async def wind_farm_generation(self):
+    async def wind_farm_generation(self) -> WindFarmGenerationMember | None:
         """Ripple Energy wind farm generation"""
         data = await self.client.wind_farm_generation()
 
@@ -216,7 +242,9 @@ class RippleEnergy:
 
     @check_expiry
     @validate_call
-    async def monthly_savings(self, date: datetime = datetime.now()):
+    async def monthly_savings(
+        self, date: datetime = datetime.now()
+    ) -> MonthlySavingsMonthlySavingsData | None:
         """Ripple Energy monthly savings
 
         If you want to display from today, do not pass the date argument"""
@@ -231,7 +259,7 @@ class RippleEnergy:
         return data
 
     @check_expiry
-    async def cumulative_savings(self):
+    async def cumulative_savings(self) -> CumulativeSavingsCumulativeSavingsData | None:
         """Ripple Energy cumulative savings"""
         data = await self.client.cumulative_savings()
 
@@ -241,7 +269,9 @@ class RippleEnergy:
 
     @check_expiry
     @validate_call
-    async def coop_timeline_progression(self, coop_code: str):
+    async def coop_timeline_progression(
+        self, coop_code: str
+    ) -> CoopTimelineProgressionCoopTimelineProgression:
         """Ripple Energy co-op timeline progression"""
         data = await self.client.coop_timeline_progression(coop_code)
 
@@ -250,7 +280,7 @@ class RippleEnergy:
         return data
 
     @check_expiry
-    async def consumption(self):
+    async def consumption(self) -> ConsumptionConsumption | None:
         """Ripple Energy estimated household consumption"""
         data = await self.client.consumption()
 
@@ -259,7 +289,7 @@ class RippleEnergy:
         return data
 
     @check_expiry
-    async def all_coops(self):
+    async def all_coops(self) -> List[AllCoopsAllCoops] | None:
         """Ripple Energy all co-op's"""
         data = await self.client.all_coops()
 
