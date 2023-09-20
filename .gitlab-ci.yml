@@ -5,5 +5,8 @@ workflow:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
 
 lint:
+  image: python:latest
+
   script:
+    - pip install .
     - hatch run style:lint
