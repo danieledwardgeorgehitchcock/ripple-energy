@@ -4,26 +4,25 @@ from datetime import datetime
 from pydantic import validate_call
 from graphql_client.client import Client
 from constants import RIPPLE_GRAPH_URL
-from helpers import (generate_jwt_header,
-                     check_date)
-from exceptions import (RippleEnergyMissingAuthorizationHeaderException,
-                        RippleEnergyDeauthenticationException,
-                        RippleEnergyTokenDestroyException,
-                        RippleEnergyAuthenticationException
-                        )
-from models import (RippleEnergyCredentialAuth,
-                    RippleEnergyTokenAuth
-                    )
+from helpers import generate_jwt_header, check_date
+from exceptions import (
+    RippleEnergyMissingAuthorizationHeaderException,
+    RippleEnergyDeauthenticationException,
+    RippleEnergyTokenDestroyException,
+    RippleEnergyAuthenticationException,
+)
+from models import RippleEnergyCredentialAuth, RippleEnergyTokenAuth
 
 logger = logging.getLogger(__name__)
 
 
 class RippleEnergy:
     @validate_call
-    def __init__(self,
-                 auth: RippleEnergyCredentialAuth | RippleEnergyTokenAuth,
-                 auto_auth_deauth: bool = True
-                 ):
+    def __init__(
+        self,
+        auth: RippleEnergyCredentialAuth | RippleEnergyTokenAuth,
+        auto_auth_deauth: bool = True,
+    ):
         """Initialise Ripple Energy object"""
         if isinstance(auth, RippleEnergyCredentialAuth):
             self.auth_method = "credential"
@@ -50,15 +49,14 @@ class RippleEnergy:
 
         return self
 
-    async def __aexit__(self,
-                        *args
-                        ) -> None:
+    async def __aexit__(self, *args) -> None:
         """Ripple Energy asyncronous exit"""
         if self.auto_auth_deauth:
             await self.deauthenticate()
 
     def check_expiry(function):
         """Ripple Energy decorator function to check JWT token expiry"""
+
         async def wrapper(*args, **kwargs):
             if check_date(args[0].token_expires, args[0].auto_auth_deauth):
                 await args[0].refresh_token()
@@ -69,8 +67,7 @@ class RippleEnergy:
 
     async def authenticate(self):
         """Authenticate with Ripple Energy and generate JWT token"""
-        input = {"email": self.email,
-                 "password": self.password}
+        input: dict[str, str] = {"email": self.email, "password": self.password}
 
         data = await self.client.authenticate(input=input)
 
