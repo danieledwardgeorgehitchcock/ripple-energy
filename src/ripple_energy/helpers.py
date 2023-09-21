@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Any
 
 from pydantic import validate_call
 
@@ -19,3 +20,15 @@ def check_date(date: datetime, auto_auth_deauth: bool) -> bool:
         raise RippleEnergyTokenExpiredException
 
     return expired
+
+
+def check_expiry(function: Any):  # type: ignore
+    """Ripple Energy decorator function to check JWT token expiry"""
+
+    async def wrapper(*args, **kwargs):  # type: ignore
+        if check_date(args[0].token_expires, args[0].auto_auth_deauth):
+            await args[0].refresh_token()
+
+        return await function(*args, **kwargs)
+
+    return wrapper

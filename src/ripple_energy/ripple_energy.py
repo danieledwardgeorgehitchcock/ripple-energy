@@ -33,7 +33,7 @@ from .graphql_client import (
     VerifyTokenVerifyToken,
     WindFarmGenerationMember,
 )
-from .helpers import check_date, generate_jwt_header
+from .helpers import check_expiry, generate_jwt_header
 from .models import RippleEnergyCredentialAuth, RippleEnergyTokenAuth
 
 logger = logging.getLogger(__name__)
@@ -82,17 +82,6 @@ class RippleEnergy:
         """Ripple Energy asyncronous exit"""
         if self.auto_auth_deauth:
             await self.deauthenticate()
-
-    def check_expiry(function: Any):  # type: ignore
-        """Ripple Energy decorator function to check JWT token expiry"""
-
-        async def wrapper(*args, **kwargs):  # type: ignore
-            if check_date(args[0].token_expires, args[0].auto_auth_deauth):
-                await args[0].refresh_token()
-
-            return await function(*args, **kwargs)
-
-        return wrapper
 
     async def authenticate(self) -> AuthenticateTokenAuth:
         """Authenticate with Ripple Energy and generate JWT token"""
