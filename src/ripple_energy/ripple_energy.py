@@ -112,9 +112,9 @@ class RippleEnergy:
 
         logger.debug(f"De-authentication response: {data}")
 
-        if not data.auth_logout_session.logout_successful:  # type: ignore
+        if data.auth_logout_session and not data.auth_logout_session.logout_successful:
             raise RippleEnergyDeauthenticationException
-        if not data.delete_token_cookie.deleted:  # type: ignore
+        if data.delete_token_cookie and not data.delete_token_cookie.deleted:
             raise RippleEnergyTokenDestroyException
 
         self.token = None
@@ -129,14 +129,14 @@ class RippleEnergy:
 
         logger.debug(f"Refresh token response: {data}")
 
-        if not data.token:  # type: ignore
+        if isinstance(data, RefreshTokenRefreshToken):
+            logger.info(f"Token refresh successful. Token: {data.token}")
+
+            self.token = data.token
+            self.headers.update(generate_jwt_header(data.token))
+            self.token_expires = datetime.fromtimestamp(data.refresh_expires_in)
+        else:
             raise RippleEnergyAuthenticationException
-
-        logger.info(f"Token refresh successful. Token: {data.token}")  # type: ignore
-
-        self.token = data.token  # type: ignore
-        self.headers.update(generate_jwt_header(data.token))  # type: ignore
-        self.token_expires = datetime.fromtimestamp(data.refresh_expires_in)  # type: ignore
 
         return data
 
@@ -146,7 +146,8 @@ class RippleEnergy:
 
         logger.debug(f"Verify token response: {data}")
 
-        self.token_expires = datetime.fromtimestamp(data.payload["exp"])  # type: ignore
+        if isinstance(data, VerifyTokenVerifyToken):
+            self.token_expires = datetime.fromtimestamp(data.payload["exp"])
 
         logger.info(f"Token verified. Expires: {self.token_expires}")
 
@@ -211,7 +212,7 @@ class RippleEnergy:
     async def faqs(self, tag: str = "") -> List[FaqsFaqs]:
         """Ripple Energy Frequently Asked Questions
 
-        If you want to display all faqs, do not pass the tag argument"""
+        Do not pass the tag parameter to display all faqs"""
         if not tag:
             logger.info("Querying all FAQs.")
         else:
@@ -239,7 +240,7 @@ class RippleEnergy:
     ) -> MonthlySavingsMonthlySavingsData | None:
         """Ripple Energy monthly savings
 
-        If you want to display from today, do not pass the date argument"""
+        Do not pass the date parameter to display from today"""
         date_str: str = date.strftime("%Y-%m-%d")
 
         logger.info(f"Querying monthly savings for date: {date_str}")

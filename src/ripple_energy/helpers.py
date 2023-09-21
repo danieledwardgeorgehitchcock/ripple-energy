@@ -22,6 +22,8 @@ def check_date(date: datetime, auto_auth_deauth: bool) -> bool:
     return expired
 
 
+# Type ignores are required here as there doesn't appear to be a
+# type friendly asyncronous way of wrapping a function
 def check_expiry(function: Any):  # type: ignore
     """Ripple Energy decorator function to check JWT token expiry"""
 
