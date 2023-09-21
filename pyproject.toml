@@ -47,10 +47,10 @@ no-cov = "cov --no-cov {args}"
 
 [tool.hatch.envs.checks]
 dependencies = [
+  "ariadne-codegen",
   "black",
   "mypy",
   "isort",
-  "ariadne-codegen",
   "websockets", # This is only here to prevent MyPy error - upstream PR submitted
 ]
 
@@ -83,6 +83,7 @@ target_package_path = "src/ripple_energy"
 include_comments = false
 
 [tool.mypy]
+plugins = ["pydantic.mypy"]
 mypy_path = "src"
 follow_imports = "normal"
 # be strict
