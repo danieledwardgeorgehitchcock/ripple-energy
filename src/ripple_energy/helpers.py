@@ -1,10 +1,13 @@
+import logging
 from datetime import datetime
-from typing import Any
+from typing import Awaitable, Callable
 
 from pydantic import validate_call
 
-from .constants import JWT_HEADER_PREFIX
+from .constants import JWT_HEADER_PREFIX, PARAM, TYPE
 from .exceptions import RippleEnergyTokenExpiredException
+
+logger = logging.getLogger(__name__)
 
 
 @validate_call
@@ -14,7 +17,10 @@ def generate_jwt_header(token: str | None = None) -> dict[str, str]:
 
 @validate_call
 def check_date(date: datetime, auto_auth_deauth: bool) -> bool:
-    expired = date < datetime.now()
+    now = datetime.now()
+    expired = date < now
+
+    logger.info(f"Checked Token Expiry: {date} Against Now: {now}. Result: {expired}")
 
     if expired and not auto_auth_deauth:
         raise RippleEnergyTokenExpiredException
@@ -22,15 +28,17 @@ def check_date(date: datetime, auto_auth_deauth: bool) -> bool:
     return expired
 
 
-# Type ignores are required here as there doesn't appear to be a
-# type friendly asyncronous way of wrapping a function
-def check_expiry(function: Any):  # type: ignore
-    """Ripple Energy decorator function to check JWT token expiry"""
-
-    async def wrapper(*args, **kwargs):  # type: ignore
-        if check_date(args[0].token_expires, args[0].auto_auth_deauth):
-            await args[0].refresh_token()
-
+def check_expiry(
+    function: Callable[PARAM, Awaitable[TYPE]]
+) -> Callable[PARAM, Awaitable[TYPE]]:
+    async def wrapper(*args: PARAM.args, **kwargs: PARAM.kwargs) -> TYPE:
+        if (
+            hasattr(args[0], "token_expires")
+            and hasattr(args[0], "auto_auth_deauth")
+            and hasattr(args[0], "refresh_token")
+        ):
+            if check_date(args[0].token_expires, args[0].auto_auth_deauth):
+                await args[0].refresh_token()
         return await function(*args, **kwargs)
 
     return wrapper
