@@ -33,7 +33,7 @@ The primary purpose of this package is to create an interface for Home Assistant
     - [x] [PEP257](https://peps.python.org/pep-0257/) compliance
     - [x] [PEP484](https://peps.python.org/pep-0484/) compliance
  - [ ] Create tests
- - [ ] Create build pipeline 
+ - [x] Create build pipeline 
  - [x] Publish to PyPi 
  - [x] Make Async?
 
