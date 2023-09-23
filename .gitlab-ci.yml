@@ -14,4 +14,4 @@ release:
   image: python:latest
   script:
     - pip install .
-    - hatch build
+    - hatchling build
