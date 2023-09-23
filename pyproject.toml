@@ -1,5 +1,5 @@
 [build-system]
-requires = ["hatchling"]
+requires = ["hatchling", "hatch-vcs"]
 build-backend = "hatchling.build"
 
 [project]
@@ -34,7 +34,7 @@ Issues = "https://github.com/danieledwardgeorgehitchcock/ripple-energy/issues"
 Source = "https://github.com/danieledwardgeorgehitchcock/ripple-energy"
 
 [tool.hatch.version]
-path = "src/ripple_energy/__about__.py"
+source = "vcs"
 
 [tool.hatch.envs.default]
 dependencies = [
