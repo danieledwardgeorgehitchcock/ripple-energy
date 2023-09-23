@@ -7,3 +7,11 @@ checks:
   script:
     - pip install hatch
     - hatch run checks:lint
+    
+release:
+  rules:
+    - if: $CI_COMMIT_TAG
+  image: python:latest
+  script:
+    - pip install hatch
+    - hatch version
