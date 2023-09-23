@@ -49,6 +49,8 @@ release-gitlab-job:
     - if: $CI_COMMIT_TAG
   image: registry.gitlab.com/gitlab-org/release-cli:latest
   script:
-    - apk update && apk add git
-    - export CHANGES_BETWEEN_VERSIONS=$(git log $CI_COMMIT_TAG...$(git tag --sort=-creatordate | grep -A 1 $CI_COMMIT_TAG | tail -n 1) --no-merges --pretty="format:%h %s @%cn")
-    - echo $CHANGES_BETWEEN_VERSIONS
+    - apk update
+    - apk add git
+  release:
+    - tag_name: $CI_COMMIT_TAG
+    - description: CHANGES_BETWEEN_VERSIONS=$(git log $CI_COMMIT_TAG...$(git tag --sort=-creatordate | grep -A 1 $CI_COMMIT_TAG | tail -n 1) --no-merges --pretty="format:%h %s @%cn")
