@@ -2,3 +2,4 @@ __pycache__
 dist
 src/test.py
 .coverage
+_version.py
