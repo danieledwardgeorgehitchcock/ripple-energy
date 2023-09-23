@@ -53,4 +53,4 @@ release-gitlab-job:
     - apk add git
   release:
     tag_name: $CI_COMMIT_TAG
-    description: | Commit | Description | Committed By |\n|---|---|---|\n$(git log $CI_COMMIT_TAG...$(git tag --sort=-creatordate | grep -A 1 $CI_COMMIT_TAG | tail -n 1) --no-merges --pretty="format:| %h | %s | @%cn |")"
+    description: | Commit | Description | Committed By |\n|---|---|---|\n$(git log $CI_COMMIT_TAG...$(git tag --sort=-creatordate | grep -A 1 $CI_COMMIT_TAG | tail -n 1) --no-merges --pretty="format:| %h | %s | @%cn |")
