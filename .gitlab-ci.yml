@@ -8,10 +8,13 @@ checks:
     - pip install hatch
     - hatch run checks:lint
     
-release:
+build:
   rules:
     - if: $CI_COMMIT_TAG
   image: python:latest
   script:
-    - pip install .
+    - pip install hatch
     - hatchling build
+  artifacts:
+    paths:
+      - dist/*
