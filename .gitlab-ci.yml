@@ -39,7 +39,7 @@ deploy-pypi-job:
     PYTHON_KEYRING_BACKEND: keyring.backends.null.Keyring
   script:
     - pip install hatch
-    - hatch publish -u $HATCH_INDEX_USER - a HATCH_INDEX_AUTH
+    - hatch publish -u $HATCH_INDEX_USER - a $HATCH_INDEX_AUTH
 
 release-gitlab-job:
   stage: deploy
