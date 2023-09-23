@@ -14,7 +14,7 @@ build:
   image: python:latest
   script:
     - pip install hatch
-    - hatchling build
+    - hatch build
   artifacts:
     paths:
       - dist/*
