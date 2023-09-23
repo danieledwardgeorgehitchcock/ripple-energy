@@ -34,12 +34,22 @@ The primary purpose of this package is to create an interface for Home Assistant
     - [x] [PEP484](https://peps.python.org/pep-0484/) compliance
  - [ ] Create tests
  - [ ] Create build pipeline 
- - [ ] Publish to PyPi 
+ - [x] Publish to PyPi 
  - [x] Make Async?
 
 ## Installation
 
-At present, this package has not been published to PyPi - You will therefore need to clone this repository to use it.  
+### From Package Index
+
+It is recommended to use `pip` to pull the package from PyPi
+
+```console
+pip install ripple-energy
+```
+
+### From Repository
+
+Clone this repository  
 
 ```console
 git clone https://github.com/danieledwardgeorgehitchcock/ripple-energy.git
@@ -105,7 +115,7 @@ In a terminal, make sure you are in the Hatch shell environment:
 hatch shell start
 ```
 
-Run the Ariadne code generator:
+This project uses the Ariadne code generator. To run it:
 
 ```console
 ariadne-codegen
