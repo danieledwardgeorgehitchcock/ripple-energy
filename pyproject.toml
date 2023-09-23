@@ -106,6 +106,3 @@ warn_unused_ignores = true
 
 [tool.isort]
 profile = "black"
-
-[tool.hatch.build.hooks.vcs]
-version-file = "_version.py"
