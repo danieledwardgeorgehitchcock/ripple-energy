@@ -37,10 +37,8 @@ deploy-pypi-job:
     - if: $CI_COMMIT_TAG
   variables:
     PYTHON_KEYRING_BACKEND: keyring.backends.null.Keyring
-    HATCH_INDEX_USER: $HATCH_INDEX_USER
-    HATCH_INDEX_AUTH: $HATCH_INDEX_AUTH
   script:
-    - pip install hatch
+    - pip install hatch -u $HATCH_INDEX_USER - a $HATCH_INDEX_AUTH
     - hatch publish
 
 release-gitlab-job:
