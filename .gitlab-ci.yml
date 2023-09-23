@@ -45,5 +45,5 @@ release-job:
   image: registry.gitlab.com/gitlab-org/release-cli:latest
   script:
     - apk update && apk add git
-    - git log 3.0.0...$(git tag --sort=-creatordate | grep -A 1 3.0.0 | tail -n 1) --no-merges --pretty="format:%h %s @%cn"
+    - git log $CI_COMMIT_TAG...$(git tag --sort=-creatordate | grep -A 1 $CI_COMMIT_TAG | tail -n 1) --no-merges --pretty="format:%h %s @%cn"
     - release-cli --name $CI_COMMIT_TAG
