@@ -46,4 +46,3 @@ release-job:
   script:
     - apk update && apk add git
     - git log $CI_COMMIT_TAG...$(git tag --sort=-creatordate | grep -A 1 $CI_COMMIT_TAG | tail -n 1) --no-merges --pretty="format:%h %s @%cn"
-    - release-cli --name $CI_COMMIT_TAG
