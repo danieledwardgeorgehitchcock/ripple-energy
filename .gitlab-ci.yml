@@ -5,7 +5,6 @@ stages:
   - build
   - test
   - deploy
-  - release
 
 check-job:
   stage: check
@@ -19,6 +18,8 @@ check-job:
     
 build-job:
   stage: build
+  needs:
+    - check-job
   rules:
     - if: $CI_COMMIT_TAG
   script:
@@ -28,8 +29,10 @@ build-job:
     paths:
       - dist/*
 
-deploy-job:
+deploy-pypi-job:
   stage: deploy
+  needs:
+    - build-job  
   rules:
     - if: $CI_COMMIT_TAG
   script:
@@ -38,8 +41,10 @@ deploy-job:
     - cd dist
     - ls -al
 
-release-job:
-  stage: release
+release-gitlab-job:
+  stage: deploy
+  needs:
+    - build-job  
   rules:
     - if: $CI_COMMIT_TAG
   image: registry.gitlab.com/gitlab-org/release-cli:latest
