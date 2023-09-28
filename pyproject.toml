@@ -45,7 +45,8 @@ dependencies = [
 cov = "pytest --cov-report=term-missing --cov-config=pyproject.toml --cov=ripple_energy --cov=tests {args}"
 no-cov = "cov --no-cov {args}"
 
-[tool.hatch.envs.checks]
+[tool.hatch.envs.lint]
+detached = true
 dependencies = [
   "ariadne-codegen",
   "black",
@@ -54,7 +55,7 @@ dependencies = [
   "websockets", # This is only here to prevent MyPy error - upstream PR submitted
 ]
 
-[tool.hatch.envs.checks.scripts]
+[tool.hatch.envs.lint.scripts]
 lint = ["black --check --diff {args:.}", "isort --check --diff {args:.}", "mypy {args:.}",]
 format = ["black {args:.}", "isort {args:.}"]
 

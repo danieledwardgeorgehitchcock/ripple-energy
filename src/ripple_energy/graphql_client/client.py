@@ -17,8 +17,8 @@ from .cumulative_savings import (
 )
 from .deauthenticate import Deauthenticate
 from .faqs import Faqs, FaqsFaqs
-from .get_insights_chart_data import GetInsightsChartData, GetInsightsChartDataMember
 from .input_types import InsightsChartDataInput, TokenAuthenticationInput
+from .insights_chart_data import InsightsChartData, InsightsChartDataMember
 from .me import Me, MeMe
 from .member import Member, MemberMember
 from .monthly_savings import MonthlySavings, MonthlySavingsMonthlySavingsData
@@ -234,12 +234,12 @@ class Client(AsyncBaseClient):
         data = self.get_data(response)
         return Coop.model_validate(data).coop
 
-    async def get_insights_chart_data(
+    async def insights_chart_data(
         self, input: InsightsChartDataInput
-    ) -> Optional[GetInsightsChartDataMember]:
+    ) -> Optional[InsightsChartDataMember]:
         query = gql(
             """
-            query GetInsightsChartData($input: InsightsChartDataInput!) {
+            query InsightsChartData($input: InsightsChartDataInput!) {
               member {
                 id
                 memberships {
@@ -279,7 +279,7 @@ class Client(AsyncBaseClient):
         variables: Dict[str, object] = {"input": input}
         response = await self.execute(query=query, variables=variables)
         data = self.get_data(response)
-        return GetInsightsChartData.model_validate(data).member
+        return InsightsChartData.model_validate(data).member
 
     async def member(self) -> Optional[MemberMember]:
         query = gql(

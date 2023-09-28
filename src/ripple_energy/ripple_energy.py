@@ -25,7 +25,7 @@ from .graphql_client import (
     CumulativeSavingsCumulativeSavingsData,
     Deauthenticate,
     FaqsFaqs,
-    GetInsightsChartData,
+    InsightsChartDataMember,
     MemberMember,
     MeMe,
     MonthlySavingsMonthlySavingsData,
@@ -294,10 +294,11 @@ class RippleEnergy:
 
     @check_expiry
     @validate_call
-    async def insights_chart(self, input: InsightsChartDataInput) -> List[GetInsightsChartData]:
+    async def insights_chart(
+        self, input: InsightsChartDataInput
+    ) -> InsightsChartDataMember | None:
         """Ripple Energy Insights Chart Data"""
-
-        data = await self.client.get_insights_chart_data(input=input)
+        data = await self.client.insights_chart_data(input=input)
 
         logger.debug(f"Insights Chart Data response: {data}")
 
