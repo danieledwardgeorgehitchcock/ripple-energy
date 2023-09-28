@@ -16,7 +16,8 @@ from .exceptions import (
 )
 
 try:
-    from websockets.client import WebSocketClientProtocol, connect as ws_connect
+    from websockets.client import WebSocketClientProtocol
+    from websockets.client import connect as ws_connect
     from websockets.typing import Data, Origin, Subprotocol
 except ImportError:
     from contextlib import asynccontextmanager

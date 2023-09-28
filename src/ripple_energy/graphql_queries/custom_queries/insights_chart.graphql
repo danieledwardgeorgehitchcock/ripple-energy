@@ -1,4 +1,4 @@
-query GetInsightsChartData($input: InsightsChartDataInput!) {
+query InsightsChartData($input: InsightsChartDataInput!) {
   member {
     id
     memberships {
