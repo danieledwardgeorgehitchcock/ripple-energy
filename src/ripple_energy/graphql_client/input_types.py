@@ -55,6 +55,12 @@ class SupplierMemberInfoInput(BaseModel):
     member_account_id: Optional[str] = Field(alias="memberAccountId", default=None)
 
 
+class ConsumptionGenerationChartDataInput(BaseModel):
+    period: Period
+    start_date: str = Field(alias="startDate")
+    end_date: str = Field(alias="endDate")
+
+
 class CalculateOrderPaymentInput(BaseModel):
     balance_amount: Optional[int] = Field(alias="balanceAmount", default=None)
     currency: str
@@ -575,6 +581,7 @@ SearchAndFilterInput.model_rebuild()
 FilterInput.model_rebuild()
 SearchCountAndFilterInput.model_rebuild()
 SupplierMemberInfoInput.model_rebuild()
+ConsumptionGenerationChartDataInput.model_rebuild()
 CalculateOrderPaymentInput.model_rebuild()
 CalculatePaymentLineInput.model_rebuild()
 CalculateUnitsForCostInput.model_rebuild()

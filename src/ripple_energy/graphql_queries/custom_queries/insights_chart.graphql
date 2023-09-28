@@ -1,0 +1,35 @@
+query GetInsightsChartData($input: InsightsChartDataInput!) {
+  member {
+    id
+    memberships {
+      id
+      coop {
+        id
+        name
+        generationfarm {
+          id
+          name
+          operationalStatus
+          insightsChartData(input: $input) {
+            chartData {
+              windSpeedMph
+              generationKwh
+              savings
+              fromTime
+              toTime
+            }
+            cumulativeData {
+              averageWindSpeedMph
+              cumulativeGenerationKwh
+              cumulativeSavings
+            }
+            userErrors {
+              field
+              message
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -25,6 +25,7 @@ from .graphql_client import (
     CumulativeSavingsCumulativeSavingsData,
     Deauthenticate,
     FaqsFaqs,
+    GetInsightsChartData,
     MemberMember,
     MeMe,
     MonthlySavingsMonthlySavingsData,
@@ -33,6 +34,7 @@ from .graphql_client import (
     VerifyTokenVerifyToken,
     WindFarmGenerationMember,
 )
+from .graphql_client.input_types import InsightsChartDataInput
 from .helpers import check_expiry, generate_jwt_header
 from .models import RippleEnergyCredentialAuth, RippleEnergyTokenAuth
 
@@ -287,5 +289,16 @@ class RippleEnergy:
         data = await self.client.all_coops()
 
         logger.debug(f"All co-op's response: {data}")
+
+        return data
+
+    @check_expiry
+    @validate_call
+    async def insights_chart(self, input: InsightsChartDataInput) -> List[GetInsightsChartData]:
+        """Ripple Energy Insights Chart Data"""
+
+        data = await self.client.get_insights_chart_data(input=input)
+
+        logger.debug(f"Insights Chart Data response: {data}")
 
         return data
