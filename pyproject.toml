@@ -48,15 +48,13 @@ no-cov = "cov --no-cov {args}"
 [tool.hatch.envs.lint]
 detached = true
 dependencies = [
-  "ariadne-codegen",
   "black",
   "mypy",
   "isort",
-  "websockets", # This is only here to prevent MyPy error - upstream PR submitted
 ]
 
 [tool.hatch.envs.lint.scripts]
-lint = ["black --check --diff {args:.}", "isort --check --diff {args:.}", "mypy {args:.}",]
+lint = ["black --check --diff {args:.}", "isort --check --diff {args:.}", "mypy {args:.}"]
 format = ["black {args:.}", "isort {args:.}"]
 
 [[tool.hatch.envs.test.matrix]]
