@@ -71,9 +71,9 @@ class MeMePayments(BaseModel):
 class MeMeDirectDebit(BaseModel):
     id: str
     account_name: str = Field(alias="accountName")
-    account_sort_code: str = Field(alias="accountSortCode")
-    account_number: str = Field(alias="accountNumber")
-    payment_day: str = Field(alias="paymentDay")
+    account_sort_code: Optional[str] = Field(alias="accountSortCode")
+    account_number: Optional[str] = Field(alias="accountNumber")
+    payment_day: int = Field(alias="paymentDay")
 
 
 class MeMeMember(BaseModel):
