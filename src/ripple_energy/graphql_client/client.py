@@ -11,17 +11,12 @@ from .coop_timeline_progression import (
     CoopTimelineProgression,
     CoopTimelineProgressionCoopTimelineProgression,
 )
-from .cumulative_savings import (
-    CumulativeSavings,
-    CumulativeSavingsCumulativeSavingsData,
-)
 from .deauthenticate import Deauthenticate
 from .faqs import Faqs, FaqsFaqs
 from .input_types import InsightsChartDataInput, TokenAuthenticationInput
 from .insights_chart_data import InsightsChartData, InsightsChartDataMember
 from .me import Me, MeMe
 from .member import Member, MemberMember
-from .monthly_savings import MonthlySavings, MonthlySavingsMonthlySavingsData
 from .refresh_token import RefreshToken, RefreshTokenRefreshToken
 from .tribe_url import TribeUrl
 from .verify_token import VerifyToken, VerifyTokenVerifyToken
@@ -74,7 +69,6 @@ class Client(AsyncBaseClient):
               description
               maxGenerationPerMember
               minGenerationPerMember
-              percentageFunded
               publicCloseDate
               estimatedBillSavingsPerWattHour
               firstYearEstimatedBillSavingsPerWattHour
@@ -178,7 +172,6 @@ class Client(AsyncBaseClient):
               description
               maxGenerationPerMember
               minGenerationPerMember
-              percentageFunded
               publicCloseDate
               estimatedBillSavingsPerWattHour
               firstYearEstimatedBillSavingsPerWattHour
@@ -300,7 +293,6 @@ class Client(AsyncBaseClient):
               description
               maxGenerationPerMember
               minGenerationPerMember
-              percentageFunded
               publicCloseDate
               estimatedBillSavingsPerWattHour
               firstYearEstimatedBillSavingsPerWattHour
@@ -603,30 +595,6 @@ class Client(AsyncBaseClient):
         data = self.get_data(response)
         return CoopTimelineProgression.model_validate(data).coop_timeline_progression
 
-    async def cumulative_savings(
-        self,
-    ) -> Optional[CumulativeSavingsCumulativeSavingsData]:
-        query = gql(
-            """
-            query CumulativeSavings {
-              cumulativeSavingsData {
-                currency {
-                  code
-                  precision
-                }
-                savings
-                generation
-                co2Saved
-                lastUpdate
-              }
-            }
-            """
-        )
-        variables: Dict[str, object] = {}
-        response = await self.execute(query=query, variables=variables)
-        data = self.get_data(response)
-        return CumulativeSavings.model_validate(data).cumulative_savings_data
-
     async def faqs(self, tag: str) -> List[FaqsFaqs]:
         query = gql(
             """
@@ -712,33 +680,6 @@ class Client(AsyncBaseClient):
         response = await self.execute(query=query, variables=variables)
         data = self.get_data(response)
         return Me.model_validate(data).me
-
-    async def monthly_savings(
-        self, date: str
-    ) -> Optional[MonthlySavingsMonthlySavingsData]:
-        query = gql(
-            """
-            query MonthlySavings($date: String!) {
-              monthlySavingsData(date: $date) {
-                currency {
-                  code
-                  precision
-                }
-                month
-                year
-                savings
-                referredSavings
-                generation
-                co2Saved
-                treeEquivalent
-              }
-            }
-            """
-        )
-        variables: Dict[str, object] = {"date": date}
-        response = await self.execute(query=query, variables=variables)
-        data = self.get_data(response)
-        return MonthlySavings.model_validate(data).monthly_savings_data
 
     async def tribe_url(self) -> str:
         query = gql(

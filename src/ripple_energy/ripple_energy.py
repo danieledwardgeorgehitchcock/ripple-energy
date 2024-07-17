@@ -22,13 +22,11 @@ from .graphql_client import (
     ConsumptionConsumption,
     CoopCoop,
     CoopTimelineProgressionCoopTimelineProgression,
-    CumulativeSavingsCumulativeSavingsData,
     Deauthenticate,
     FaqsFaqs,
     InsightsChartDataMember,
     MemberMember,
     MeMe,
-    MonthlySavingsMonthlySavingsData,
     RefreshTokenRefreshToken,
     TokenAuthenticationInput,
     VerifyTokenVerifyToken,
@@ -232,33 +230,6 @@ class RippleEnergy:
         data = await self.client.wind_farm_generation()
 
         logger.debug(f"Wind farm generation response: {data}")
-
-        return data
-
-    @check_expiry
-    @validate_call
-    async def monthly_savings(
-        self, date: datetime = datetime.now()
-    ) -> MonthlySavingsMonthlySavingsData | None:
-        """Ripple Energy monthly savings
-
-        Do not pass the date parameter to display from today"""
-        date_str: str = date.strftime("%Y-%m-%d")
-
-        logger.info(f"Querying monthly savings for date: {date_str}")
-
-        data = await self.client.monthly_savings(date=date_str)
-
-        logger.debug(f"Monthly savings response: {data}")
-
-        return data
-
-    @check_expiry
-    async def cumulative_savings(self) -> CumulativeSavingsCumulativeSavingsData | None:
-        """Ripple Energy cumulative savings"""
-        data = await self.client.cumulative_savings()
-
-        logger.debug(f"Cumulative savings response: {data}")
 
         return data
 
