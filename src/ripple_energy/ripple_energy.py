@@ -22,17 +22,17 @@ from .graphql_client import (
     ConsumptionConsumption,
     CoopCoop,
     CoopTimelineProgressionCoopTimelineProgression,
-    CumulativeSavingsCumulativeSavingsData,
     Deauthenticate,
     FaqsFaqs,
+    InsightsChartDataMember,
     MemberMember,
     MeMe,
-    MonthlySavingsMonthlySavingsData,
     RefreshTokenRefreshToken,
     TokenAuthenticationInput,
     VerifyTokenVerifyToken,
     WindFarmGenerationMember,
 )
+from .graphql_client.input_types import InsightsChartDataInput
 from .helpers import check_expiry, generate_jwt_header
 from .models import RippleEnergyCredentialAuth, RippleEnergyTokenAuth
 
@@ -235,33 +235,6 @@ class RippleEnergy:
 
     @check_expiry
     @validate_call
-    async def monthly_savings(
-        self, date: datetime = datetime.now()
-    ) -> MonthlySavingsMonthlySavingsData | None:
-        """Ripple Energy monthly savings
-
-        Do not pass the date parameter to display from today"""
-        date_str: str = date.strftime("%Y-%m-%d")
-
-        logger.info(f"Querying monthly savings for date: {date_str}")
-
-        data = await self.client.monthly_savings(date=date_str)
-
-        logger.debug(f"Monthly savings response: {data}")
-
-        return data
-
-    @check_expiry
-    async def cumulative_savings(self) -> CumulativeSavingsCumulativeSavingsData | None:
-        """Ripple Energy cumulative savings"""
-        data = await self.client.cumulative_savings()
-
-        logger.debug(f"Cumulative savings response: {data}")
-
-        return data
-
-    @check_expiry
-    @validate_call
     async def coop_timeline_progression(
         self, coop_code: str
     ) -> CoopTimelineProgressionCoopTimelineProgression:
@@ -287,5 +260,17 @@ class RippleEnergy:
         data = await self.client.all_coops()
 
         logger.debug(f"All co-op's response: {data}")
+
+        return data
+
+    @check_expiry
+    @validate_call
+    async def insights_chart(
+        self, input: InsightsChartDataInput
+    ) -> InsightsChartDataMember | None:
+        """Ripple Energy Insights Chart Data"""
+        data = await self.client.insights_chart_data(input=input)
+
+        logger.debug(f"Insights Chart Data response: {data}")
 
         return data
