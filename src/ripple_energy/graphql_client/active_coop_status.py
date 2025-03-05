@@ -14,4 +14,3 @@ class ActiveCoopStatusCoop(BaseModel):
 
 
 ActiveCoopStatus.model_rebuild()
-ActiveCoopStatusCoop.model_rebuild()

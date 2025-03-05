@@ -1,4 +1,4 @@
-from typing import Dict, List, Optional, Union
+from typing import Any, Dict, List, Optional, Union
 
 from .active_coop_status import ActiveCoopStatus, ActiveCoopStatusCoop
 from .all_coops import AllCoops, AllCoopsAllCoops
@@ -7,10 +7,6 @@ from .authenticate import Authenticate, AuthenticateTokenAuth
 from .base_model import UNSET, UnsetType
 from .consumption import Consumption, ConsumptionConsumption
 from .coop import Coop, CoopCoop
-from .coop_timeline_progression import (
-    CoopTimelineProgression,
-    CoopTimelineProgressionCoopTimelineProgression,
-)
 from .deauthenticate import Deauthenticate
 from .faqs import Faqs, FaqsFaqs
 from .input_types import InsightsChartDataInput, TokenAuthenticationInput
@@ -29,7 +25,7 @@ def gql(q: str) -> str:
 
 
 class Client(AsyncBaseClient):
-    async def deauthenticate(self) -> Deauthenticate:
+    async def deauthenticate(self, **kwargs: Any) -> Deauthenticate:
         query = gql(
             """
             mutation Deauthenticate {
@@ -46,11 +42,13 @@ class Client(AsyncBaseClient):
             """
         )
         variables: Dict[str, object] = {}
-        response = await self.execute(query=query, variables=variables)
+        response = await self.execute(
+            query=query, operation_name="Deauthenticate", variables=variables, **kwargs
+        )
         data = self.get_data(response)
         return Deauthenticate.model_validate(data)
 
-    async def all_coops(self) -> Optional[List[AllCoopsAllCoops]]:
+    async def all_coops(self, **kwargs: Any) -> Optional[List[AllCoopsAllCoops]]:
         query = gql(
             """
             query AllCoops {
@@ -120,11 +118,13 @@ class Client(AsyncBaseClient):
             """
         )
         variables: Dict[str, object] = {}
-        response = await self.execute(query=query, variables=variables)
+        response = await self.execute(
+            query=query, operation_name="AllCoops", variables=variables, **kwargs
+        )
         data = self.get_data(response)
         return AllCoops.model_validate(data).all_coops
 
-    async def consumption(self) -> Optional[ConsumptionConsumption]:
+    async def consumption(self, **kwargs: Any) -> Optional[ConsumptionConsumption]:
         query = gql(
             """
             query Consumption {
@@ -149,11 +149,13 @@ class Client(AsyncBaseClient):
             """
         )
         variables: Dict[str, object] = {}
-        response = await self.execute(query=query, variables=variables)
+        response = await self.execute(
+            query=query, operation_name="Consumption", variables=variables, **kwargs
+        )
         data = self.get_data(response)
         return Consumption.model_validate(data).consumption
 
-    async def coop(self) -> Optional[CoopCoop]:
+    async def coop(self, **kwargs: Any) -> Optional[CoopCoop]:
         query = gql(
             """
             query Coop {
@@ -223,12 +225,14 @@ class Client(AsyncBaseClient):
             """
         )
         variables: Dict[str, object] = {}
-        response = await self.execute(query=query, variables=variables)
+        response = await self.execute(
+            query=query, operation_name="Coop", variables=variables, **kwargs
+        )
         data = self.get_data(response)
         return Coop.model_validate(data).coop
 
     async def insights_chart_data(
-        self, input: InsightsChartDataInput
+        self, input: InsightsChartDataInput, **kwargs: Any
     ) -> Optional[InsightsChartDataMember]:
         query = gql(
             """
@@ -270,11 +274,16 @@ class Client(AsyncBaseClient):
             """
         )
         variables: Dict[str, object] = {"input": input}
-        response = await self.execute(query=query, variables=variables)
+        response = await self.execute(
+            query=query,
+            operation_name="InsightsChartData",
+            variables=variables,
+            **kwargs
+        )
         data = self.get_data(response)
         return InsightsChartData.model_validate(data).member
 
-    async def member(self) -> Optional[MemberMember]:
+    async def member(self, **kwargs: Any) -> Optional[MemberMember]:
         query = gql(
             """
             query Member {
@@ -462,11 +471,15 @@ class Client(AsyncBaseClient):
             """
         )
         variables: Dict[str, object] = {}
-        response = await self.execute(query=query, variables=variables)
+        response = await self.execute(
+            query=query, operation_name="Member", variables=variables, **kwargs
+        )
         data = self.get_data(response)
         return Member.model_validate(data).member
 
-    async def wind_farm_generation(self) -> Optional[WindFarmGenerationMember]:
+    async def wind_farm_generation(
+        self, **kwargs: Any
+    ) -> Optional[WindFarmGenerationMember]:
         query = gql(
             """
             query WindFarmGeneration {
@@ -505,12 +518,17 @@ class Client(AsyncBaseClient):
             """
         )
         variables: Dict[str, object] = {}
-        response = await self.execute(query=query, variables=variables)
+        response = await self.execute(
+            query=query,
+            operation_name="WindFarmGeneration",
+            variables=variables,
+            **kwargs
+        )
         data = self.get_data(response)
         return WindFarmGeneration.model_validate(data).member
 
     async def authenticate(
-        self, input: TokenAuthenticationInput
+        self, input: TokenAuthenticationInput, **kwargs: Any
     ) -> AuthenticateTokenAuth:
         query = gql(
             """
@@ -522,12 +540,14 @@ class Client(AsyncBaseClient):
             """
         )
         variables: Dict[str, object] = {"input": input}
-        response = await self.execute(query=query, variables=variables)
+        response = await self.execute(
+            query=query, operation_name="Authenticate", variables=variables, **kwargs
+        )
         data = self.get_data(response)
         return Authenticate.model_validate(data).token_auth
 
     async def refresh_token(
-        self, token: Union[Optional[str], UnsetType] = UNSET
+        self, token: Union[Optional[str], UnsetType] = UNSET, **kwargs: Any
     ) -> Optional[RefreshTokenRefreshToken]:
         query = gql(
             """
@@ -541,12 +561,14 @@ class Client(AsyncBaseClient):
             """
         )
         variables: Dict[str, object] = {"token": token}
-        response = await self.execute(query=query, variables=variables)
+        response = await self.execute(
+            query=query, operation_name="RefreshToken", variables=variables, **kwargs
+        )
         data = self.get_data(response)
         return RefreshToken.model_validate(data).refresh_token
 
     async def verify_token(
-        self, token: Union[Optional[str], UnsetType] = UNSET
+        self, token: Union[Optional[str], UnsetType] = UNSET, **kwargs: Any
     ) -> Optional[VerifyTokenVerifyToken]:
         query = gql(
             """
@@ -558,11 +580,13 @@ class Client(AsyncBaseClient):
             """
         )
         variables: Dict[str, object] = {"token": token}
-        response = await self.execute(query=query, variables=variables)
+        response = await self.execute(
+            query=query, operation_name="VerifyToken", variables=variables, **kwargs
+        )
         data = self.get_data(response)
         return VerifyToken.model_validate(data).verify_token
 
-    async def active_coop_status(self) -> Optional[ActiveCoopStatusCoop]:
+    async def active_coop_status(self, **kwargs: Any) -> Optional[ActiveCoopStatusCoop]:
         query = gql(
             """
             query ActiveCoopStatus {
@@ -574,28 +598,16 @@ class Client(AsyncBaseClient):
             """
         )
         variables: Dict[str, object] = {}
-        response = await self.execute(query=query, variables=variables)
+        response = await self.execute(
+            query=query,
+            operation_name="ActiveCoopStatus",
+            variables=variables,
+            **kwargs
+        )
         data = self.get_data(response)
         return ActiveCoopStatus.model_validate(data).coop
 
-    async def coop_timeline_progression(
-        self, coop_code: str
-    ) -> CoopTimelineProgressionCoopTimelineProgression:
-        query = gql(
-            """
-            query CoopTimelineProgression($coopCode: String!) {
-              coopTimelineProgression(coopCode: $coopCode) {
-                timelineProgression
-              }
-            }
-            """
-        )
-        variables: Dict[str, object] = {"coopCode": coop_code}
-        response = await self.execute(query=query, variables=variables)
-        data = self.get_data(response)
-        return CoopTimelineProgression.model_validate(data).coop_timeline_progression
-
-    async def faqs(self, tag: str) -> List[FaqsFaqs]:
+    async def faqs(self, tag: str, **kwargs: Any) -> List[FaqsFaqs]:
         query = gql(
             """
             query Faqs($tag: String!) {
@@ -612,11 +624,13 @@ class Client(AsyncBaseClient):
             """
         )
         variables: Dict[str, object] = {"tag": tag}
-        response = await self.execute(query=query, variables=variables)
+        response = await self.execute(
+            query=query, operation_name="Faqs", variables=variables, **kwargs
+        )
         data = self.get_data(response)
         return Faqs.model_validate(data).faqs
 
-    async def me(self) -> Optional[MeMe]:
+    async def me(self, **kwargs: Any) -> Optional[MeMe]:
         query = gql(
             """
             query Me {
@@ -677,11 +691,13 @@ class Client(AsyncBaseClient):
             """
         )
         variables: Dict[str, object] = {}
-        response = await self.execute(query=query, variables=variables)
+        response = await self.execute(
+            query=query, operation_name="Me", variables=variables, **kwargs
+        )
         data = self.get_data(response)
         return Me.model_validate(data).me
 
-    async def tribe_url(self) -> str:
+    async def tribe_url(self, **kwargs: Any) -> str:
         query = gql(
             """
             query TribeUrl {
@@ -690,11 +706,13 @@ class Client(AsyncBaseClient):
             """
         )
         variables: Dict[str, object] = {}
-        response = await self.execute(query=query, variables=variables)
+        response = await self.execute(
+            query=query, operation_name="TribeUrl", variables=variables, **kwargs
+        )
         data = self.get_data(response)
         return TribeUrl.model_validate(data).tribe_url
 
-    async def version(self) -> Optional[str]:
+    async def version(self, **kwargs: Any) -> Optional[str]:
         query = gql(
             """
             query Version {
@@ -703,6 +721,8 @@ class Client(AsyncBaseClient):
             """
         )
         variables: Dict[str, object] = {}
-        response = await self.execute(query=query, variables=variables)
+        response = await self.execute(
+            query=query, operation_name="Version", variables=variables, **kwargs
+        )
         data = self.get_data(response)
         return Version.model_validate(data).version

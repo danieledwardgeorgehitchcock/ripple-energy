@@ -16,4 +16,3 @@ class RefreshTokenRefreshToken(BaseModel):
 
 
 RefreshToken.model_rebuild()
-RefreshTokenRefreshToken.model_rebuild()

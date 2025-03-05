@@ -21,7 +21,6 @@ from .graphql_client import (
     Client,
     ConsumptionConsumption,
     CoopCoop,
-    CoopTimelineProgressionCoopTimelineProgression,
     Deauthenticate,
     FaqsFaqs,
     InsightsChartDataMember,
@@ -230,18 +229,6 @@ class RippleEnergy:
         data = await self.client.wind_farm_generation()
 
         logger.debug(f"Wind farm generation response: {data}")
-
-        return data
-
-    @check_expiry
-    @validate_call
-    async def coop_timeline_progression(
-        self, coop_code: str
-    ) -> CoopTimelineProgressionCoopTimelineProgression:
-        """Ripple Energy co-op timeline progression"""
-        data = await self.client.coop_timeline_progression(coop_code)
-
-        logger.debug(f"Co-op timeline progression response: {data}")
 
         return data
 

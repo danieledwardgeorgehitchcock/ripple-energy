@@ -21,4 +21,3 @@ class FaqsFaqsTags(BaseModel):
 
 Faqs.model_rebuild()
 FaqsFaqs.model_rebuild()
-FaqsFaqsTags.model_rebuild()

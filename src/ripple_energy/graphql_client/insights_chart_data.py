@@ -32,9 +32,9 @@ class InsightsChartDataMemberMembershipsCoopGenerationfarm(BaseModel):
     operational_status: GenerationGenerationFarmOperationalStatusChoices = Field(
         alias="operationalStatus"
     )
-    insights_chart_data: "InsightsChartDataMemberMembershipsCoopGenerationfarmInsightsChartData" = Field(
-        alias="insightsChartData"
-    )
+    insights_chart_data: (
+        "InsightsChartDataMemberMembershipsCoopGenerationfarmInsightsChartData"
+    ) = Field(alias="insightsChartData")
 
 
 class InsightsChartDataMemberMembershipsCoopGenerationfarmInsightsChartData(BaseModel):
@@ -82,6 +82,3 @@ InsightsChartDataMemberMemberships.model_rebuild()
 InsightsChartDataMemberMembershipsCoop.model_rebuild()
 InsightsChartDataMemberMembershipsCoopGenerationfarm.model_rebuild()
 InsightsChartDataMemberMembershipsCoopGenerationfarmInsightsChartData.model_rebuild()
-InsightsChartDataMemberMembershipsCoopGenerationfarmInsightsChartDataChartData.model_rebuild()
-InsightsChartDataMemberMembershipsCoopGenerationfarmInsightsChartDataCumulativeData.model_rebuild()
-InsightsChartDataMemberMembershipsCoopGenerationfarmInsightsChartDataUserErrors.model_rebuild()

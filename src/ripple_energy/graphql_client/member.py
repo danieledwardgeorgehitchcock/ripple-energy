@@ -13,4 +13,3 @@ class MemberMember(MemberFragment):
 
 
 Member.model_rebuild()
-MemberMember.model_rebuild()

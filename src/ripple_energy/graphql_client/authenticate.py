@@ -14,4 +14,3 @@ class AuthenticateTokenAuth(BaseModel):
 
 
 Authenticate.model_rebuild()
-AuthenticateTokenAuth.model_rebuild()

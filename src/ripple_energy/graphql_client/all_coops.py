@@ -15,4 +15,3 @@ class AllCoopsAllCoops(CoopFragment):
 
 
 AllCoops.model_rebuild()
-AllCoopsAllCoops.model_rebuild()

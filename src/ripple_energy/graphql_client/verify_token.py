@@ -14,4 +14,3 @@ class VerifyTokenVerifyToken(BaseModel):
 
 
 VerifyToken.model_rebuild()
-VerifyTokenVerifyToken.model_rebuild()

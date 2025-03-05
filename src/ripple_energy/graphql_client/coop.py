@@ -13,4 +13,3 @@ class CoopCoop(CoopFragment):
 
 
 Coop.model_rebuild()
-CoopCoop.model_rebuild()

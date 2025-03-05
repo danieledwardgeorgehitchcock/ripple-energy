@@ -168,9 +168,9 @@ class MemberFragment(BaseModel):
     current_member_supplier: Optional["MemberFragmentCurrentMemberSupplier"] = Field(
         alias="currentMemberSupplier"
     )
-    waiting_list_places: Optional[
-        List[Optional["MemberFragmentWaitingListPlaces"]]
-    ] = Field(alias="waitingListPlaces")
+    waiting_list_places: Optional[List[Optional["MemberFragmentWaitingListPlaces"]]] = (
+        Field(alias="waitingListPlaces")
+    )
 
 
 class MemberFragmentMemberDocument(BaseModel):
@@ -181,8 +181,8 @@ class MemberFragmentMemberDocument(BaseModel):
 
 class MemberFragmentAddress(BaseModel):
     id: str
-    line1: str
-    line2: str
+    line_1: str = Field(alias="line1")
+    line_2: str = Field(alias="line2")
     town: str
     postcode: str
     manually_entered: bool = Field(alias="manuallyEntered")
@@ -201,8 +201,8 @@ class MemberFragmentBeneficiaries(BaseModel):
     nominated_person: str = Field(alias="nominatedPerson")
     email: str
     phone: str
-    line1: str
-    line2: Optional[str]
+    line_1: str = Field(alias="line1")
+    line_2: Optional[str] = Field(alias="line2")
     town: str
     postcode: str
 
@@ -276,26 +276,6 @@ class MemberFragmentWaitingListPlaces(WaitingListPlaceFragment):
 
 ConsumptionFragment.model_rebuild()
 CoopFragment.model_rebuild()
-CoopFragmentCurrency.model_rebuild()
-CoopFragmentGenerationfarm.model_rebuild()
-CoopFragmentGenerationfarmCurrency.model_rebuild()
-CoopFragmentDocuments.model_rebuild()
-CoopFragmentDocumentsDocument.model_rebuild()
-CoopFragmentDocumentsDocumentDocumentTags.model_rebuild()
 WaitingListFragment.model_rebuild()
-WaitingListFragmentCoop.model_rebuild()
 WaitingListPlaceFragment.model_rebuild()
-WaitingListPlaceFragmentWaitingList.model_rebuild()
 MemberFragment.model_rebuild()
-MemberFragmentMemberDocument.model_rebuild()
-MemberFragmentAddress.model_rebuild()
-MemberFragmentBadges.model_rebuild()
-MemberFragmentBeneficiaries.model_rebuild()
-MemberFragmentInvoices.model_rebuild()
-MemberFragmentInvoicesQuote.model_rebuild()
-MemberFragmentInvoicesQuoteCurrency.model_rebuild()
-MemberFragmentMemberships.model_rebuild()
-MemberFragmentMembershipsCoop.model_rebuild()
-MemberFragmentCurrentMemberSupplier.model_rebuild()
-MemberFragmentCurrentMemberSupplierSupplier.model_rebuild()
-MemberFragmentWaitingListPlaces.model_rebuild()

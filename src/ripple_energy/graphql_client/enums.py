@@ -1,6 +1,13 @@
 from enum import Enum
 
 
+class SupplierSupplierBrandCodeChoices(str, Enum):
+    BRITISH_GAS = "BRITISH_GAS"
+    COOP_ENERGY = "COOP_ENERGY"
+    EON_NEXT = "EON_NEXT"
+    GOOD_ENERGY = "GOOD_ENERGY"
+
+
 class ApprovalStatus(str, Enum):
     APPROVAL_NOT_REQUIRED = "APPROVAL_NOT_REQUIRED"
     EVIDENCE_NEEDED = "EVIDENCE_NEEDED"
@@ -42,6 +49,7 @@ class GenerationDataTitle(str, Enum):
 class ChartStatus(str, Enum):
     Confirmed = "Confirmed"
     Estimated = "Estimated"
+    Paid = "Paid"
 
 
 class Period(str, Enum):
@@ -155,6 +163,7 @@ class PaymentStatus(str, Enum):
     REFUNDED = "REFUNDED"
     UPCOMING = "UPCOMING"
     OVERDUE = "OVERDUE"
+    DONATED = "DONATED"
 
 
 class CrmUserMemoChannelChoices(str, Enum):
@@ -192,6 +201,11 @@ class CardBrandType(str, Enum):
     OTHER = "OTHER"
     VISA = "VISA"
     MASTERCARD = "MASTERCARD"
+
+
+class Action(str, Enum):
+    SUBSCRIBE = "SUBSCRIBE"
+    UNSUBSCRIBE = "UNSUBSCRIBE"
 
 
 class CountryChoices(str, Enum):

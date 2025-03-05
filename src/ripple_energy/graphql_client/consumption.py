@@ -13,4 +13,3 @@ class ConsumptionConsumption(ConsumptionFragment):
 
 
 Consumption.model_rebuild()
-ConsumptionConsumption.model_rebuild()

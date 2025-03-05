@@ -12,9 +12,9 @@ class Deauthenticate(BaseModel):
     delete_token_cookie: Optional["DeauthenticateDeleteTokenCookie"] = Field(
         alias="deleteTokenCookie"
     )
-    delete_refresh_token_cookie: Optional[
-        "DeauthenticateDeleteRefreshTokenCookie"
-    ] = Field(alias="deleteRefreshTokenCookie")
+    delete_refresh_token_cookie: Optional["DeauthenticateDeleteRefreshTokenCookie"] = (
+        Field(alias="deleteRefreshTokenCookie")
+    )
 
 
 class DeauthenticateAuthLogoutSession(BaseModel):
@@ -30,6 +30,3 @@ class DeauthenticateDeleteRefreshTokenCookie(BaseModel):
 
 
 Deauthenticate.model_rebuild()
-DeauthenticateAuthLogoutSession.model_rebuild()
-DeauthenticateDeleteTokenCookie.model_rebuild()
-DeauthenticateDeleteRefreshTokenCookie.model_rebuild()
