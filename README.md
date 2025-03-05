@@ -4,38 +4,41 @@ A Python package For interacting with the Ripple Energy GraphQL API.
 
 The primary purpose of this package is to create an interface for Home Assistant to communicate with the Ripple Energy GraphQL API however, the facility is available to develop this module further by adding additional queries / functions.
 
------
+---
 
 **Disclaimer** - I do not work for Ripple Energy however, I have memberships in some of their co-ops. While this module has been developed in consultation with Ripple Energy, I cannot guarantee it's long-term support or stability.
 
------
+---
 
 [![PyPI - Version](https://img.shields.io/pypi/v/ripple-energy.svg)](https://pypi.org/project/ripple-energy)
 
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/ripple-energy.svg)](https://pypi.org/project/ripple-energy)
 
------
+---
 
 **Table of Contents**
 
- - [To-Do](#to-do)  
- - [Installation](#installation)
- - [Example](#example)
- - [Contributing](#contributing)
- - [License](#license)
+- [Ripple Energy](#ripple-energy)
+  - [To-Do](#to-do)
+  - [Installation](#installation)
+    - [From Package Index](#from-package-index)
+    - [From Repository](#from-repository)
+  - [Example](#example)
+  - [Contributing](#contributing)
+  - [License](#license)
 
 ## To-Do
 
- - [x] Create exceptions
- - [x] Put functions into classes
- - [x] Add linting
-    - [x] [PEP8](https://peps.python.org/pep-0008/) compliance
-    - [x] [PEP257](https://peps.python.org/pep-0257/) compliance
-    - [x] [PEP484](https://peps.python.org/pep-0484/) compliance
- - [ ] Create tests
- - [ ] Create build pipeline 
- - [x] Publish to PyPi 
- - [x] Make Async?
+- [x] Create exceptions
+- [x] Put functions into classes
+- [x] Add linting
+  - [x] [PEP8](https://peps.python.org/pep-0008/) compliance
+  - [x] [PEP257](https://peps.python.org/pep-0257/) compliance
+  - [x] [PEP484](https://peps.python.org/pep-0484/) compliance
+- [ ] Create tests
+- [x] Create build pipeline
+- [x] Publish to PyPi
+- [x] Make Async?
 
 ## Installation
 
@@ -49,11 +52,12 @@ pip install ripple-energy
 
 ### From Repository
 
-Clone this repository  
+Clone this repository
 
 ```console
 git clone https://github.com/danieledwardgeorgehitchcock/ripple-energy.git
 ```
+
 This project leverages the use of [Hatch](https://hatch.pypa.io/latest/) for project management - please follow the installation instructions there before continuing.
 
 Once the above has completed, enter in to the project directory
@@ -61,8 +65,9 @@ Once the above has completed, enter in to the project directory
 ```console
 cd ripple-energy
 ```
+
 As this package is managed by Hatch, you can start an environment which automatically pulls the project dependencies
-  
+
 ```console
 hatch shell start
 ```
@@ -71,38 +76,43 @@ You should then be able to use the package from within this environment.
 
 ## Example
 
-  ```python
+```python
 from ripple_energy import RippleEnergy, RippleEnergyCredentialAuth
 import asyncio
 from sys import platform
 
 if(platform == "win32"):
-    asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy()) #Avoid event loop selector policy error in Windows 
+  asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy()) #Avoid event loop selector policy error in Windows
 
 async def main():
 
-    auth = RippleEnergyCredentialAuth(email="YOUR_RIPPLE_EMAIL", password="YOUR_RIPPLE_PASSWORD")
+  auth = RippleEnergyCredentialAuth(email="YOUR_RIPPLE_EMAIL", password="YOUR_RIPPLE_PASSWORD")
 
-    async with RippleEnergy(auth=auth) as ripple:
+  async with RippleEnergy(auth=auth) as ripple:
 
-        #Query filter
-        faqs = await ripple.faqs("business")
-        
-        #Full object response
-        print(faqs)
-        
-        member = await ripple.member()
+      #Query filter
+      faqs = await ripple.faqs("business")
 
-        #Filtered object response
-        print(member.address)
+      #Full object response
+      print(faqs)
 
-        version = await ripple.version()
+      member = await ripple.member()
 
-        #Simple type response
-        print(version)
+      #Filtered object response
+      print(member.address)
+
+      version = await ripple.version()
+
+      #Simple type response
+      print(version)
+
+      #More complex query with input parameters
+      insights = await ripple.insights_chart(input={"genFarmId": "1", "startDate": "2023-09-25T23:00:00.000Z", "endDate": "2023-09-26T16:02:24.272Z", "period":"Day"})
+
+      print(insights)
 
 if __name__ == "__main__":
-    asyncio.run(main())
+  asyncio.run(main())
 ```
 
 ## Contributing
