@@ -1,26 +1,59 @@
-# You can override the included template(s) by including variable overrides
-# SAST customization: https://docs.gitlab.com/ee/user/application_security/sast/#customizing-the-sast-settings
-# Secret Detection customization: https://docs.gitlab.com/ee/user/application_security/secret_detection/#customizing-settings
-# Dependency Scanning customization: https://docs.gitlab.com/ee/user/application_security/dependency_scanning/#customizing-the-dependency-scanning-settings
-# Container Scanning customization: https://docs.gitlab.com/ee/user/application_security/container_scanning/#customizing-the-container-scanning-settings
-# Note that environment variables can be set in several places
-# See https://docs.gitlab.com/ee/ci/variables/#cicd-variable-precedence
+image: python:latest
+
 stages:
-- build
-- test
-- deploy
-- review
-- dast
-- staging
-- canary
-- production
-- incremental rollout 10%
-- incremental rollout 25%
-- incremental rollout 50%
-- incremental rollout 100%
-- performance
-- cleanup
-sast:
-  stage: test
-include:
-- template: Auto-DevOps.gitlab-ci.yml
+  - lint
+  - build
+  - test
+  - deploy
+
+check-job:
+  stage: lint
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+    - if: $CI_COMMIT_TAG
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+  script:
+    - pip install hatch
+    - hatch run lint:lint
+    
+build-job:
+  stage: build
+  needs:
+    - check-job
+  rules:
+    - if: $CI_COMMIT_TAG
+  script:
+    - pip install hatch
+    - hatch build
+  artifacts:
+    paths:
+      - dist/*
+
+deploy-pypi-job:
+  stage: deploy
+  needs:
+    - build-job  
+  rules:
+    - if: $CI_COMMIT_TAG
+  variables:
+    PYTHON_KEYRING_BACKEND: keyring.backends.null.Keyring
+  script:
+    - pip install hatch
+    - hatch publish dist -u $HATCH_INDEX_USER - a $HATCH_INDEX_AUTH
+
+release-gitlab-job:
+  stage: deploy
+  needs:
+    - build-job  
+  rules:
+    - if: $CI_COMMIT_TAG
+  image: registry.gitlab.com/gitlab-org/release-cli:latest
+  script:
+    - apk update
+    - apk add git
+  release:
+    tag_name: $CI_COMMIT_TAG
+    description: |
+     | Commit | Description | Committed By |
+     |---|---|---|
+     $(git log $CI_COMMIT_TAG...$(git tag --sort=-creatordate | grep -A 1 $CI_COMMIT_TAG | tail -n 1) --no-merges --pretty="format:| %h | %s | %cN |")
