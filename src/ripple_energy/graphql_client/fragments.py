@@ -37,7 +37,6 @@ class CoopFragment(BaseModel):
     description: str
     max_generation_per_member: int = Field(alias="maxGenerationPerMember")
     min_generation_per_member: int = Field(alias="minGenerationPerMember")
-    percentage_funded: int = Field(alias="percentageFunded")
     public_close_date: Optional[Any] = Field(alias="publicCloseDate")
     estimated_bill_savings_per_watt_hour: float = Field(
         alias="estimatedBillSavingsPerWattHour"

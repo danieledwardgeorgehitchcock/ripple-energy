@@ -3,7 +3,14 @@ from typing import Any, List, Optional
 from pydantic import Field
 
 from .base_model import BaseModel, Upload
-from .enums import ApprovalStatus, Period
+from .enums import (
+    ApprovalStatus,
+    CountryChoices,
+    EventRegisteredChoices,
+    FuelType,
+    MeterType,
+    Period,
+)
 
 
 class InsightsChartDataInput(BaseModel):
@@ -53,6 +60,12 @@ class SearchCountAndFilterInput(BaseModel):
 class SupplierMemberInfoInput(BaseModel):
     api_key: Optional[str] = Field(alias="apiKey", default=None)
     member_account_id: Optional[str] = Field(alias="memberAccountId", default=None)
+
+
+class ConsumptionGenerationChartDataInput(BaseModel):
+    period: Period
+    start_date: str = Field(alias="startDate")
+    end_date: str = Field(alias="endDate")
 
 
 class CalculateOrderPaymentInput(BaseModel):
@@ -202,14 +215,27 @@ class InstalmentInput(BaseModel):
 
 
 class CreateOwnershipUserInput(BaseModel):
+    create_account: "AuthenticationCreateAccountInput" = Field(alias="createAccount")
+    update_details: "RegistrationUpdateUserPersonalDetailsInput" = Field(
+        alias="updateDetails"
+    )
     create_address: "AddressInput" = Field(alias="createAddress")
+    create_consumption: float = Field(alias="createConsumption")
+    create_quote: "UpdateQuoteInput" = Field(alias="createQuote")
     create_supplier_quotes: "UpdateSupplierQuotesInput" = Field(
         alias="createSupplierQuotes"
     )
-    create_consumption: "ConsumptionInput" = Field(alias="createConsumption")
-    create_quote: "UpdateQuoteInput" = Field(alias="createQuote")
-    create_account: "CreateAccountInput" = Field(alias="createAccount")
     pay_order: "PayOrderInput" = Field(alias="payOrder")
+    consumption_evidence_needed: Optional[bool] = Field(
+        alias="consumptionEvidenceNeeded", default=None
+    )
+
+
+class UpdateQuoteInput(BaseModel):
+    electricity_consumption_annual: int = Field(alias="electricityConsumptionAnnual")
+    voucher_codes: List[str] = Field(alias="voucherCodes")
+    monetary_value: Optional[int] = Field(alias="monetaryValue", default=None)
+    capacity: Optional[int] = None
 
 
 class UpdateSupplierQuotesInput(BaseModel):
@@ -224,7 +250,7 @@ class UpdateSupplierQuotesInput(BaseModel):
         alias="electricityAnnualNightKwh", default=None
     )
     switches_gas: Optional[bool] = Field(alias="switchesGas", default=None)
-    gas_annual_kwh: Optional[int] = Field(alias="gasAnnualKwh", default=None)
+    gas_annual_kwh: Optional[float] = Field(alias="gasAnnualKwh", default=None)
     has_smart_meter: Optional[bool] = Field(alias="hasSmartMeter", default=None)
     postcode: Optional[str] = None
     is_switch_delayed: Optional[bool] = Field(alias="isSwitchDelayed", default=None)
@@ -261,49 +287,13 @@ class UpdateSupplierQuotesInput(BaseModel):
     ] = Field(
         alias="acknowledgesHeNeedsToContactTheSupplierToUpdateAddress", default=None
     )
-
-
-class ConsumptionInput(BaseModel):
-    electricity_annual: float = Field(alias="electricityAnnual")
-    from_calculator: Optional[bool] = Field(alias="fromCalculator", default=None)
-    people_count: Optional[int] = Field(alias="peopleCount", default=None)
-    bedrooms_count: Optional[int] = Field(alias="bedroomsCount", default=None)
-    has_electric_vehicle: Optional[bool] = Field(
-        alias="hasElectricVehicle", default=None
+    meter_type: Optional[MeterType] = Field(alias="meterType", default=None)
+    fuel_type: Optional[FuelType] = Field(alias="fuelType", default=None)
+    mprn: Optional[str] = None
+    is_vulnerable_customer: Optional[bool] = Field(
+        alias="isVulnerableCustomer", default=None
     )
-    has_electric_heating: Optional[bool] = Field(
-        alias="hasElectricHeating", default=None
-    )
-    has_heat_pump: Optional[bool] = Field(alias="hasHeatPump", default=None)
-    has_solar_panels: Optional[bool] = Field(alias="hasSolarPanels", default=None)
-    solar_panels_capacity: Optional[float] = Field(
-        alias="solarPanelsCapacity", default=None
-    )
-    acknowledges_to_provide_bill_evidence: Optional[bool] = Field(
-        alias="acknowledgesToProvideBillEvidence", default=None
-    )
-
-
-class UpdateQuoteInput(BaseModel):
-    electricity_consumption_annual: int = Field(alias="electricityConsumptionAnnual")
-    voucher_codes: List[str] = Field(alias="voucherCodes")
-    monetary_value: Optional[int] = Field(alias="monetaryValue", default=None)
-    capacity: Optional[int] = None
-
-
-class CreateAccountInput(BaseModel):
-    user: "UserInput"
-    is_business: bool = Field(alias="isBusiness")
-    business_name: Optional[str] = Field(alias="businessName", default=None)
-
-
-class UserInput(BaseModel):
-    first_name: str = Field(alias="firstName")
-    last_name: str = Field(alias="lastName")
-    email: str
-    phone_number: str = Field(alias="phoneNumber")
-    password: str
-    password_confirm: str = Field(alias="passwordConfirm")
+    supplier_brand_code: Optional[str] = Field(alias="supplierBrandCode", default=None)
 
 
 class SingleFileUploadInput(BaseModel):
@@ -364,18 +354,56 @@ class PasswordResetConfirmInput(BaseModel):
 class UpdateUserCRMInput(BaseModel):
     id: int
     email: str
+    business_name: Optional[str] = Field(alias="businessName", default=None)
 
 
 class DirectDebitInput(BaseModel):
     account_name: str = Field(alias="accountName")
     account_sort_code: str = Field(alias="accountSortCode")
     account_number: str = Field(alias="accountNumber")
-    payment_day: str = Field(alias="paymentDay")
+    payment_day: int = Field(alias="paymentDay")
+    billing_address: "BillingAddress" = Field(alias="billingAddress")
 
 
 class AuthLoginSessionInputType(BaseModel):
     email: str
     password: str
+
+
+class CreateAccountInput(BaseModel):
+    user: "UserInput"
+    is_business: bool = Field(alias="isBusiness")
+    business_name: Optional[str] = Field(alias="businessName", default=None)
+
+
+class UserInput(BaseModel):
+    first_name: str = Field(alias="firstName")
+    last_name: str = Field(alias="lastName")
+    email: str
+    phone_number: str = Field(alias="phoneNumber")
+    password: str
+    password_confirm: str = Field(alias="passwordConfirm")
+
+
+class ConsumptionInput(BaseModel):
+    electricity_annual: float = Field(alias="electricityAnnual")
+    from_calculator: Optional[bool] = Field(alias="fromCalculator", default=None)
+    people_count: Optional[int] = Field(alias="peopleCount", default=None)
+    bedrooms_count: Optional[int] = Field(alias="bedroomsCount", default=None)
+    has_electric_vehicle: Optional[bool] = Field(
+        alias="hasElectricVehicle", default=None
+    )
+    has_electric_heating: Optional[bool] = Field(
+        alias="hasElectricHeating", default=None
+    )
+    has_heat_pump: Optional[bool] = Field(alias="hasHeatPump", default=None)
+    has_solar_panels: Optional[bool] = Field(alias="hasSolarPanels", default=None)
+    solar_panels_capacity: Optional[float] = Field(
+        alias="solarPanelsCapacity", default=None
+    )
+    acknowledges_to_provide_bill_evidence: Optional[bool] = Field(
+        alias="acknowledgesToProvideBillEvidence", default=None
+    )
 
 
 class CreateMemberConsumptionEvidenceSubmissionInput(BaseModel):
@@ -487,6 +515,10 @@ class UserContactInput(BaseModel):
     firstname: str
     lastname: str
     email: str
+    country: Optional[CountryChoices] = None
+    event_registered: Optional[EventRegisteredChoices] = Field(
+        alias="eventRegistered", default=None
+    )
 
 
 class CreateEmployerContactInput(BaseModel):
@@ -506,6 +538,14 @@ class CreateEmployerContactInput(BaseModel):
     message: Optional[str] = None
     pathname: Optional[str] = None
     job_title: Optional[str] = Field(alias="jobTitle", default=None)
+    marketing_opt_in: Optional[bool] = Field(alias="marketingOptIn", default=None)
+
+
+class CreateUserInfoRecordInput(BaseModel):
+    email: str
+    first_name: Optional[str] = Field(alias="firstName", default=None)
+    last_name: Optional[str] = Field(alias="lastName", default=None)
+    data: str
 
 
 class RequestCallBackInput(BaseModel):
@@ -575,6 +615,7 @@ SearchAndFilterInput.model_rebuild()
 FilterInput.model_rebuild()
 SearchCountAndFilterInput.model_rebuild()
 SupplierMemberInfoInput.model_rebuild()
+ConsumptionGenerationChartDataInput.model_rebuild()
 CalculateOrderPaymentInput.model_rebuild()
 CalculatePaymentLineInput.model_rebuild()
 CalculateUnitsForCostInput.model_rebuild()
@@ -591,11 +632,8 @@ OrderInput.model_rebuild()
 PaymentLineInput.model_rebuild()
 InstalmentInput.model_rebuild()
 CreateOwnershipUserInput.model_rebuild()
-UpdateSupplierQuotesInput.model_rebuild()
-ConsumptionInput.model_rebuild()
 UpdateQuoteInput.model_rebuild()
-CreateAccountInput.model_rebuild()
-UserInput.model_rebuild()
+UpdateSupplierQuotesInput.model_rebuild()
 SingleFileUploadInput.model_rebuild()
 TokenAuthenticationInput.model_rebuild()
 ClientEnvInput.model_rebuild()
@@ -608,6 +646,9 @@ PasswordResetConfirmInput.model_rebuild()
 UpdateUserCRMInput.model_rebuild()
 DirectDebitInput.model_rebuild()
 AuthLoginSessionInputType.model_rebuild()
+CreateAccountInput.model_rebuild()
+UserInput.model_rebuild()
+ConsumptionInput.model_rebuild()
 CreateMemberConsumptionEvidenceSubmissionInput.model_rebuild()
 ConsumptionEvidenceInput.model_rebuild()
 ApproveMemberConsumptionEvidenceSubmissionInput.model_rebuild()
@@ -623,6 +664,7 @@ CreateUserMemoInputs.model_rebuild()
 CreateContactUsMessageInput.model_rebuild()
 UserContactInput.model_rebuild()
 CreateEmployerContactInput.model_rebuild()
+CreateUserInfoRecordInput.model_rebuild()
 RequestCallBackInput.model_rebuild()
 QuoteInput.model_rebuild()
 GiftCardInput.model_rebuild()

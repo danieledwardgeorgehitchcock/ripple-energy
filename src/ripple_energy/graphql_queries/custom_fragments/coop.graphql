@@ -8,7 +8,6 @@ fragment CoopFragment on Coop {
   description
   maxGenerationPerMember
   minGenerationPerMember
-  percentageFunded
   publicCloseDate
   estimatedBillSavingsPerWattHour
   firstYearEstimatedBillSavingsPerWattHour
